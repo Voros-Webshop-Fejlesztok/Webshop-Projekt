@@ -8,12 +8,18 @@ def is_valid_param(param):
 
 def store(request):
     products = Product.objects.all()
+    categories = Category.objects.all()
+    categories2 = Category2.objects.all()
+    brands = Brand.objects.all()
     
     product_name_query = request.GET.get('product_name')
     rating_min = request.GET.get('rating_min')
     rating_max = request.GET.get('rating_max')
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
+    category = request.GET.get('category')
+    category2 = request.GET.get('category2')
+    brand = request.GET.get('brand')
     
 
     if is_valid_param(product_name_query):
@@ -32,8 +38,16 @@ def store(request):
     if is_valid_param(price_max):
         products = products.filter(price__lt=price_max)
 
+    if is_valid_param(category) and category != '':
+        products = products.filter(category__name=category)
+
+    if is_valid_param(category2) and category2 != '':
+        products = products.filter(category2__name=category2)
+        
+    if is_valid_param(brand) and brand != '':
+        products = products.filter(brand__name=brand)
     
-    context = {'products':products}
+    context = {'products':products,'categories':categories,'categories2':categories2,'brands':brands}
 
     return render(request, 'store/store.html', context)
 

@@ -19,6 +19,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+class Category2(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+    
 class Brand(models.Model):
     name = models.CharField(max_length=20, null = True)
 
@@ -32,12 +38,11 @@ class Product(models.Model):
     price = models.FloatField()
     digital = models.BooleanField(default=False, null=True, blank=False)
     image = models.ImageField(null=True, blank=True)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=200, blank=True, default=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category)
-    type = models.CharField(max_length=100, blank=True)
+    category2 = models.ManyToManyField(Category2, default=False, blank=True)
     rating = models.FloatField(default=0)
-    reviewed = models.BooleanField(default=False, null=True, blank=False)
 
     def __str__(self):
         return self.pname
