@@ -3,82 +3,90 @@
 {% extends 'store/main.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'store.css' %}">
 
-<h3>Szűrő</h3>
 <form method="GET" action=".">
 
   <div class="form-row">
-    <div class="form-group col-12">
-      <div class="input-group">
-        <input class="form-control py-2 border-right-0 border" type="search" placeholder="Termék név" name="product_name">
+    <div class="form-group col-4">
+      <label >Márka</label>
+      <select id="inputState" class="form-control" name="brand">
+        <option ></option>
+        {% for bran in brands %}
+        <option value="{{ bran }}">{{ bran }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-4">
+      <div class="input-group" style="padding-top: 32px;">
+        <input class="form-control py-2 border-right-0 border" type="search" placeholder="Kulcsszó" name="product_name" id="pname">
         <span class="input-group-append">
           <div class="input-group-text bg-transparent"><i class='bx bx-search-alt-2'></i></div>
         </span>
       </div>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-12">
-      <div class="input-group">
-        <input class="form-control py-2 border-right-0 border" type="search" placeholder="Gyártó" name="author_name">
-        <span class="input-group-append">
-          <div class="input-group-text bg-transparent"><i class='bx bx-search-alt-2'></i></div>
-        </span>
-      </div>
-    </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-2 col-lg-2">
-      <label for="viewCountMin">Minimum megtekintés</label>
-      <input type="number" min="0" class="form-control" id="viewCountMin" placeholder="0" name="view_count_min">
-    </div>
-    <div class="form-group col-md-2 col-lg-2">
-      <label for="viewCountMax">Maximum megtekintés</label>
-      <input type="number" min="0" class="form-control" id="viewCountMax" placeholder="10000" name="view_count_max">
-    </div>
-    <div class="form-group col-md-2 col-lg-2">
-      <label for="dateMin">Megjelenés dátuma</label>
-      <input type="date" class="form-control" id="dateMin" name="date_min">
-    </div>
-    <div class="form-group col-md-2 col-lg-2">
-      <label for="dateMax">Megjelenés dátuma</label>
-      <input type="date" class="form-control" id="dateMax" name="date_max">
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">Kategória</label>
+    <div class="form-group col-4">
+      <label>Kategória</label>
       <select id="inputState" class="form-control" name="category">
-        <option selected>Choose...</option>
-        <option>...</option>
+        <option ></option>
+        {% for cat in categories %}
+        <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+  </div>
+    
+  <div class="form-row">
+    <div class="form-group col-2">
+      <label>Értékelés (legalább)</label>
+      <input type="number" min="0" max="4.9" step="0.1" class="form-control" id="viewCountMin" placeholder="0" name="rating_min">
+    </div>
+    <div class="form-group col-2">
+      <label>Értékelés (legfeljebb)</label>
+      <input type="number" min="0" max="5" step="0.1" class="form-control" id="viewCountMax" placeholder="5" name="rating_max">
+    </div>
+    <div class="form-group col-2">
+      <label>Ár (legalább)</label>
+      <input type="number" min="0" step="1" class="form-control" id="viewCountMin" placeholder="1500 Ft" name="price_min">
+    </div>
+    <div class="form-group col-2">
+      <label>Ár (legfeljebb)</label>
+      <input type="number" min="0" step="1" class="form-control" id="viewCountMax" placeholder="14990 Ft" name="price_max">
+    </div>
+    <div class="form-group col-4">
+      <label>Alkategória</label>
+      <select id="inputState" class="form-control" name="category2">
+        <option></option>
+        {% for cat2 in categories2 %}
+        <option value="{{ cat2 }}">{{ cat2 }}</option>
+        {% endfor %}
       </select>
     </div>
   </div>
   <div class="form-group">
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="reviewed" name="reviewed">
-      <label class="form-check-label" for="reviewed">
-        Ellenőrzött
-      </label>
+      <button style="float: right;" type="submit" class="btn btn-primary">Keresés</button>
     </div>
   </div>
-  <button type="submit" class="btn btn-primary">Keresés</button>
 </form>
 
 <div class="row" style="padding-top: 50px;">
   {% for product in products %}
   <div class="col-lg-4">
-    <img class="thumbnail" src="{{product.imageURL}}" />
+    <img class="thumbnail" style="width: 100%; height: 200px;" src="{{product.imageURL}}" />
     <div class="box-element product">
-      <h5><strong>{{product.pname}}</strong></h5>
-      <h6 style="font-size: smaller;"><strong>{{product.author.name}}&nbsp;|&nbsp;
+      <h5><strong>{{product.pname}}
+        <i style="font-size: larger; float: right; color: gold;" class='bx bx-star'></i><span style="float: right; color: gold;">{{product.rating}}</span>
+      </strong></h5>
+      <h6 style="font-size: smaller;"><strong>{{product.brand.name}}&nbsp;|&nbsp;
         
         {% for category in product.category.all %}
         {{ category }}
         {% endfor %}
 
         &nbsp;|&nbsp;
-        
-        {% for type in product.type.all %}
-        {{ type }}
+        {% for category2 in product.category2.all %}
+        {{ category2 }}
         {% endfor %}
       
       </strong></h6>
