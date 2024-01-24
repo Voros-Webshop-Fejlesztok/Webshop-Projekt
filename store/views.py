@@ -11,7 +11,7 @@ def store(request):
     categories = Category.objects.all()
     categories2 = Category2.objects.all()
     brands = Brand.objects.all()
-    
+
     product_name_query = request.GET.get('product_name')
     rating_min = request.GET.get('rating_min')
     rating_max = request.GET.get('rating_max')
@@ -23,8 +23,16 @@ def store(request):
     
 
     if is_valid_param(product_name_query):
-        products = products.filter(pname__icontains=product_name_query)
+        products = products.filter(category__name__icontains=product_name_query)
 
+        if len(products) == 0:
+            products = Product.objects.all()
+            products = products.filter(category2__name__icontains=product_name_query)
+
+            if len(products) == 0:
+                products = Product.objects.all()
+                products = products.filter(pname__icontains=product_name_query)
+            
 
     if is_valid_param(rating_min):
         products = products.filter(rating__gte=rating_min)
@@ -50,6 +58,12 @@ def store(request):
     context = {'products':products,'categories':categories,'categories2':categories2,'brands':brands}
 
     return render(request, 'store/store.html', context)
+
+######################################################################################################
+
+def home(request):
+    context = {}
+    return render(request, 'store/home.html', context)
 
 def cart(request):
     context = {}

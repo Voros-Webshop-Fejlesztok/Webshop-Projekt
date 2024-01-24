@@ -35,13 +35,13 @@ class Brand(models.Model):
 
 class Product(models.Model):
     pname = models.CharField(max_length=200, null=True)
-    price = models.FloatField()
+    price = models.IntegerField()
     digital = models.BooleanField(default=False, null=True, blank=False)
     image = models.ImageField(null=True, blank=True)
-    description = models.CharField(max_length=200, blank=True, default=False)
+    description = models.CharField(max_length=200, blank=True, default='')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category)
-    category2 = models.ManyToManyField(Category2, default=False, blank=True)
+    category2 = models.ManyToManyField(Category2, blank=True)
     rating = models.FloatField(default=0)
 
     def __str__(self):
