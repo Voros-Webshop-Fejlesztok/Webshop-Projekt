@@ -79,18 +79,20 @@
 
   <div class="col-lg-6">
      <div class="box-element">
-          <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+          <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Vissza a kosárhoz</a>
           <hr>
-          <h3>Order Summary</h3>
+          <h3>Rendelés összegzése</h3>
           <hr>
+          {% for item in items %}
           <div class="cart-row">
-               <div style="flex:2"><img class="row-image" src="{% static 'images/placeholder.png' %}"></div>
-               <div style="flex:2"><p>Product 1</p></div>
-               <div style="flex:1"><p>$20.00</p></div>
-               <div style="flex:1"><p>x2</p></div>
+               <div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
+               <div style="flex:2"><p>{{item.product.name}}</p></div>
+               <div style="flex:1"><p>{{item.product.price|floatformat:0}} Ft</p></div>
+               <div style="flex:1"><p>{{item.quantity}} db</p></div>
           </div>
-          <h5>Items:   2</h5>
-          <h5>Total:   $40</h5>
+          {% endfor %}
+          <h5>Termékek:   {{order.get_cart_items}} db</h5>
+          <h5>Végösszeg:   {{order.get_cart_total|floatformat:0}} Ft</h5>
      </div>
 </div>
 {% endblock content %}
