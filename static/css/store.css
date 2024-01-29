@@ -39,6 +39,17 @@
     margin-right: 1vh;
   }
   
-  .button-33:hover {
+.button-33:hover {
     transform: scale(1.05) rotate(-1deg);
   }
+
+.add-to-cart{
+  background-color: rgb(16, 184, 16);
+  font-weight: 500;
+}
+
+.view{
+  background-color: rgba(173, 173, 255, 0.599);
+  font-weight: 500;
+}
+
