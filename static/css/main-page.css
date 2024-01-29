@@ -15,6 +15,10 @@
 	--toggle-color: #ddd;
 	--text-color: #707070;
 	--text-color-dark: #f6f5ff;
+	--grey: #545454;
+	--black: #000000;
+	--white: #fff;
+
 
 	--tran-02: all 0.2s ease;
 	--tran-03: all 0.3s ease;
@@ -30,13 +34,13 @@ body{
 }
 
 body.dark{
-	--body-color: #12191a;
+	--body-color: #00343c;
 	--sidebar-color: #242526;
 	--primary-color: #3a3b3c;
 	--primary-color-light: #3a3b3c;
 	--toggle-color: #fff;
 	--text-color: #ccc;
-	color: var(--text-color-dark);
+	color: var(--white);
 }
 
 .sidebar{
@@ -125,6 +129,7 @@ header .image-text .header-text{
 
 .header-text .name{
 	font-weight: bold;
+	font-variant: small-caps;
 }
 
 .sidebar header .toggle{
@@ -277,19 +282,38 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .box-element{
-	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	box-shadow: var(--black) 0 0 16px;
 	background-color: #fff;
-	border-radius: 4px;
 	padding: 10px;
+}
+
+body.dark .box-element{
+	box-shadow:hsl(0, 0%, 100%) 0 0 16px;
+	padding: 10px;
+}
+
+.box-element.product{
+	border-radius: 0px 0px 25px 25px;
+}
+
+body.dark .box-element.product{
+	border-radius: 0px 0px 25px 25px;
 }
 
 .thumbnail{
 	width: 100%;
 	height: 200px;
-	-webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
-    -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
-    box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+	box-shadow:var(--black) 0 0 16px;
 	object-fit: cover;
+	border-radius: 50px 50px 0 0;
+}
+
+body.dark .thumbnail{
+	width: 100%;
+	height: 200px;
+	box-shadow: var(--white) 0 0 16px;
+	object-fit: cover;
+	border-radius: 50px 50px 0 0;
 }
 
 .product{
@@ -371,4 +395,5 @@ h1,h2,h3,h4,h5,h6{
 
 .balance{
 	margin-top: 10px;
+	margin-bottom: 20px;
 }
