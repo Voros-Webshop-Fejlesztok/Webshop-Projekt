@@ -285,10 +285,12 @@ h1,h2,h3,h4,h5,h6{
 	box-shadow: var(--black) 0 0 16px;
 	background-color: #fff;
 	padding: 10px;
+	color: var(--black);
 }
 
 body.dark .box-element{
 	box-shadow:hsl(0, 0%, 100%) 0 0 16px;
+	color: var(--black);
 	padding: 10px;
 }
 
@@ -367,6 +369,7 @@ body.dark .thumbnail{
     border-bottom: 1px solid #ececec;
 
 }
+
 
 .quantity{
 	display: inline-block;
