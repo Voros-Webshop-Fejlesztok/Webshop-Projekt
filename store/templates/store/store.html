@@ -70,7 +70,7 @@
 <div class="row" style="padding-top: 50px;">
   {% for product in products %}
   <div class="col-lg-4 col-md-6 col-sm-12 balance">
-    <img class="thumbnail" style="width: 100%; height: auto;" src="{{product.imageURL}}" />
+    <img class="thumbnail" src="{{product.imageURL}}" />
     <div class="box-element product">
       <h5><strong>{{product.pname}}
         <i style="font-size: larger; float: right; color: gold;" class='bx bx-star'></i><span style="float: right; color: gold;">{{product.rating}}</span>
@@ -88,13 +88,12 @@
       
       </strong></h6>
       <hr>
-      <h6 style="font-size: small;">{{product.description}}</h6>
-
+      <h6 style="font-size: small; height: 30px;">{{product.description}}</h6>
       <hr>
+      <h4><strong>{{product.price|floatformat:0}} Ft</strong></h4>
 
-      <button class="btn btn-outline-secondary add-btn">Kosárba</button>
-      <a class="btn btn-outline-success" href="#">Megtekint</a>
-      <h4 style="display: inline-block; float: right"><strong>{{product.price|floatformat:0}} Ft</strong></h4>
+      <button class="button-33" role="button">Button 33</button>
+      <button class="button-33" role="button">Button 33</button>
     </div>
   </div>
   {% endfor %}

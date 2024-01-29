@@ -14,6 +14,7 @@
 	--primary-color-light: #f6f5ff;
 	--toggle-color: #ddd;
 	--text-color: #707070;
+	--text-color-dark: #f6f5ff;
 
 	--tran-02: all 0.2s ease;
 	--tran-03: all 0.3s ease;
@@ -35,6 +36,7 @@ body.dark{
 	--primary-color-light: #3a3b3c;
 	--toggle-color: #fff;
 	--text-color: #ccc;
+	color: var(--text-color-dark);
 }
 
 .sidebar{
@@ -287,6 +289,7 @@ h1,h2,h3,h4,h5,h6{
 	-webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
     -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
     box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+	object-fit: cover;
 }
 
 .product{
