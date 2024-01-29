@@ -1,6 +1,8 @@
-{% extends 'store/main.html' %} {% load static %} {% block content %}
-
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
 <form method="GET" action=".">
+  {% csrf_token %}
 
   <div class="form-row">
     <div class="form-group col-lg-4 col-md-6 col-sm-12 balance">
@@ -73,7 +75,6 @@
     <img class="thumbnail" src="{{product.imageURL}}" />
     <div class="box-element product">
       <h5><strong>{{product.pname}}
-        <i style="font-size: larger; float: right; color: gold;" class='bx bx-star'></i><span style="float: right; color: gold;">{{product.rating}}</span>
       </strong></h5>
       <h6 style="font-size: smaller;"><strong>{{product.brand.name}}&nbsp;|&nbsp;
         
@@ -90,10 +91,11 @@
       <hr>
       <h6 style="font-size: small; height: 30px;">{{product.description}}</h6>
       <hr>
-      <h4><strong>{{product.price|floatformat:0}} Ft</strong></h4>
+      <h4><strong>{{product.price|floatformat:0}} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{product.rating}}</span></h4>
+      
 
-      <button class="button-33" role="button">Button 33</button>
-      <button class="button-33" role="button">Button 33</button>
+      <button data-product={{product.id}} data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
+      <button class="button-33 view" role="button">Megtekint</button>
     </div>
   </div>
   {% endfor %}
