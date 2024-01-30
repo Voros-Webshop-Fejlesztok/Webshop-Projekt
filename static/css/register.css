@@ -1,0 +1,80 @@
+:root {
+	--body-color: #e4e9f7;
+	--sidebar-color: #fff;
+	--primary-color: #0083c5;
+	--primary-color-light: #00b6e3;
+	--toggle-color: #ddd;
+	--text-color: #707070;
+	--text-color-dark: #f6f5ff;
+	--grey: #545454;
+	--black: #000000;
+	--white: #fff;
+
+
+	--tran-02: all 0.2s ease;
+	--tran-03: all 0.3s ease;
+	--tran-04: all 0.4s ease;
+	--tran-05: all 0.5s ease;
+
+}
+
+.user_card {
+    width: 350px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: var(--primary-color-light);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: var(--black) 0 0 1.6vh;
+    border-radius: 5px;
+
+
+}
+
+body.dark .user_card {
+    width: 350px;
+    margin-top: auto;
+    margin-bottom: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: var(--white) 0 0 1.6vh;
+    border-radius: 5px;
+
+}
+
+.form_container {
+    margin-top: 20px;
+}
+
+#form-title{
+    color: #fff;
+}
+.login_btn {
+    width: 100%;
+    background: #33ccff !important;
+    color: white !important;
+}
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+.login_container {
+    padding: 0 2rem;
+}
+.input-group-text {
+    background: var(--primary-color) !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}

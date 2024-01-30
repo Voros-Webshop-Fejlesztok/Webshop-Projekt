@@ -10,8 +10,8 @@
 :root {
 	--body-color: #e4e9f7;
 	--sidebar-color: #fff;
-	--primary-color: #695cfe;
-	--primary-color-light: #f6f5ff;
+	--primary-color: #0079b5;
+	--primary-color-light: #00b6e3;
 	--toggle-color: #ddd;
 	--text-color: #707070;
 	--text-color-dark: #f6f5ff;
@@ -65,7 +65,7 @@ body.dark{
 }
 
 .sidebar.close{
-	width: 92px;
+	width: 93px;
 	opacity: 0.6;
 }
 
