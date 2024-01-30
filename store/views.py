@@ -1,10 +1,28 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import json
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import *
+from .forms import CreateUserForm
+
 
 # Create your views here.
+
+def register(request):
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    context = {'form':form}
+    return render(request, 'store/register.html', context)
+
+def login(request):
+    context = {}
+    return render(request, 'store/login.html', context)
 
 def is_valid_param(param):
     return param != '' and param is not None
