@@ -1,14 +1,15 @@
 :root {
 	--body-color: #e4e9f7;
 	--sidebar-color: #fff;
-	--primary-color: #695cfe;
-	--primary-color-light: #f6f5ff;
+	--primary-color: #0079b5;
+	--primary-color-light: #00b6e3;
 	--toggle-color: #ddd;
 	--text-color: #707070;
 	--text-color-dark: #f6f5ff;
 	--grey: #545454;
 	--black: #000000;
 	--white: #fff;
+
 
 	--tran-02: all 0.2s ease;
 	--tran-03: all 0.3s ease;
