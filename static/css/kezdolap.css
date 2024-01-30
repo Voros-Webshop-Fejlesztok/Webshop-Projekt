@@ -2,15 +2,14 @@
     margin: 0;
     padding: 0;
   }
-  
+
   .test {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #151515;
+    background: #064c7a;
   }
-  
   .cst{
     text-align: center;
     color: #fff;
@@ -29,7 +28,7 @@
   
   .product .product-card {
     z-index: 1;
-    background: #1d212b;
+    background: #010d2c;
     position: relative;
     width: 300px;
     height: 400px;
@@ -85,8 +84,8 @@
   
   .product .product-card .popup-btn {
     z-index: 2;
-    color: #fff;
-    background: #555;
+    color: #1156ea;
+    background: #fefefe;
     position: absolute;
     bottom: 20px;
     left: 50%;
@@ -132,7 +131,7 @@
   
   .product .popup-card .product-img {
     z-index: 2;
-    background: #1d212b;
+    background: #021032;
     position: relative;
     display: flex;
     justify-content: center;
@@ -165,7 +164,7 @@
   }
   
   .product .popup-card .close-btn {
-    color: #555;
+    color: #062070;
     z-index: 3;
     position: absolute;
     right: 0;
