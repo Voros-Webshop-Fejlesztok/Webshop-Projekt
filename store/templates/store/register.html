@@ -25,6 +25,18 @@
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
                         </div>
+                        {{form.first_name}}
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                        </div>
+                        {{form.last_name}}
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                        </div>
                         {{form.email}}
                     </div>
                     <div class="input-group mb-2">
@@ -63,9 +75,11 @@
     //Query All input fields
     var form_fields = document.getElementsByTagName('input')
     form_fields[1].placeholder='Felhasználónév';
-    form_fields[2].placeholder='Email cím';
-    form_fields[3].placeholder='Jelszó';
-    form_fields[4].placeholder='Jelszó újra';
+    form_fields[2].placeholder='Vezetéknév';
+    form_fields[3].placeholder='Keresztnév';
+    form_fields[4].placeholder='Email cím';
+    form_fields[5].placeholder='Jelszó';
+    form_fields[6].placeholder='Jelszó újra';
 
 
     for (var field in form_fields){	

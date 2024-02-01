@@ -18,8 +18,19 @@ def registerPage(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Sikeresen létrehoztuk a ' + user + ' nevű fiókját')
+
+            user_name = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            name = first_name + ' ' + last_name
+
+            user = User.objects.get(username = user_name)
+            customer = Customer(user=user, email=email, name=name)
+            
+            customer.save()
+
+            messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű fiókját')
 
             return redirect('login')
 
@@ -145,6 +156,9 @@ def updateItem(request):
     print(action, productId)
 
     customer = request.user.customer
+    user = request.user
+
+    print(customer, user)
     product = Product.objects.get(id = productId)
     order, created = Order.objects.get_or_create(customer = customer, complete=False)
 
