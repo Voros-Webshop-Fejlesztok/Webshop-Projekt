@@ -405,6 +405,7 @@ body.dark .thumbnail{
 .balance{
 	margin-top: 1vh;
 	margin-bottom: 2vh;
+	min-width: 250px;
 }
 
 .rating{

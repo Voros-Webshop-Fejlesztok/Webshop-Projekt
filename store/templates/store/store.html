@@ -5,7 +5,7 @@
   {% csrf_token %}
 
   <div class="form-row">
-    <div class="form-group col-lg-4 col-md-6 col-sm-12 balance">
+    <div class="form-group col-lg-4 col-md-12 col-sm-12 balance">
       <label >Márka</label>
       <select id="inputState" class="form-control" name="brand">
         <option ></option>
@@ -14,7 +14,7 @@
         {% endfor %}
       </select>
     </div>
-    <div class="form-group col-lg-4 col-md-6 col-sm-12 balance">
+    <div class="form-group col-lg-4 col-md-12 col-sm-12 balance">
       <div class="input-group" style="padding-top: 32px;">
         <input class="form-control py-2 border-right-0 border" type="search" placeholder="Kulcsszó" name="product_name" id="pname">
         <span class="input-group-append">
@@ -23,7 +23,7 @@
       </div>
   </div>
 
-    <div class="form-group col-lg-4 col-md-6 col-sm-12 balance">
+    <div class="form-group col-lg-4 col-md-12 col-sm-12 balance">
       <label>Kategória</label>
       <select id="inputState" class="form-control" name="category">
         <option ></option>
@@ -35,24 +35,9 @@
     
   </div>
     
+  
   <div class="form-row">
-    <div class="form-group col-lg-2 col-md-4 col-sm-12 balance">
-      <label>Értékelés</label>
-      <input type="number" min="0" max="4.9" step="0.1" class="form-control" id="viewCountMin" placeholder="0" name="rating_min">
-    </div>
-    <div class="form-group col-lg-2 col-md-4 col-sm-12 balance">
-      <label>Értékelés</label>
-      <input type="number" min="0" max="5" step="0.1" class="form-control" id="viewCountMax" placeholder="5" name="rating_max">
-    </div>
-    <div class="form-group col-lg-2 col-md-4 col-sm-12 balance">
-      <label>Ár</label>
-      <input type="number" min="0" step="1" class="form-control" id="viewCountMin" placeholder="1500 Ft" name="price_min">
-    </div>
-    <div class="form-group col-lg-2 col-md-4 col-sm-12 balance">
-      <label>Ár</label>
-      <input type="number" min="0" step="1" class="form-control" id="viewCountMax" placeholder="14990 Ft" name="price_max">
-    </div>
-    <div class="form-group col-lg-4 col-md-6 col-sm-12 balance">
+    <div class="form-group col-lg-3 col-md-12 col-sm-12 balance">
       <label>Alkategória</label>
       <select id="inputState" class="form-control" name="category2">
         <option></option>
@@ -61,6 +46,23 @@
         {% endfor %}
       </select>
     </div>
+    <div class="form-group col-lg-2 col-md-6 col-sm-12 balance">
+      <label>Értékelés</label>
+      <input type="number" min="0" max="4.9" step="0.1" class="form-control" id="viewCountMin" placeholder="0" name="rating_min">
+    </div>
+    <div class="form-group col-lg-2 col-md-6 col-sm-12 balance">
+      <label>Értékelés</label>
+      <input type="number" min="0" max="5" step="0.1" class="form-control" id="viewCountMax" placeholder="5" name="rating_max">
+    </div>
+    <div class="form-group col-lg-2 col-md-6 col-sm-12 balance">
+      <label>Ár</label>
+      <input type="number" min="0" step="1" class="form-control" id="viewCountMin" placeholder="1500 Ft" name="price_min">
+    </div>
+    <div class="form-group col-lg-2 col-md-6 col-sm-12 balance">
+      <label>Ár</label>
+      <input type="number" min="0" step="1" class="form-control" id="viewCountMax" placeholder="14990 Ft" name="price_max">
+    </div>
+    
   </div>
   <div class="form-group">
     <div class="form-check">
