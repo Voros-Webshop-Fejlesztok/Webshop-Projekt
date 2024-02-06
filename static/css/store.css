@@ -1,60 +1,57 @@
 :root {
-	--body-color: #e4e9f7;
-	--sidebar-color: #fff;
-	--primary-color: #0079b5;
-	--primary-color-light: #00b6e3;
-	--toggle-color: #ddd;
-	--text-color: #707070;
-	--text-color-dark: #f6f5ff;
-	--grey: #545454;
-	--black: #000000;
-	--white: #fff;
+  --body-color: #e4e9f7;
+  --sidebar-color: #fff;
+  --primary-color: #0079b5;
+  --primary-color-light: #00b6e3;
+  --toggle-color: #ddd;
+  --text-color: #707070;
+  --text-color-dark: #f6f5ff;
+  --grey: #545454;
+  --black: #000000;
+  --white: #fff;
 
-
-	--tran-02: all 0.2s ease;
-	--tran-03: all 0.3s ease;
-	--tran-04: all 0.4s ease;
-	--tran-05: all 0.5s ease;
-
+  --tran-02: all 0.2s ease;
+  --tran-03: all 0.3s ease;
+  --tran-04: all 0.4s ease;
+  --tran-05: all 0.5s ease;
 }
 
-
 .button-33 {
-    box-shadow: var(--grey) 0 0 16px;
-    background-color: var(--white);
-    border-radius: 100px;
-    color: var(--black);
-    cursor: pointer;
-    display: inline;
-    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
-    padding: 7px 20px;
-    text-align: center;
-    text-decoration: none;
-    transition: all 250ms;
-    border: 0;
-    font-size: 16px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    margin-top: 2vh;
-    margin-right: 1vh;
-  }
-  
-.button-33:hover {
-    transform: scale(1.05) rotate(-1deg);
-  }
+  box-shadow: var(--grey) 0 0 16px;
+  background-color: var(--white);
+  border-radius: 100px;
+  color: var(--black);
+  cursor: pointer;
+  display: inline;
+  font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-top: 2vh;
+  margin-right: 1vh;
+}
 
-.add-to-cart{
+.button-33:hover {
+  transform: scale(1.2) rotate(-2deg);
+}
+
+.add-to-cart {
   background-color: rgb(16, 184, 16);
   font-weight: 500;
 }
 
-.view{
+.view {
   background-color: rgba(173, 173, 255, 0.599);
   font-weight: 500;
 }
 
-#csiresz{
+#csiresz {
   display: none;
   position: fixed;
   top: 0;
@@ -68,22 +65,22 @@
   overflow: hidden;
 }
 
-#csiresz.active{
+#csiresz.active {
   display: flex;
 }
 
-.cardstore{
+.cardstore {
   position: relative;
   display: flex;
   width: 1200px;
   height: 800px;
-  background-color: #fff; 
+  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(8, 49, 253, 0.754);
   margin: 20px;
 }
 
-.cardstore .cardstore-img{
+.cardstore .cardstore-img {
   z-index: 2;
   position: relative;
   display: flex;
@@ -96,7 +93,7 @@
   border-bottom-left-radius: 10px;
 }
 
-.cardstore .cardstore-img img{
+.cardstore .cardstore-img img {
   z-index: 2;
   position: relative;
   height: 280px;
@@ -104,8 +101,7 @@
   border-radius: 10px;
 }
 
-
-.cardstore .infók{
+.cardstore .infók {
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -125,4 +121,15 @@
   font-size: 20px;
   margin: 20px;
   cursor: pointer;
+}
+
+#toggleFilter {
+  overflow: hidden; /* Kell az animált magasságért */
+  transition: height 10s ease-in-out; /* Átmenet az animált magasságért */
+}
+
+.hidden {
+  opacity: 0;
+  transition: height 10s ease-in-out, opacity 0.5s ease-in-out; /* Két tulajdonság esetén két átmenet definiálása */
+  pointer-events: none; /* A rejtett elem ne legyen interaktív */
 }
