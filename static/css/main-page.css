@@ -452,3 +452,11 @@ body.dark .rating-star{
     opacity: 1;
     visibility: visible;
 }
+
+.active {
+	background-color: lightskyblue;
+}
+
+body.dark .active {
+	background-color: steelblue;
+}
