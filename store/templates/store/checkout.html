@@ -1,6 +1,4 @@
-{% extends 'store/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'store/main.html' %} {% load static %} {% block content %}
 <div class="row">
   <div class="col-lg-6">
     <div class="box-element" id="form-wrapper">
@@ -76,25 +74,111 @@
     <br />
     <div class="box-element hidden" id="payment-info">
       <small>Paypal Options</small>
+      <button id="make-payment">Fizetés</button>
     </div>
   </div>
 
   <div class="col-lg-6">
-     <div class="box-element">
-          <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Vissza a kosárhoz</a>
-          <hr>
-          <h3>Rendelés összegzése</h3>
-          <hr>
-          {% for item in items %}
-          <div class="cart-row">
-               <div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
-               <div style="flex:2"><p>{{item.product.name}}</p></div>
-               <div style="flex:1"><p>{{item.product.price|floatformat:0}} Ft</p></div>
-               <div style="flex:1"><p>{{item.quantity}} db</p></div>
-          </div>
-          {% endfor %}
-          <h5>Termékek:   {{order.get_cart_items}} db</h5>
-          <h5>Végösszeg:   {{order.get_cart_total|floatformat:0}} Ft</h5>
-     </div>
+    <div class="box-element">
+      <a class="btn btn-outline-dark" href="{% url 'cart' %}"
+        >&#x2190; Vissza a kosárhoz</a
+      >
+      <hr />
+      <h3>Rendelés összegzése</h3>
+      <hr />
+      {% for item in items %}
+      <div class="cart-row">
+        <div style="flex: 2">
+          <img class="row-image" src="{{item.product.imageURL}}" />
+        </div>
+        <div style="flex: 2"><p>{{item.product.name}}</p></div>
+        <div style="flex: 1">
+          <p>{{item.product.price|floatformat:0}} Ft</p>
+        </div>
+        <div style="flex: 1"><p>{{item.quantity}} db</p></div>
+      </div>
+      {% endfor %}
+      <h5>Termékek: {{order.get_cart_items}} db</h5>
+      <h5>Végösszeg: {{order.get_cart_total|floatformat:0}} Ft</h5>
+    </div>
+  </div>
+
+  <script>
+    var shipping = "{{order.shipping}}";
+    var user = "{{user}}";
+    var total = "{{order.get_cart_total}}";
+
+    if (shipping == "False") {
+      document.getElementById("shipping-info").innerHTML = "";
+    }
+
+    if (user != "AnonymousUser") {
+      document.getElementById("user-info").innerHTML = "";
+    }
+
+    if (shipping == "False" && user != "AnonymousUser") {
+      document.getElementById("form-wrapper").classList.add("hidden");
+      document.getElementById("payment-info").classList.remove("hidden");
+    }
+
+    var form = document.getElementById("form");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      console.log("Sikeres rendelés");
+      document.getElementById("form-button").classList.add("hidden");
+      document.getElementById("payment-info").classList.remove("hidden");
+    });
+
+    document
+      .getElementById("make-payment")
+      .addEventListener("click", function (e) {
+        submitFormData();
+      });
+
+    function submitFormData() {
+      var userFormData = {
+        name: null,
+        email: null,
+        total: total,
+      };
+
+      var shippingInfo = {
+        address: null,
+        city: null,
+        state: null,
+        zipcode: null,
+      };
+
+      if (shipping != "False") {
+        shippingInfo.address = form.address.value;
+        shippingInfo.city = form.city.value;
+        shippingInfo.state = form.state.value;
+        shippingInfo.zipcode = form.zipcode.value;
+      }
+
+      if (user == "AnonymousUser") {
+        shippingInfo.name = form.name.value;
+        shippingInfo.email = form.email.value;
+      }
+
+      var url = '/process_order/'
+      fetch(url,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'X-CSRFToken':csrftoken,
+        },
+        body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo})
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Siker:', data);
+        alert('Sikeres tranzakció');
+        window.location.href = "{% url 'store' %}"
+      })
+
+    }
+  </script>
+
+  {% endblock content %}
 </div>
-{% endblock content %}
