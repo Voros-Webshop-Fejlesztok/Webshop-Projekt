@@ -297,6 +297,7 @@ h6 {
   background-color: #fff;
   padding: 2vh;
   color: var(--black);
+  border-radius: 15px;
 }
 
 body.dark .box-element {
@@ -479,6 +480,10 @@ body.dark .active {
   z-index: 5;
 }
 
+body.dark .popup {
+  box-shadow: var(--white) 0 0 16px;
+}
+
 .popup img {
   width: 100px;
   margin-top: -50px;
@@ -504,4 +509,14 @@ body.dark .active {
   border-radius: 4px;
   cursor: pointer;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+#pname,
+#pname-icon {
+  box-shadow: var(--black) 0 0 5px;
+}
+
+body.dark #pname,
+#pname-icon {
+  box-shadow: var(--white) 0 0 16px;
 }
