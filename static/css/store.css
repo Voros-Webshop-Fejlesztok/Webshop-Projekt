@@ -19,7 +19,7 @@
 .button-33 {
   box-shadow: var(--grey) 0 0 16px;
   background-color: var(--white);
-  border-radius: 100px;
+  border-radius: 15px;
   color: var(--black);
   cursor: pointer;
   display: inline;
@@ -35,6 +35,10 @@
   touch-action: manipulation;
   margin-top: 2vh;
   margin-right: 1vh;
+}
+
+body.dark .button-33.add-to-cart{
+  box-shadow: var(--white) 0 0 16px;
 }
 
 .button-33:hover {
