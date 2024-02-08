@@ -69,7 +69,7 @@
     </div>
   </div>
 
-  <div class="popup hidden" id="popup">
+  <div class="popup" id="popup">
     <img src="{% static 'images/tick.png' %}" />
     <h2>Köszönjük</h2>
     <p>Sikeresen megrendelted a kiválasztott termékeket</p>
@@ -106,12 +106,18 @@
       });
 
     function flashMessage() {
-      document.getElementById("checkoutContent").classList.add("hidden");
-      document.getElementById("popup").classList.remove("hidden");
-      var popupClose = document.getElementById("popupClose");
+      var checkoutContent = document.getElementById("checkoutContent");
+      checkoutContent.style.animation = "checkoutClose 0.3s ease-in-out";
+      setTimeout(function() {
+            checkoutContent.style.display = "none";
+            checkoutContent.style.animation = ""; // Visszaállítjuk a szüneteltetett animációt
+        }, 300);
 
+
+      document.getElementById("popup").style.display = 'block';
+      var popupClose = document.getElementById("popupClose");
       popupClose.addEventListener("click", function () {
-        document.getElementById("popup").classList.add("hidden");
+        document.getElementById("popup").style.display = 'none';
         submitFormData();
       });
     }

@@ -466,6 +466,7 @@ body.dark .active {
 }
 
 .popup {
+  display: none;
   width: 400px;
   background-color: #fff;
   border-radius: 6px;
@@ -478,6 +479,7 @@ body.dark .active {
   color: #333;
   box-shadow: var(--black) 0 0 16px;
   z-index: 5;
+  animation: popupAnimation 0.5s ease-out;
 }
 
 body.dark .popup {
@@ -519,4 +521,27 @@ body.dark .popup {
 body.dark #pname,
 #pname-icon {
   box-shadow: var(--white) 0 0 16px;
+}
+
+
+@keyframes popupAnimation {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes checkoutClose {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.5;
+  }
 }
