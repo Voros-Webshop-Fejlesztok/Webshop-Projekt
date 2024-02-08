@@ -81,6 +81,10 @@
     var user = "{{user}}";
     var total = "{{order.get_cart_total}}";
 
+    if (total == 0) {
+      document.getElementById("payment-info").style.display = 'none';
+    }
+
     if (shipping == "False") {
       document.getElementById("shipping-info").innerHTML = "";
     }

@@ -85,11 +85,15 @@ def store(request):
 
         if len(products) == 0:
             products = Product.objects.all()
-            products = products.filter(category2__name__icontains=product_name_query)
+            products = products.filter(brand__name__icontains=product_name_query)
 
             if len(products) == 0:
                 products = Product.objects.all()
                 products = products.filter(pname__icontains=product_name_query)
+
+                if len(products) == 0:
+                    products = Product.objects.all()
+                    products = products.filter(description__icontains=product_name_query)
             
 
     if is_valid_param(rating_min):
