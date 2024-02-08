@@ -3,6 +3,12 @@
     padding: 0;
   }
 
+  .elerhetoseg {
+    margin-left: 20px;
+    font-weight: 600;
+    position: absolute;
+  }
+
   .test {
     min-height: 100vh;
     justify-content: center;
