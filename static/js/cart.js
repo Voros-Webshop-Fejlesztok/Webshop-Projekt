@@ -31,7 +31,24 @@ function updateUserOrder(productId, action){
     })
 
     .then((data) => {
-        console.log('data:', data)
-        location.reload()
+        var path = window.location.pathname;
+        if (path == "/store/") {
+            succesfulOrder()
+        }else{
+            location.reload()
+        }
+
     })
 }
+
+function succesfulOrder() {
+    document.getElementById("popup").style.display = 'block';
+    document.getElementById('formContent').style.opacity = '0.1';
+    var popupClose = document.getElementById("popupClose");
+    popupClose.addEventListener("click", function () {
+        document.getElementById("popup").style.display = 'none';
+        document.getElementById('formContent').style.opacity = '1';
+    });
+}
+
+    
