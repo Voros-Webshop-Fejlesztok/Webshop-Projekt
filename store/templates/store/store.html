@@ -1,6 +1,7 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
+<div id="formContent">
 <form method="GET" action=".">
   {% csrf_token %}
 
@@ -93,6 +94,7 @@
     </div>
   {% endfor %}
 </div>
+</div>
 
 <!-- Quick View Popup HTML -->
 <div id="csiresz" class="popup-view">
@@ -107,6 +109,13 @@
       <button data-product="{{ product.id }}" data-action="add" class="button-33 Kosárba add-to-cart update-cart" role="button">Kosárba</button>
     </div>
   </div>
+</div>
+
+<div class="popup" id="popup">
+  <img src="{% static 'images/tick.png' %}" />
+  <h2>Köszönjük</h2>
+  <p>Sikeresen hozzáadtad a terméket a kosárhoz</p>
+  <button id="popupClose">OK</button>
 </div>
 
 <script src="{% static 'js/filter.js' %}"></script>

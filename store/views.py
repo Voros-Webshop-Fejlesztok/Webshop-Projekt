@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 
 from .models import *
 from .forms import CreateUserForm
+from django.db.models import Q
+
 
 
 # Create your views here.
@@ -79,22 +81,10 @@ def store(request):
     category2 = request.GET.get('category2')
     brand = request.GET.get('brand')
     
+    
 
     if is_valid_param(product_name_query):
-        products = products.filter(category__name__icontains=product_name_query)
-
-        if len(products) == 0:
-            products = Product.objects.all()
-            products = products.filter(brand__name__icontains=product_name_query)
-
-            if len(products) == 0:
-                products = Product.objects.all()
-                products = products.filter(pname__icontains=product_name_query)
-
-                if len(products) == 0:
-                    products = Product.objects.all()
-                    products = products.filter(description__icontains=product_name_query)
-            
+        products = products.filter(Q(pname__icontains=product_name_query)|  Q(brand__name__icontains=product_name_query)|  Q(category__name__icontains=product_name_query)|  Q(category2__name__icontains=product_name_query)|  Q(pname__icontains=product_name_query)|  Q(description__icontains=product_name_query))
 
     if is_valid_param(rating_min):
         products = products.filter(rating__gte=rating_min)
