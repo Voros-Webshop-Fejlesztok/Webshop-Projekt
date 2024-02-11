@@ -263,7 +263,7 @@ body.dark .menu-bar .mode i.dark {
 }
 
 body.dark .switch::before {
-  left: 2.5vh;
+  left: 25px;
 }
 
 .home {
@@ -522,7 +522,6 @@ body.dark #pname,
 #pname-icon {
   box-shadow: var(--white) 0 0 16px;
 }
-
 
 @keyframes popupAnimation {
   from {
