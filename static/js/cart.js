@@ -55,12 +55,6 @@ function updateUserOrder(productId, action) {
     })
 
     .then((data) => {
-<<<<<<< HEAD
-      console.log("data:", data);
-      location.reload();
-    });
-}
-=======
         var path = window.location.pathname;
         if (path == "/store/") {
             succesfulOrder()
@@ -82,4 +76,3 @@ function succesfulOrder() {
 }
 
     
->>>>>>> 823f47ea273a479b732d7797e27d418353089b09
