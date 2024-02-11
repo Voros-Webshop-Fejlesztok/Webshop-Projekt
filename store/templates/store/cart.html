@@ -12,7 +12,7 @@
                          <th><h5>Termékek: <strong>{{order.get_cart_items}}</strong></h5></th>
                          <th><h5>Végösszeg: <strong>{{order.get_cart_total}} Ft</strong></h5></th>
                          <th>
-                              <a  style="float:right; margin:5px; border-radius: 15px;" class="btn btn-success" href="{% url 'checkout' %}">Fizetés</a>
+                              <a  style="float:right; margin:5px; border-radius: 15px;" class="btn btn-success" id="toCheckout" href="{% url 'checkout' %}">Fizetés</a>
                          </th>
                     </tr>
                </table>
@@ -47,4 +47,12 @@
                {% endfor %}
 	</div>
 </div>
+
+<script>
+     var total = "{{order.get_cart_total}}";
+
+     if (total == 0) {
+          document.getElementById('toCheckout').classList.add('hidden')
+     }
+</script>
 {% endblock content %}
