@@ -7,7 +7,15 @@ for (i = 0; i < updateBtns.length; i++) {
 
     console.log(user);
     if (user == "AnonymousUser") {
+      var path = window.location.pathname;
+
       addCookieItem(productId, action);
+        if (path == "/store/") {
+            succesfulOrder()
+        }else{
+            location.reload()
+        }
+
     } else {
       updateUserOrder(productId, action);
     }
