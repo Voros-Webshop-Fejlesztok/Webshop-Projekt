@@ -149,6 +149,33 @@
 			return cookieValue;
 		}
 		var csrftoken = getToken('csrftoken');
+
+
+		//Cookies
+
+		function getCookie(name) {
+			var cookieArr = document.cookie.split(';');
+
+			for (var i = 0; i < cookieArr.length; i++) {
+				var cookiePair = cookieArr[i].split('=');
+
+				if (name == cookiePair[0].trim()) {
+					return decodeURIComponent(cookiePair[1]);
+				}
+			}
+
+			return null;
+		}
+
+		var cart = JSON.parse(getCookie('cart'))
+
+		if (cart == undefined){
+			cart = {}
+			console.log('Cart was created')
+			document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+		}
+
+		console.log('Cart:', cart)
 	</script>
 
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
