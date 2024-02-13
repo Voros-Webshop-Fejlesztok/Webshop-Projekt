@@ -37,7 +37,7 @@
   margin-right: 1vh;
 }
 
-body.dark .button-33.add-to-cart{
+body.dark .button-33.add-to-cart {
   box-shadow: var(--white) 0 0 16px;
 }
 
@@ -53,6 +53,10 @@ body.dark .button-33.add-to-cart{
 .view {
   background-color: rgba(173, 173, 255, 0.599);
   font-weight: 500;
+}
+
+#quick-view-name {
+  color: #fff;
 }
 
 #csiresz {
@@ -76,12 +80,13 @@ body.dark .button-33.add-to-cart{
 .cardstore {
   position: relative;
   display: flex;
-  width: 1200px;
+  width: 70%;
   height: 800px;
-  background-color: #fff;
+  background-color: #0079b5;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(8, 49, 253, 0.754);
+  box-shadow: 0 0 10px rgba(8, 122, 253, 0.754);
   margin: 20px;
+  flex-direction: row;
 }
 
 .cardstore .cardstore-img {
@@ -100,8 +105,8 @@ body.dark .button-33.add-to-cart{
 .cardstore .cardstore-img img {
   z-index: 2;
   position: relative;
-  height: 280px;
-  width: 310x;
+  height: auto;
+  width: 100%;
   border-radius: 10px;
 }
 
@@ -110,11 +115,12 @@ body.dark .button-33.add-to-cart{
   display: flex;
   flex-direction: column;
   width: 55%;
-  height: 100%;
+  height: auto;
   box-sizing: border-box;
   padding: 40px;
   border-radius: 10px;
-  background: #fff;
+  color: #fff;
+  font-size: 25px;
 }
 
 .cardstore .close-btn {
@@ -136,4 +142,20 @@ body.dark .button-33.add-to-cart{
   opacity: 0;
   transition: height 10s ease-in-out, opacity 0.5s ease-in-out; /* Két tulajdonság esetén két átmenet definiálása */
   pointer-events: none; /* A rejtett elem ne legyen interaktív */
+}
+
+@media only screen and (max-width: 768px) {
+  .cardstore {
+    flex-direction: column;
+  }
+
+  .cardstore .cardstore-img {
+    width: 100%;
+    order: 2;
+  }
+
+  .cardstore .infók {
+    width: 100%;
+    order: 1;
+  }
 }
