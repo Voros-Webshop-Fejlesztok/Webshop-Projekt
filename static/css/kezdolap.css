@@ -4,9 +4,9 @@
   }
 
   .elerhetoseg {
-    margin-left: 20px;
+    left: 20px;
     font-weight: 600;
-    position: absolute;
+    display: block;
   }
 
   .test {
@@ -16,7 +16,7 @@
   }
   .cst{
     text-align: center;
-    color: #fff;
+    color: #0433ab;
     font-size: 65px;
   }
   
@@ -88,7 +88,7 @@
   
   .product .product-card .popup-btn {
     z-index: 2;
-    color: #1156ea;
+    color: #021032;
     background: #fefefe;
     position: absolute;
     bottom: 20px;
@@ -157,10 +157,11 @@
   
   .product .popup-card .info {
     z-index: 2;
-    background: #fff;
+    background: #0433ab;
+    color: #fff;
     display: flex;
     flex-direction: column;
-    width: 55%;
+    width: 75%;
     height: 100%;
     box-sizing: border-box;
     padding: 40px;
@@ -168,7 +169,7 @@
   }
   
   .product .popup-card .close-btn {
-    color: #062070;
+    color: #fff;
     z-index: 3;
     position: absolute;
     right: 0;
@@ -178,12 +179,14 @@
   }
   
   .product .popup-card .info h2 {
+    color: #fff;
     font-size: 40px;
     line-height: 20px;
     margin: 10px;
   }
   
   .product .popup-card .info h2 span {
+    color: #fff;
     font-size: 15px;
     text-transform: uppercase;
     letter-spacing: 2px;
