@@ -478,7 +478,7 @@ body.dark .active {
   padding: 0 30px 30px;
   color: #333;
   box-shadow: var(--black) 0 0 16px;
-  z-index: 5;
+  z-index: 1200;
   animation: popupAnimation 0.5s ease-out;
 }
 
