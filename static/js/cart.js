@@ -8,6 +8,12 @@ for (i = 0; i < updateBtns.length; i++) {
     console.log(user);
     if (user == "AnonymousUser") {
       addCookieItem(productId, action);
+      var path = window.location.pathname;
+        if (path == "/store/") {
+            succesfulOrder()
+        }else{
+            location.reload()
+        }
     } else {
       updateUserOrder(productId, action);
     }
@@ -68,11 +74,29 @@ function updateUserOrder(productId, action) {
 function succesfulOrder() {
     document.getElementById("popup").style.display = 'block';
     document.getElementById('formContent').style.opacity = '0.1';
+
     var popupClose = document.getElementById("popupClose");
+
     popupClose.addEventListener("click", function () {
+      document.getElementById("popup").style.animation = "checkoutClose 0.5s ease-in-out"
+
+      setTimeout(function() {
         document.getElementById("popup").style.display = 'none';
         document.getElementById('formContent').style.opacity = '1';
-    });
-}
-
+        document.getElementById("popup").style.animation = "";
+    }, 500);
+  
+  });
     
+    setTimeout(closePopup, 2000);
+
+    function closePopup() {
+      document.getElementById("popup").style.animation = "checkoutClose 0.5s ease-in-out"
+
+      setTimeout(function() {
+        document.getElementById("popup").style.display = 'none';
+        document.getElementById('formContent').style.opacity = '1';
+        document.getElementById("popup").style.animation = "";
+    }, 500);
+    }
+}

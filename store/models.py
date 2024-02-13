@@ -39,6 +39,7 @@ class Product(models.Model):
     digital = models.BooleanField(default=False, null=True, blank=False)
     image = models.ImageField(null=True, blank=True)
     description = models.CharField(max_length=200, blank=True, default='')
+    stock = models.IntegerField(blank=True, default=0)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category)
     category2 = models.ManyToManyField(Category2, blank=True)
@@ -64,7 +65,7 @@ class Order(models.Model):
     transaction_id = models.CharField(max_length=200, null = True)
 
     def __str__(self):
-        return str(self.transaction_id)
+        return f'{self.id}. rendelés '
     
     @property
     def shipping(self):
@@ -95,6 +96,9 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.order} - {self.quantity} db {self.product} '
+
     @property
     def get_total(self):
         total = self.product.price * self.quantity
@@ -106,12 +110,10 @@ class ShippingAddress(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
     address = models.CharField(max_length=200, null = True)
-    city = models.CharField(max_length=200, null = True)
+    city= models.CharField(max_length=200, null=True)
     state = models.CharField(max_length=200, null = True)
     zipcode = models.CharField(max_length=200, null = True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.address
-    
-###########################################################################################################
+        return self.city + ' ' + self.address
