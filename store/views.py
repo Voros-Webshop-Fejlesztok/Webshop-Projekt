@@ -10,7 +10,7 @@ from .models import *
 from .forms import CreateUserForm
 from django.db.models import Q
 
-
+from .utils import cookieCart, cartData, guestOrder
 
 # Create your views here.
 
@@ -118,62 +118,22 @@ def home(request):
     return render(request, 'store/home.html', context)
 
 def cart(request):
+    data = cartData(request)
+
+    items = data['items']
+    order = data['order']
+    cartItems = data['cartItems']
     
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer = customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        try:
-            cart = json.loads(request.COOKIES['cart'])
-        except:
-            cart = {}
-        print(cart)
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
-        cartItems = order['get_cart_items']
-
-        for i in cart:
-            cartItems += cart[i]['quantity']
-
-            product = Product.objects.get(id=i)
-            total = (product.price * cart[i]['quantity'])
-
-            order['get_cart_total'] += total
-            order['get_cart_items'] += cart[i]['quantity']
-
-            item = {
-                'product':{
-                    'id':product.id,
-                    'pname':product.pname,
-                    'price':product.price,
-                    'imageURL':product.imageURL
-                },
-                'quantity':cart[i]['quantity'],
-                'get_total':total,
-            }
-
-            items.append(item)
-
-            if product.digital == False:
-                order['shipping'] = True
-    
-    context = {'items':items, 'order':order}
+    context = {'items':items, 'order':order, 'cartItems':cartItems}
     return render(request, 'store/cart.html', context)
 
 
 def checkout(request):
+    data = cartData(request)
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer = customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        #ezzel csinál üres kosarakat az új és nem bejelentkezett felhasználóknak
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
-        cartItems = order['get_cart_items']
+    items = data['items']
+    order = data['order']
+    cartItems = data['cartItems']
 
     context = {'items':items, 'order':order, 'cartItems':cartItems}
     return render(request, 'store/checkout.html', context)
@@ -194,7 +154,7 @@ def updateItem(request):
     if action == 'add':
         orderItem.quantity = (orderItem.quantity + 1)
     elif action == 'remove':
-        orderItem.quantity = (orderItem.quantity + -1)
+        orderItem.quantity = (orderItem.quantity - 1)
 
     orderItem.save()
 
@@ -205,30 +165,31 @@ def updateItem(request):
 
 
 def processOrder(request):
-    data = json.loads(request.body)
     transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer = customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
-        if total == order.get_cart_total:
-            order.complete = True
-        order.save()
+    else:
+        customer, order = guestOrder(request, data)
 
-        if order.shipping == True:
-            ShippingAddress.objects.create(
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
+
+    if total == order.get_cart_total:
+        order.complete = True
+    order.save()
+    
+    if order.shipping:
+        ShippingAddress.objects.create(
                 customer=customer,
                 order=order,
                 address=data['shipping']['address'],
                 city=data['shipping']['city'],
                 state=data['shipping']['state'],
-                zipcode=data['shipping']['zipcode'],  
+                zipcode=data['shipping']['zipcode'],
             )
-
-    else:
-        print('Nincs bejelentkezett felhasználó')
 
     return JsonResponse('Payment was complete', safe=False)

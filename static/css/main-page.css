@@ -534,6 +534,17 @@ body.dark #pname,
   }
 }
 
+@keyframes closePopupAnimation {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.5;
+  }
+}
+
 @keyframes checkoutClose {
   from {
     opacity: 1;
