@@ -61,6 +61,9 @@ def loginPage(request):
     return render(request, 'store/login.html', context)
 
 def logoutUser(request):
+
+    messages.success(request, 'Sikeresen kijelentkezett')
+
     logout(request)
 
     return redirect('login')
