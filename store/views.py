@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
 import datetime
+import time
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -60,6 +61,7 @@ def loginPage(request):
 
 def logoutUser(request):
     logout(request)
+
     return redirect('login')
 
 
@@ -115,6 +117,7 @@ def store(request):
 
 def home(request):
     context = {}
+
     return render(request, 'store/home.html', context)
 
 def cart(request):

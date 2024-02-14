@@ -42,14 +42,26 @@
         </div>
     </div>
 </div>
+
+{% for message in messages %}
 <div class="popup" id="popup">
+    {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
     <img src="{% static 'images/x.png' %}" />
+    {% else %}
+    <img src="{% static 'images/tick.png' %}" />
+    {% endif %}
     <h2></h2>
-    {% for message in messages %}
-    <div class="message {{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-    <button id="popupClose">OK</button>
+    <div class="message {{ message.tags }}">{{message}}</div>
+    <br>
+    {% if message|striptags != 'Sikeres bejelentkezés' %}
+        {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
+        <button style="background: red;" id="popupClose">OK</button>
+        {% else %}
+        <button id="popupClose">OK</button>
+        {% endif %}
+    {% endif %}
 </div>
+{% endfor %}
 
 {% if messages %}
 <script>
