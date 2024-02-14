@@ -3,7 +3,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-<div class="container h-100">
+<div class="container h-100" id="loginContent">
     <div class="d-flex justify-content-center h-100">
         <div class="user_card">
             <div class="d-flex justify-content-center">
@@ -32,12 +32,7 @@
                            </div>
                 </form>
 
-            </div>
-    
-            {% for message in messages %}
-                <p id="messages">{{message}}</p>
-            {% endfor %}
-
+            </div> 
             <div class="mt-4">
                 <div class="d-flex justify-content-center links">
                     Nincs még fiókod? <a href="{% url 'register' %}" class="ml-2">Regisztráció</a>
@@ -47,5 +42,55 @@
         </div>
     </div>
 </div>
+
+{% for message in messages %}
+<div style="display: block;" class="popup" id="popup">
+    {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
+    <img src="{% static 'images/x.png' %}" />
+    {% else %}
+    <img src="{% static 'images/tick.png' %}" />
+    {% endif %}
+    <h2></h2>
+    <div class="message {{ message.tags }}">{{message}}</div>
+    <br>
+    {% if message|striptags != 'Sikeres bejelentkezés' %}
+        {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
+        <button style="background: red;" id="popupClose">OK</button>
+        {% else %}
+        <button id="popupClose">OK</button>
+        {% endif %}
+    {% endif %}
+</div>
+{% endfor %}
+
+{% if messages %}
+<script>
+    popup = document.getElementById('popup');
+    content = document.getElementById('loginContent')
+
+    content.style.opacity = '0.1'
+    popup.style.display = 'block';
+
+    setTimeout(loginAnimation, 4000);
+
+    function loginAnimation() {
+        document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
+        document.getElementById('loginContent').style.animation = "opacityAnimation 0.5s ease.out";
+
+        setTimeout(function() {
+            document.getElementById('popup').style.animation = "";
+            document.getElementById('loginContent').style.animation = "";
+            document.getElementById('popup').style.display = "none";
+            document.getElementById('loginContent').style.opacity = 1;
+        }, 500);  
+    }
+
+    var popupClose = document.getElementById('popupClose')
+    popupClose.addEventListener("click", function () {
+        loginAnimation()
+      });
+
+</script>
+{% endif %}
 
 {% endblock content %}

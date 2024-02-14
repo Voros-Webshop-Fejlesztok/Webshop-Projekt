@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
 import datetime
+import time
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -33,7 +34,7 @@ def registerPage(request):
             
             customer.save()
 
-            messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű fiókját')
+            messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű felhasználói fiókját')
 
             return redirect('login')
 
@@ -51,6 +52,7 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, 'Sikeresen bejelentkezett ' + username + ' felhasználó')
             return redirect('home')
         else:
             messages.info(request, 'Helytelen felhasználónév vagy jelszó')
@@ -59,7 +61,11 @@ def loginPage(request):
     return render(request, 'store/login.html', context)
 
 def logoutUser(request):
+
+    messages.success(request, 'Sikeresen kijelentkezett')
+
     logout(request)
+
     return redirect('login')
 
 
@@ -115,6 +121,7 @@ def store(request):
 
 def home(request):
     context = {}
+
     return render(request, 'store/home.html', context)
 
 def cart(request):

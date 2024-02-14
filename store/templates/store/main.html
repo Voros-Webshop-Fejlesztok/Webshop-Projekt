@@ -91,18 +91,21 @@
 
 				<div class="bottom-content">
 					<ul>
+						{% if request.user.id is None %}
 						<li class="nav-link">
 							<a href="{% url 'register' %}">
 								<i class='bx bx-log-in icon'></i>
 								<span class="text nav-text">Regisztráció/<br>Bejelentkezés</span>
 							</a>
 						</li>
+						{% else %}
 						<li class="nav-link">
 							<a href="{% url 'logout' %}">
 								<i class='bx bx-log-out icon'></i>
 								<span class="text nav-text">Kijelentkezés</span>
 							</a>
 						</li>
+						{% endif %}
 						<li class="mode nav-link">
 
 								<div class="moon-sun">

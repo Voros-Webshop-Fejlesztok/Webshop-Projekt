@@ -466,6 +466,7 @@ body.dark .active {
 }
 
 .popup {
+  margin-left: 45px;
   display: none;
   width: 400px;
   background-color: #fff;
@@ -553,5 +554,14 @@ body.dark #pname,
   to {
     opacity: 0;
     scale: 0.5;
+  }
+}
+
+@keyframes opacityAnimation {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 1;
   }
 }
