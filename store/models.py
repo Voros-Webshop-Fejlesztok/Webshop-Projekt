@@ -7,6 +7,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,  null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -15,12 +16,6 @@ class Customer(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=20, null = True)
-
-    def __str__(self):
-        return self.name
-    
-class Category2(models.Model):
-    name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
@@ -42,7 +37,6 @@ class Product(models.Model):
     stock = models.IntegerField(blank=True, default=0)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category)
-    category2 = models.ManyToManyField(Category2, blank=True)
     rating = models.FloatField(default=0)
 
     def __str__(self):
@@ -110,6 +104,7 @@ class ShippingAddress(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
     address = models.CharField(max_length=200, null = True)
+    house_number = models.IntegerField(null = True)
     city= models.CharField(max_length=200, null=True)
     state = models.CharField(max_length=200, null = True)
     zipcode = models.CharField(max_length=200, null = True)

@@ -139,6 +139,7 @@
     function submitFormData() {
       var userFormData = {
         name: null,
+        phonenumber: null,
         email: null,
         total: total,
       };
@@ -160,6 +161,7 @@
       if (user == "AnonymousUser") {
         userFormData.name = form.lastname.value + " " + form.firstname.value;
         userFormData.email = form.email.value;  
+        userFormData.phonenumber = form.phonenumber.value;  
       }
 
       var url = "/process_order/";
