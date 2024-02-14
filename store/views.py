@@ -33,7 +33,7 @@ def registerPage(request):
             
             customer.save()
 
-            messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű fiókját')
+            messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű felhasználói fiókját')
 
             return redirect('login')
 
