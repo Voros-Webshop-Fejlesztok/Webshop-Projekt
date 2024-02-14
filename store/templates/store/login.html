@@ -44,7 +44,7 @@
 </div>
 
 {% for message in messages %}
-<div class="popup" id="popup">
+<div style="display: block;" class="popup" id="popup">
     {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
     <img src="{% static 'images/x.png' %}" />
     {% else %}

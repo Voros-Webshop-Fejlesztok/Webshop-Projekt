@@ -52,6 +52,7 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, 'Sikeresen bejelentkezett ' + username + ' felhasználó')
             return redirect('home')
         else:
             messages.info(request, 'Helytelen felhasználónév vagy jelszó')
