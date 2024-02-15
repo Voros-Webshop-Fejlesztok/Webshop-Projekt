@@ -20,8 +20,12 @@ modeSwitch.addEventListener('click', () => {
 
     if (body.classList.contains('dark')) {
         modeText.innerText = 'Világos mód';
+        document.getElementById('lightStore').classList.add('hidden')
+        document.getElementById('darkStore').classList.remove('hidden')
     } else {
         modeText.innerText = 'Sötét mód';
+        document.getElementById('lightStore').classList.remove('hidden')
+        document.getElementById('darkStore').classList.add('hidden')
     }
 });
 

@@ -38,6 +38,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category)
     rating = models.FloatField(default=0)
+    darkweb = models.BooleanField(default=False, null=True, blank=False)
 
     def __str__(self):
         return self.pname
