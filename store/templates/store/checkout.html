@@ -15,6 +15,9 @@
             <div class="form-field">
               <input required class="form-control" type="email" name="email" placeholder="Email cím" />
             </div>
+            <div class="form-field">
+              <input required class="form-control" type="tel" name="phonenumber" placeholder="Telefonszám" />
+            </div>
             <br><br>
           </div>
           
@@ -22,9 +25,6 @@
           <div id="shipping-info">     
             <p>Szállítási adatok</p>
             <hr/>
-            <div class="form-field">
-              <input required class="form-control" type="tel" name="phonenumber" placeholder="Telefonszám" />
-            </div>
             <hr>
             <div class="form-field">
               <input class="form-control" type="text" name="zipcode" placeholder="Irányítószám" />
@@ -161,7 +161,7 @@
       if (user == "AnonymousUser") {
         userFormData.name = form.lastname.value + " " + form.firstname.value;
         userFormData.email = form.email.value;  
-        userFormData.phonenumber = form.phonenumber.value;  
+        userFormData.phonenumber = form.phonenumber.value; 
       }
 
       var url = "/process_order/";
