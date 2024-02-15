@@ -36,7 +36,10 @@
               <input class="form-control" type="text" name="state" placeholder="Megye" />
             </div>
             <div class="form-field">
-              <input class="form-control" type="text" name="address" placeholder="Cím" />
+              <input class="form-control" type="text" name="address" placeholder="Közterület neve és jellege" />
+            </div>          
+            <div class="form-field">
+              <input class="form-control" type="text" name="house_number" placeholder="Házszám" />
             </div>          
           </div>
           <hr />
@@ -152,11 +155,12 @@
       };
 
       if (shipping != "False") {
-        shippingInfo.address = form.address.value;
+        shippingInfo.address = form.address.value + ' ' + form.house_number.value + '.';
         shippingInfo.city = form.city.value;
         shippingInfo.state = form.state.value;
         shippingInfo.zipcode = form.zipcode.value;
       }
+
 
       if (user == "AnonymousUser") {
         userFormData.name = form.lastname.value + " " + form.firstname.value;
