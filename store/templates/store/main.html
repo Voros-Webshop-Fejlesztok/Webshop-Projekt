@@ -62,12 +62,17 @@
 							<span class="text nav-text">Kosár</span>
 						</a>
 					</li>
+					{% if request.user.id is not None %}
 					<li class="nav-link basic">
 						<a href="">
 							<i class='bx bx-conversation icon' ></i>
 							<span class="text nav-text">Fórum</span>
 						</a>
 					</li>
+					{% else %}
+					<li class="nav-link basic">
+					</li>
+					{% endif %}
 					<li class="nav-link">
 						<a href="">
 							<i class='bx bxl-youtube icon'></i>
