@@ -55,11 +55,11 @@ body.dark .button-33.add-to-cart {
   font-weight: 500;
 }
 
-#quick-view-name {
-  color: #fff;
-}
 
-#csiresz {
+
+/* light*/
+
+#light {
   display: none;
   position: fixed;
   top: 0;
@@ -73,11 +73,15 @@ body.dark .button-33.add-to-cart {
   overflow: hidden;
 }
 
-#csiresz.active {
+#light.active {
   display: flex;
 }
 
-.cardstore {
+#lightquick-view-name{
+  color: #fff;
+}
+
+.lightcardstore {
   position: relative;
   display: flex;
   width: 70%;
@@ -89,7 +93,7 @@ body.dark .button-33.add-to-cart {
   flex-direction: row;
 }
 
-.cardstore .cardstore-img {
+.lightcardstore .lightcardstore-img {
   z-index: 2;
   position: relative;
   display: flex;
@@ -102,7 +106,7 @@ body.dark .button-33.add-to-cart {
   border-bottom-left-radius: 10px;
 }
 
-.cardstore .cardstore-img img {
+.lightcardstore .lightcardstore-img img {
   z-index: 2;
   position: relative;
   height: auto;
@@ -110,7 +114,7 @@ body.dark .button-33.add-to-cart {
   border-radius: 10px;
 }
 
-.cardstore .infók {
+.lightcardstore .lightinfók {
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -123,7 +127,86 @@ body.dark .button-33.add-to-cart {
   font-size: 25px;
 }
 
-.cardstore .close-btn {
+.lightcardstore .lightclose-btn {
+  color: #062070;
+  z-index: 3;
+  position: absolute;
+  right: 0;
+  font-size: 20px;
+  margin: 20px;
+  cursor: pointer;
+}
+
+/* dark*/
+#dark {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#dark.active {
+  display: flex;
+}
+
+#darkquick-view-name{
+  color: #fff;
+}
+
+.darkcardstore {
+  position: relative;
+  display: flex;
+  width: 70%;
+  height: 800px;
+  background-color: #0079b5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(8, 122, 253, 0.754);
+  margin: 20px;
+  flex-direction: row;
+}
+
+.darkcardstore .darkcardstore-img {
+  z-index: 2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 90%;
+  transform: translateY(25px);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.darkcardstore .darkcardstore-img img {
+  z-index: 2;
+  position: relative;
+  height: auto;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.darkcardstore .darkinfók {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  height: auto;
+  box-sizing: border-box;
+  padding: 40px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 25px;
+}
+
+.darkcardstore .darkclose-btn {
   color: #062070;
   z-index: 3;
   position: absolute;

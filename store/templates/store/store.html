@@ -88,18 +88,18 @@
         <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span></h4>
         
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
-        <button class="button-33 view" role="button" onclick="openQuickView('{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
+        <button class="button-33 view" role="button" onclick="lightopenQuickView('{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
       </div>
     </div>
-    <div id="csiresz" class="popup-view">
-      <div class="cardstore popup-card">
-        <a onclick="closeQuickView()"><i class="fas fa-times close-btn"></i></a>
-        <div class="cardstore-img">
-          <img id="quick-view-image" src="" alt="">
+    <div id="light" class="popup-view">
+      <div class="lightcardstore popup-card">
+        <a onclick="lightcloseQuickView()"><i class="fas fa-times lightclose-btn"></i></a>
+        <div class="lightcardstore-img">
+          <img id="lightquick-view-image" src="" alt="">
         </div>
-        <div class="infók">
-          <h2 id="quick-view-name"></h2>
-          <p id="quick-view-details"></p>
+        <div class="lightinfók">
+          <h2 id="lightquick-view-name"></h2>
+          <p id="lightquick-view-details"></p>
           <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart quickview" role="button">Kosárba</button>
         </div>
       </div>
@@ -107,6 +107,19 @@
   {% endif %}
   {% endfor %}
 </div>
+
+<script type="text/javascript">
+  function lightopenQuickView(imageURL, name, brand, category, description, price, rating) {
+     document.getElementById('lightquick-view-image').src = imageURL;
+     document.getElementById('lightquick-view-name').innerHTML = name + '<br><span>' + brand + '</span>';
+     document.getElementById('lightquick-view-details').innerHTML = category +  '<br>' + description + '<br><strong>' + price + '</strong> <i class="bx bx-star rating-star"></i><span class="rating">' + rating + '</span>';
+     document.getElementById('light').classList.add('active');
+   }
+ 
+   function lightcloseQuickView() {
+     document.getElementById('light').classList.remove('active');
+   }
+ </script>
 
 <div class="row hidden" style="margin-top: 100px;" id="darkStore">
   {% for product in products %}
@@ -127,18 +140,18 @@
         <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span></h4>
         
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
-        <button class="button-33 view" role="button" onclick="openQuickView('{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
+        <button class="button-33 view" role="button" onclick="darkopenQuickView('{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
       </div>
     </div>
-    <div id="csiresz" class="popup-view">
-      <div class="cardstore popup-card">
-        <a onclick="closeQuickView()"><i class="fas fa-times close-btn"></i></a>
-        <div class="cardstore-img">
-          <img id="quick-view-image" src="" alt="">
+    <div id="dark" class="popup-view">
+      <div class="darkcardstore popup-card">
+        <a onclick="darkcloseQuickView()"><i class="fas fa-times darkclose-btn"></i></a>
+        <div class="darkcardstore-img">
+          <img id="darkquick-view-image" src="" alt="">
         </div>
-        <div class="infók">
-          <h2 id="quick-view-name"></h2>
-          <p id="quick-view-details"></p>
+        <div class="darkinfók">
+          <h2 id="darkquick-view-name"></h2>
+          <p id="darkquick-view-details"></p>
           <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart quickview" role="button">Kosárba</button>
         </div>
       </div>
@@ -148,6 +161,20 @@
 </div>
 </div>
 
+
+<!-- Quick View Popup JavaScript -->
+<script type="text/javascript">
+  function darkopenQuickView(imageURL, name, brand, category, description, price, rating) {
+     document.getElementById('darkquick-view-image').src = imageURL;
+     document.getElementById('darkquick-view-name').innerHTML = name + '<br><span>' + brand + '</span>';
+     document.getElementById('darkquick-view-details').innerHTML = category +  '<br>' + description + '<br><strong>' + price + '</strong> <i class="bx bx-star rating-star"></i><span class="rating">' + rating + '</span>';
+     document.getElementById('dark').classList.add('active');
+   }
+ 
+   function darkcloseQuickView() {
+     document.getElementById('dark').classList.remove('active');
+   }
+ </script>
 <!-- Quick View Popup HTML -->
 
 
@@ -159,19 +186,7 @@
 </div>
 
 <script src="{% static 'js/filter.js' %}"></script>
-<!-- Quick View Popup JavaScript -->
-<script type="text/javascript">
- function openQuickView(imageURL, name, brand, category, description, price, rating) {
-    document.getElementById('quick-view-image').src = imageURL;
-    document.getElementById('quick-view-name').innerHTML = name + '<br><span>' + brand + '</span>';
-    document.getElementById('quick-view-details').innerHTML = category + ' | ' + category + '<br>' + description + '<br><strong>' + price + '</strong> <i class="bx bx-star rating-star"></i><span class="rating">' + rating + '</span>';
-    document.getElementById('csiresz').classList.add('active');
-  }
 
-  function closeQuickView() {
-    document.getElementById('csiresz').classList.remove('active');
-  }
-</script>
 
 
 {% endblock content %}
