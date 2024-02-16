@@ -10,6 +10,11 @@ const modeText = body.querySelector('.mode-text');
 if (isDarkMode) {
     body.classList.add('dark');
     modeText.innerText = 'Világos mód';
+    var path = window.location.pathname;
+        if (path == "/store/") {
+            document.getElementById('lightStore').classList.add('hidden')
+            document.getElementById('darkStore').classList.remove('hidden')
+        }
 }
 
 // Dark mód váltásának figyelése és tárolása
@@ -20,16 +25,27 @@ modeSwitch.addEventListener('click', () => {
 
     if (body.classList.contains('dark')) {
         modeText.innerText = 'Világos mód';
-        document.getElementById('lightStore').classList.add('hidden')
-        document.getElementById('darkStore').classList.remove('hidden')
+        
+        var path = window.location.pathname;
+        if (path == "/store/") {
+            document.getElementById('lightStore').classList.add('hidden')
+            document.getElementById('darkStore').classList.remove('hidden')
+        }
+
+
     } else {
         modeText.innerText = 'Sötét mód';
-        document.getElementById('lightStore').classList.remove('hidden')
-        document.getElementById('darkStore').classList.add('hidden')
+        
+        var path = window.location.pathname;
+        if (path == "/store/") {
+            document.getElementById('lightStore').classList.remove('hidden')
+            document.getElementById('darkStore').classList.add('hidden')
+        }
+
     }
 });
 
 // Sidebar toggle eseményfigyelő
 toggle.addEventListener('click', () => {
-    sidebar.classList.toggle('close');
+    sidebar.classList.toggle('close')
 });
