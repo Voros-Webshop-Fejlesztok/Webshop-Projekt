@@ -7,6 +7,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,  null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -15,12 +16,6 @@ class Customer(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=20, null = True)
-
-    def __str__(self):
-        return self.name
-    
-class Category2(models.Model):
-    name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
@@ -42,8 +37,8 @@ class Product(models.Model):
     stock = models.IntegerField(blank=True, default=0)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category)
-    category2 = models.ManyToManyField(Category2, blank=True)
     rating = models.FloatField(default=0)
+    darkweb = models.BooleanField(default=False, null=True, blank=False)
 
     def __str__(self):
         return self.pname

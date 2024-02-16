@@ -41,6 +41,7 @@ def cookieCart(request):
             pass
     return {'cartItems':cartItems, 'items':items, 'order':order}
 
+
 def cartData(request):
     if request.user.is_authenticated:
         customer = request.user.customer
@@ -59,15 +60,19 @@ def cartData(request):
 def guestOrder(request, data):
     name = data['form']['name']
     email = data['form']['email']
+    phonenumber = data['form']['phonenumber']
 
     cookieData = cookieCart(request)
     items = cookieData['items']
 
     customer, created = Customer.objects.get_or_create(
         email=email,
+        phone_number=phonenumber,
+        name=name
     )
 
-    customer.name = name
+    print(customer)
+
     customer.save()
 
     order = Order.objects.create(

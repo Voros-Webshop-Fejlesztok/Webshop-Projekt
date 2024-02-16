@@ -15,8 +15,8 @@
 }
 
 body.dark .user_card {
-    background: grey;
-    width: 350px;
+    background: lightskyblue;
+    width: 400px;
     margin-top: auto;
     margin-bottom: auto;
     position: relative;
@@ -24,7 +24,7 @@ body.dark .user_card {
     justify-content: center;
     flex-direction: column;
     padding: 10px;
-    box-shadow: var(--white) 0 0 1.6vh;
+    box-shadow: hsl(0, 0%, 100%) 0 0 1.6vh;
     border-radius: 5px;
     margin-top: 20vh;
 }

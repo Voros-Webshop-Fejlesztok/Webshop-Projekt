@@ -1,4 +1,7 @@
-{% extends 'store/main.html' %} {% load static %} {% block content %}
+{% extends 'store/main.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
   <div class="row" id="checkoutContent">
     <div class="col-lg-6">
       <div class="box-element" id="form-wrapper">
@@ -15,6 +18,9 @@
             <div class="form-field">
               <input required class="form-control" type="email" name="email" placeholder="Email cím" />
             </div>
+            <div class="form-field">
+              <input required class="form-control" type="tel" name="phonenumber" placeholder="Telefonszám" />
+            </div>
             <br><br>
           </div>
           
@@ -22,9 +28,6 @@
           <div id="shipping-info">     
             <p>Szállítási adatok</p>
             <hr/>
-            <div class="form-field">
-              <input required class="form-control" type="tel" name="phonenumber" placeholder="Telefonszám" />
-            </div>
             <hr>
             <div class="form-field">
               <input class="form-control" type="text" name="zipcode" placeholder="Irányítószám" />
@@ -36,7 +39,10 @@
               <input class="form-control" type="text" name="state" placeholder="Megye" />
             </div>
             <div class="form-field">
-              <input class="form-control" type="text" name="address" placeholder="Cím" />
+              <input class="form-control" type="text" name="address" placeholder="Közterület neve és jellege" />
+            </div>          
+            <div class="form-field">
+              <input class="form-control" type="text" name="house_number" placeholder="Házszám" />
             </div>          
           </div>
           <hr />
@@ -66,7 +72,7 @@
             <p>{{item.product.name}}</p>
           </div>
           <div style="flex: 1">
-            <p>{{item.product.price|floatformat:0}} Ft</p>
+            <p>{{item.product.price|floatformat:0|intcomma}} Ft</p>
           </div>
           <div style="flex: 1">
             <p>{{item.quantity}} db</p>
@@ -74,7 +80,7 @@
         </div>
         {% endfor %}
         <h5>Termékek: {{order.get_cart_items}} db</h5>
-        <h5>Végösszeg: {{order.get_cart_total|floatformat:0}} Ft</h5>
+        <h5>Végösszeg: {{order.get_cart_total|floatformat:0|intcomma}} Ft</h5>
       </div>
     </div>
   </div>
@@ -139,6 +145,7 @@
     function submitFormData() {
       var userFormData = {
         name: null,
+        phonenumber: null,
         email: null,
         total: total,
       };
@@ -151,15 +158,17 @@
       };
 
       if (shipping != "False") {
-        shippingInfo.address = form.address.value;
+        shippingInfo.address = form.address.value + ' ' + form.house_number.value + '.';
         shippingInfo.city = form.city.value;
         shippingInfo.state = form.state.value;
         shippingInfo.zipcode = form.zipcode.value;
       }
 
+
       if (user == "AnonymousUser") {
         userFormData.name = form.lastname.value + " " + form.firstname.value;
         userFormData.email = form.email.value;  
+        userFormData.phonenumber = form.phonenumber.value; 
       }
 
       var url = "/process_order/";
