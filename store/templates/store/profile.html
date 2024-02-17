@@ -7,13 +7,16 @@
   {{profile.email}}<br />
   {{profile.phone_number}}<br />
 </p>
-<hr />
+<p style="margin-bottom: 200px;"></p>
+<hr/>
 
 {% for following in profile.follows.all %}
 <p style="margin-bottom: 5px">{{following}}</p>
-{% endfor %}<hr>
+{% endfor %} 
 
+<p style="margin-bottom: 200px;"></p>
 
+<hr>
 {% for order in orders %}
     <h3>{{order}}</h3>
     {% for order_item in order_items %}
