@@ -1,202 +1,232 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-<head>
-	<title>Dáridó Website</title>
+  <head>
+    <title>Dáridó Website</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"
+    />
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<link rel="stylesheet" href="{% static 'css/main-page.css' %}">
-	<link rel="stylesheet" href="{% static 'css/store.css' %}">
-	<link rel="stylesheet" href="{% static 'css/kezdolap.css' %}">
-	<link rel="stylesheet" href="{% static 'css/register.css' %}">
-	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'css/main-page.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/store.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/kezdolap.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="sidebar close" id="sidebar">
+      <header>
+        <div class="image-text">
+          <span class="image" style="margin-left: 2.5vh">
+            <img src="{% static 'images/logo.png' %}" />
+          </span>
 
-	<nav class="sidebar close" id="sidebar">
-		<header>
-			<div class="image-text">
-				<span class="image" style="margin-left: 2.5vh;">
-					<img src="{% static 'images/logo.png' %}">
-				</span>
+          <div class="text header-text">
+            <span class="name">Dáridó</span>
+            <span style="font-size: smaller" class="name"
+              >The Digital Store</span
+            >
+          </div>
+        </div>
 
-				<div class="text header-text">
-					<span class="name">Dáridó</span>
-					<span style="font-size: smaller;" class="name">The Digital Store</span>
-				</div>
-			</div>
+        <i class="bx bx-chevron-right toggle"></i>
+      </header>
 
-			<i class='bx bx-chevron-right toggle' ></i>
-		</header>
+      <div class="menu-bar">
+        <div class="menu">
+          <ul class="menu-links">
+            <li class="nav-link basic">
+              {% if request.user.id is None %}
+              <i class="bx bx-user-x icon"></i>
+              <span class="text nav-text"
+                >Köszöntünk<br /><strong>Vendégfelhasználó</strong></span
+              >
+              {% else %}
+              <i class="bx bx-user-check icon"></i>
+              <span class="text nav-text"
+                >Köszöntünk<br /><strong>{{request.user}}</strong></span
+              >
+              {% endif %}
+            </li>
+            <li class="nav-link">
+              <a href="{% url 'home' %}">
+                <i class="bx bx-home-alt icon"></i>
+                <span class="text nav-text">Kezdőlap</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="{% url 'store' %}">
+                <i class="bx bx-store icon"></i>
+                <span class="text nav-text">Bolt</span>
+              </a>
+            </li>
+            <li class="nav-link bottom">
+              <a href="{% url 'cart' %}">
+                <i class="bx bx-cart icon"></i>
+                <span class="text nav-text">Kosár</span>
+              </a>
+            </li>
+            {% if request.user.id is not None %}
+            <li class="nav-link basic">
+              <a href="{% url 'forum' %}">
+                <i class="bx bx-conversation icon"></i>
+                <span class="text nav-text">Fórum</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="nav-link basic"></li>
+            {% endif %}
+            <li class="nav-link">
+              <a href="">
+                <i class="bx bxl-youtube icon"></i>
+                <span class="text nav-text">Útmutató</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="">
+                <i class="bx bx-group icon"></i>
+                <span class="text nav-text">Rólunk</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="">
+                <i class="bx bx-envelope icon"></i>
+                <span class="text nav-text">Kapcsolat</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-		<div class="menu-bar">
-			<div class="menu">
-				<ul class="menu-links">
-					<li class="nav-link basic">
-							{% if request.user.id is None %}
-							<i class='bx bx-user-x icon' ></i>
-							<span class="text nav-text">Köszöntünk<br><strong>Vendégfelhasználó</strong></span>
-							{% else %}
-							<i class='bx bx-user-check icon'></i>
-							<span class="text nav-text">Köszöntünk<br><strong>{{request.user}}</strong></span>
-							{% endif %}
-					</li>
-					<li class="nav-link">
-						<a href="{% url 'home' %}">
-							<i class='bx bx-home-alt icon'></i>
-							<span class="text nav-text">Kezdőlap</span>
-						</a>
-					</li>
-					<li class="nav-link">
-						<a href="{% url 'store' %}">
-							<i class='bx bx-store icon'></i>
-							<span class="text nav-text">Bolt</span>
-						</a>
-					</li>
-					<li class="nav-link bottom">
-						<a href="{% url 'cart' %}">
-							<i class='bx bx-cart icon' ></i>
-							<span class="text nav-text">Kosár</span>
-						</a>
-					</li>
-					{% if request.user.id is not None %}
-					<li class="nav-link basic">
-						<a href="">
-							<i class='bx bx-conversation icon' ></i>
-							<span class="text nav-text">Fórum</span>
-						</a>
-					</li>
-					{% else %}
-					<li class="nav-link basic">
-					</li>
-					{% endif %}
-					<li class="nav-link">
-						<a href="">
-							<i class='bx bxl-youtube icon'></i>
-							<span class="text nav-text">Útmutató</span>
-						</a>
-					</li>
-					<li class="nav-link">
-						<a href="">
-							<i class='bx bx-group icon'></i>
-							<span class="text nav-text">Rólunk</span>
-						</a>
-					</li>
-					<li class="nav-link">
-						<a href="">
-							<i class='bx bx-envelope icon'></i>
-							<span class="text nav-text">Kapcsolat</span>
-						</a>
-					</li>
-				</ul>
-			</div>
+        <div class="bottom-content">
+          <ul>
+            {% if request.user.id is None %}
+            <li class="nav-link">
+              <a href="{% url 'register' %}">
+                <i class="bx bx-log-in icon"></i>
+                <span class="text nav-text"
+                  >Regisztráció/<br />Bejelentkezés</span
+                >
+              </a>
+            </li>
+            {% else %}
+            <li class="nav-link">
+              <a href="{% url 'profile' request.user.id %}">
+                <i class="bx bx-user icon"></i>
+                <span class="text nav-text">Fiók</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="{% url 'logout' %}">
+                <i class="bx bx-log-out icon"></i>
+                <span class="text nav-text">Kijelentkezés</span>
+              </a>
+            </li>
+            {% endif %}
+            <li class="mode nav-link">
+              <div class="moon-sun">
+                <i class="bx bxs-moon icon dark"></i>
+                <i class="bx bx-moon icon light"></i>
+              </div>
+              <span class="mode-text text">Sötét mód</span>
 
-				<div class="bottom-content">
-					<ul>
-						{% if request.user.id is None %}
-						<li class="nav-link">
-							<a href="{% url 'register' %}">
-								<i class='bx bx-log-in icon'></i>
-								<span class="text nav-text">Regisztráció/<br>Bejelentkezés</span>
-							</a>
-						</li>
-						{% else %}
-						<li class="nav-link">
-							<a href="{% url 'logout' %}">
-								<i class='bx bx-log-out icon'></i>
-								<span class="text nav-text">Kijelentkezés</span>
-							</a>
-						</li>
-						{% endif %}
-						<li class="mode nav-link">
+              <div class="toggle-switch">
+                <span class="switch"></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-								<div class="moon-sun">
-									<i class='bx bxs-moon icon dark'></i>
-									<i class='bx bx-moon icon light'></i>
-								</div>
-								<span class="mode-text text">Sötét mód</span>
-		
-								<div class="toggle-switch">
-									<span class="switch"></span>
-								</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-	</nav>
+    <section class="home">
+      <div class="container" style="max-width: 75%; margin-top: 30px">
+        {% block content %} {% endblock content %}
+      </div>
+    </section>
 
-     <section class="home">
-		<div class="container" style="max-width: 75%; margin-top: 30px;">	
-        {% block content %}
+    <script type="text/javascript">
+      var user = "{{request.user}}";
 
+      function getToken(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      var csrftoken = getToken("csrftoken");
 
+      //Cookies
 
+      function getCookie(name) {
+        var cookieArr = document.cookie.split(";");
 
-        {% endblock content %}
-		</div>
-	</section>
+        for (var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split("=");
 
-	<script type="text/javascript">
-		var user = '{{request.user}}'
+          if (name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
 
-		function getToken(name) {
-			var cookieValue = null;
-			if (document.cookie && document.cookie !== '') {
-				var cookies = document.cookie.split(';');
-				for (var i = 0; i < cookies.length; i++) {
-					var cookie = cookies[i].trim();
-					if (cookie.substring(0, name.length + 1) === (name + '=')) {
-						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-						break;
-					}
-				}
-			}
-			return cookieValue;
-		}
-		var csrftoken = getToken('csrftoken');
+        return null;
+      }
 
+      var cart = JSON.parse(getCookie("cart"));
 
-		//Cookies
+      if (cart == undefined) {
+        cart = {};
+        console.log("Cart was created");
+        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+      }
 
-		function getCookie(name) {
-			var cookieArr = document.cookie.split(';');
+      console.log("Cart:", cart);
+    </script>
 
-			for (var i = 0; i < cookieArr.length; i++) {
-				var cookiePair = cookieArr[i].split('=');
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
 
-				if (name == cookiePair[0].trim()) {
-					return decodeURIComponent(cookiePair[1]);
-				}
-			}
-
-			return null;
-		}
-
-		var cart = JSON.parse(getCookie('cart'))
-
-		if (cart == undefined){
-			cart = {}
-			console.log('Cart was created')
-			document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-		}
-
-		console.log('Cart:', cart)
-	</script>
-
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-	
-	<script src="{% static 'js/cart.js' %}"></script>
-	<script src="{% static 'js/switch.js' %}"></script>
-	<script src="{% static 'js/activeLink.js' %}"></script>
-	<script src="{% static 'js/home.js' %}"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-	
-	
-</body>
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/switch.js' %}"></script>
+    <script src="{% static 'js/activeLink.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
 </html>

@@ -197,3 +197,25 @@ def processOrder(request):
             )
 
     return JsonResponse('Payment was complete', safe=False)
+
+
+
+###########################################################
+
+def forum(request):
+    context = {}
+
+    return render(request, 'store/forum.html', context)
+
+def profile(request, pk):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        profile = Customer.objects.get(id=customer.id)
+
+        orders = Order.objects.all().filter(customer_id=customer.id)
+        order_items = OrderItem.objects.filter(order__in=orders)
+        products = Product.objects.filter(orderitem__in=order_items).distinct()
+
+    context = {'profile':profile, 'orders':orders, 'order_items':order_items, 'products':products}
+
+    return render(request, 'store/profile.html', context)   
