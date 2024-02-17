@@ -71,8 +71,6 @@ def guestOrder(request, data):
         name=name
     )
 
-    print(customer)
-
     customer.save()
 
     order = Order.objects.create(

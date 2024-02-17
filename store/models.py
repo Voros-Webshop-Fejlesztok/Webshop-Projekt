@@ -8,6 +8,8 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
+    follows = models.ManyToManyField("self", related_name='followed_by',symmetrical=False, blank=True)
+    date_modified = models.DateTimeField(User, auto_now=True)
 
     def __str__(self):
         return self.name

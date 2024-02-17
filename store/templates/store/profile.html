@@ -1,0 +1,35 @@
+{% extends 'store/main.html' %} {% load static %} {% block content %}
+
+<h5>Profile</h5>
+
+<p>
+  {{profile.name}}<br />
+  {{profile.email}}<br />
+  {{profile.phone_number}}<br />
+</p>
+<p style="margin-bottom: 200px;"></p>
+<hr/>
+
+{% for following in profile.follows.all %}
+<p style="margin-bottom: 5px">{{following}}</p>
+{% endfor %} 
+
+<p style="margin-bottom: 200px;"></p>
+
+<hr>
+{% for order in orders %}
+    <h3>{{order}}</h3>
+    {% for order_item in order_items %}
+        {% if order.id == order_item.order_id %} 
+            {% for product in products %}
+                {% if product.id == order_item.product_id %} 
+                    <h6>{{product.pname}}</h6>
+                    <img style="max-width: 200px; object-fit: cover;" src="{{product.imageURL}}"/>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %} 
+{% endfor %} 
+
+
+{% endblock content %}
