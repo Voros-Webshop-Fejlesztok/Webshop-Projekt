@@ -1,35 +1,96 @@
-{% extends 'store/main.html' %} {% load static %} {% block content %}
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+{% load humanize %}
 
-<h5>Profile</h5>
+<body className='snippet-body'>
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7">
+                <div class="card p-3 py-4">
+                    <div class="text-center">
+                        <img src="placeholder.png" width="120" class="rounded-circle">
+                    </div>
+                    <div class="text-center mt-3">
+                        <span class="bg-secondary p-1 px-4 rounded text-white">Dáridó profilod</span>
+                        <h4 class="mt-2 mb-0">{{profile.name}}</h4>
+                        <div class="block">
+                            <span class="span">{{profile.email}}</span>
+                            <span class="span">{{profile.phone_number}}</span>
+                        </div>
+                        <div class="sor">
+                            <div class="div1">
+                                <h5 class="mt-2 mb-0">Követők:</h5>
+                                <div class="block">
+                                    <img src="placeholder.png" width="30" class="rounded-circle"><span class="span">1. Követő neve</span>
+                                </div>
+                            </div>
+                            <div class="div2">
+                                <h5 class="mt-2 mb-0">Követések:</h5>
+                                <div class="block">
+                                    {% for following in profile.follows.all %}
+                                    <img src="placeholder.png" width="30" class="rounded-circle"><span class="span">{{following}}</span><br>
+                                    {% endfor %} 
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div> 
+                </div>  
+            </div> 
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7">
+                <div class="card p-3 py-4"> 
+                    <div class="text-center mt-3">
+                        <h3 class="mt-2 mb-0">Rendeléseim:</h3>
+                        {% for order in orders %}
+                        <div class="sor">
+                            <div class="div2">
+                                <h4 style="text-decoration: underline;" class="mt-2 mb-0">{{order}}</h4> 
+                                <h5 class="mt-2 mb-0">{{order.get_cart_total|intcomma}} Ft</h5> 
+                            </div>
+                            <div class="div1">
+                            {% for order_item in order_items %}
+                                {% if order.id == order_item.order_id %} 
+                                    {% for product in products %}
+                                        {% if product.id == order_item.product_id %}
+                                            <img class="orderphoto" src="{{product.imageURL}}" class="rounded-circle">
+                                            <h6 class="fonts">{{order_item.quantity}} db - {{order_item.product}}</h6>
+                                            <h6 class="fonts">{{product.price|intcomma}} Ft</h6>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7">
+                <div class="card p-3 py-4"> 
+                    <div class="text-center mt-3">
+                        <h4 class="mt-2 mb-0">Posztjaim:</h4>
+                        <div>
+                            <img class="orderphoto" src="placeholder 2.png" width="400" class="rounded-circle">
+                        </div>
+                        <div>
+                            <h4 class="mt-2 mb-0">Poszt címe</h4>
+                            <p class="fonts">A poszt hosszabb leírása. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<p>
-  {{profile.name}}<br />
-  {{profile.email}}<br />
-  {{profile.phone_number}}<br />
-</p>
-<p style="margin-bottom: 200px;"></p>
-<hr/>
-
-{% for following in profile.follows.all %}
-<p style="margin-bottom: 5px">{{following}}</p>
-{% endfor %} 
-
-<p style="margin-bottom: 200px;"></p>
-
-<hr>
-{% for order in orders %}
-    <h3>{{order}}</h3>
-    {% for order_item in order_items %}
-        {% if order.id == order_item.order_id %} 
-            {% for product in products %}
-                {% if product.id == order_item.product_id %} 
-                    <h6>{{product.pname}}</h6>
-                    <img style="max-width: 200px; object-fit: cover;" src="{{product.imageURL}}"/>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    {% endfor %} 
-{% endfor %} 
-
+</body>
 
 {% endblock content %}
