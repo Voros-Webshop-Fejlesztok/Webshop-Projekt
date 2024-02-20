@@ -9,37 +9,66 @@
             <div class="col-md-7">
                 <div class="card p-3 py-4">
                     <div class="text-center">
-                        <img src="placeholder.png" width="120" class="rounded-circle">
+                        <img src="{{profile.imageURL}}" class="rounded-circle profile_img">
                     </div>
                     <div class="text-center mt-3">
-                        <span class="bg-secondary p-1 px-4 rounded text-white">Dáridó profilod</span>
+                        <form method=POST>
+                        {% csrf_token %}
+                            {% if profile != self_profile %}
+                            {% if profile in self_profile.follows.all %}
+                            <div>
+                                <span class="bg-success p-1 px-4 rounded text-white">Követed</span>
+                                <button name="follow" value="unfollow" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
+                            </div>
+                            {% else %}
+                            <div>
+                                <span class="bg-danger p-1 px-4 rounded text-white">Nem követed</span>
+                                <button name="follow" value="follow" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
+                            </div>
+                            {% endif %}   
+                            {% endif %}
+                        </form>
                         <h4 class="mt-2 mb-0">{{profile.name}}</h4>
-                        <div class="block">
+                        <div class="block" style="margin-bottom: 20px;">
+                            {% if profile.email != None %}
                             <span class="span">{{profile.email}}</span>
+                            {% endif %}
+                            {% if profile.phone_number != None %}
                             <span class="span">{{profile.phone_number}}</span>
+                            {% endif %}
+                        </div>
+                        <div class="block description">
+                            {% if profile.description != None %}
+                            <span class="span">{{profile.description}}</span>
+                            {% endif %}
                         </div>
                         <div class="sor">
                             <div class="div1">
                                 <h5 class="mt-2 mb-0">Követők:</h5>
                                 <div class="block">
-                                    <img src="placeholder.png" width="30" class="rounded-circle"><span class="span">1. Követő neve</span>
+                                    <img src="" width="30" class="rounded-circle"><span class="span">1. Követő neve</span>
                                 </div>
                             </div>
+                        
                             <div class="div2">
                                 <h5 class="mt-2 mb-0">Követések:</h5>
-                                <div class="block">
+                                    
                                     {% for following in profile.follows.all %}
-                                    <img src="placeholder.png" width="30" class="rounded-circle"><span class="span">{{following}}</span><br>
+                                    
+                                    <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+                                        <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        <span class="span follower_a">{{following}}</span></a>
+                                    </div>
                                     {% endfor %} 
                                 </div>
                             </div>
-                            
                         </div>
                     </div> 
                 </div>  
             </div> 
         </div>
     </div>
+    {% if profile == self_profile %}
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
@@ -72,6 +101,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
@@ -79,7 +109,7 @@
                     <div class="text-center mt-3">
                         <h4 class="mt-2 mb-0">Posztjaim:</h4>
                         <div>
-                            <img class="orderphoto" src="placeholder 2.png" width="400" class="rounded-circle">
+                            <img class="orderphoto" src="" width="400" class="rounded-circle">
                         </div>
                         <div>
                             <h4 class="mt-2 mb-0">Poszt címe</h4>
