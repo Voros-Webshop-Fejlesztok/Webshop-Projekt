@@ -3,5 +3,9 @@
 {% block content %}
 <h1>Fórum</h1>
 
+{% for profile in profiles %}
+    <p>{{profile.name}}</p>
+{% endfor %}
+
 
 {% endblock content %}
