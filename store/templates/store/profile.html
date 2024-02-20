@@ -12,7 +12,22 @@
                         <img src="{{profile.imageURL}}" class="rounded-circle profile_img">
                     </div>
                     <div class="text-center mt-3">
-                        <span class="bg-secondary p-1 px-4 rounded text-white">Dáridó profil</span>
+                        <form method=POST>
+                        {% csrf_token %}
+                            {% if profile != self_profile %}
+                            {% if profile in self_profile.follows.all %}
+                            <div>
+                                <span class="bg-success p-1 px-4 rounded text-white">Követed</span>
+                                <button name="follow" value="unfollow" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
+                            </div>
+                            {% else %}
+                            <div>
+                                <span class="bg-danger p-1 px-4 rounded text-white">Nem követed</span>
+                                <button name="follow" value="follow" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
+                            </div>
+                            {% endif %}   
+                            {% endif %}
+                        </form>
                         <h4 class="mt-2 mb-0">{{profile.name}}</h4>
                         <div class="block" style="margin-bottom: 20px;">
                             {% if profile.email != None %}
@@ -34,14 +49,19 @@
                                     <img src="" width="30" class="rounded-circle"><span class="span">1. Követő neve</span>
                                 </div>
                             </div>
+                        
                             <div class="div2">
                                 <h5 class="mt-2 mb-0">Követések:</h5>
+                                    
                                     {% for following in profile.follows.all %}
-                                    <div style="margin-top: 15px;"><a href=" {% url 'profile' following.user.id %}"><img src="{{following.imageURL}}" class="rounded-circle follower_img"><span class="span">{{following}}</span></a></div>
+                                    
+                                    <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+                                        <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        <span class="span follower_a">{{following}}</span></a>
+                                    </div>
                                     {% endfor %} 
                                 </div>
                             </div>
-                            
                         </div>
                     </div> 
                 </div>  
