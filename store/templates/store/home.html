@@ -16,6 +16,106 @@
     </div>
     {% endfor %}
 
+    <h1 class="text-center mt-5 mb-4">Dárídó webshop</h1>
+    <div class="container">
+        <div class="carousel">
+            <input type="radio" name="slides" checked="checked" id="slide-1">
+            <input type="radio" name="slides" id="slide-2">
+            <input type="radio" name="slides" id="slide-3">
+            <input type="radio" name="slides" id="slide-4">
+            <input type="radio" name="slides" id="slide-5">
+            <input type="radio" name="slides" id="slide-6">
+            <ul class="carousel__slides">
+                <li class="carousel__slide">
+                    <figure>
+                        <div>
+                            <img src="static\images\carousel1.jpeg" alt="">
+                        </div>
+                        <figcaption>
+                            Üdvözlünk a Dáridó Webshopon
+                        </figcaption>
+                    </figure>
+                </li>
+                <li class="carousel__slide">
+                    <figure>
+                        <div>
+                            <img src="static\images\carousel2.jpeg" alt="">
+                        </div>
+                        <figcaption>
+
+                            <span class="credit">Előadó(k):</span>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li class="carousel__slide">
+                    <figure>
+                        <div>
+                            <img src="static\images\carousel3.webp" alt="">
+                        </div>
+                        <figcaption>
+                            A raktáros csapatunk
+                            <span class="credit">Előadó(k):</span>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li class="carousel__slide">
+                    <figure>
+                        <div>
+                            <img src="static\images\carousel4.avif" alt="">
+                        </div>
+                        <figcaption>
+                            A szállítási ügyintézők
+                            <span class="credit">Előadó(k):</span>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li class="carousel__slide">
+                    <figure>
+                        <div>
+                            <img src="static\images\carousel5.jpg" alt="">
+                        </div>
+                        <figcaption>
+                            Lagzi Lajcsi 17 éves korában az eslő áramkörével
+                            <span class="credit">Előadó(k):</span>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li class="carousel__slide">
+                    <figure>
+                        <div>
+                            <img src="static\images\carousel6.jpeg" alt="">
+                        </div>
+                        <figcaption>
+                            Futáraink a legmodernebb szállítóeszközökkel hordják a megrendeléseket
+                            <span class="credit">Előadó(k):</span>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+            <ul class="carousel__thumbnails">
+                <li>
+                    <label for="slide-1"><img src="static\images\carousel1.jpeg" alt=""></label>
+                </li>
+                <li>
+                    <label for="slide-2"><img src="static\images\carousel2.jpeg" alt=""></label>
+                </li>
+                <li>
+                    <label for="slide-3"><img src="static\images\carousel3.webp" alt=""></label>
+                </li>
+                <li>
+                    <label for="slide-4"><img src="static\images\carousel4.avif" alt=""></label>
+                </li>
+                <li>
+                    <label for="slide-5"><img src="static\images\carousel5.jpg" alt=""></label>
+                </li>
+                <li>
+                    <label for="slide-6"><img src="static\images\carousel6.jpeg" alt=""></label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
     <div id="loginContent">
         <h1 class="text-center mt-5 mb-4">Mit tudsz nálunk vásárolni?</h1>
         <div class="row masodikresz">
@@ -165,18 +265,18 @@
         document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
         document.getElementById('loginContent').style.animation = "opacityAnimation 0.5s ease.out";
 
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('popup').style.animation = "";
             document.getElementById('loginContent').style.animation = "";
             document.getElementById('popup').style.display = "none";
             document.getElementById('loginContent').style.opacity = 1;
-        }, 500);  
+        }, 500);
     }
 
     var popupClose = document.getElementById('popupClose')
     popupClose.addEventListener("click", function () {
         loginAnimation()
-      });
+    });
 
 </script>
 {% endif %}
