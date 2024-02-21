@@ -3,9 +3,21 @@
 {% block content %}
 <h1>Fórum</h1>
 
-{% for profile in profiles %}
-    <p>{{profile.name}}</p>
-{% endfor %}
+<form method=POST>
+    {% csrf_token %}
+
+    {% for profile in profiles %}
+        {% if profile != self_profile %}
+        {% if profile in self_profile.follows.all %}
+        <a href="{% url 'profile' profile.user.id %}">{{profile.name}}</a><button name="follow" value="unfollow;{{profile}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button><br>
+        {% else %}
+        <a href="{% url 'profile' profile.user.id %}">{{profile.name}}</a>
+        <button name="follow" value="follow;{{profile}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button><br>
+        {% endif %}
+        {% endif %}
+    {% endfor %}
+
+</form>
 
 
 {% endblock content %}

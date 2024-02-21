@@ -17,13 +17,13 @@
                             {% if profile != self_profile %}
                             {% if profile in self_profile.follows.all %}
                             <div>
-                                <span class="bg-success p-1 px-4 rounded text-white">Követed</span>
-                                <button name="follow" value="unfollow" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
+                                <span class="bg-success p-1 px-4 rounded text-white">Követed ;D</span>
+                                <button name="follow" value="unfollow;{{profile}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
                             </div>
                             {% else %}
                             <div>
                                 <span class="bg-danger p-1 px-4 rounded text-white">Nem követed</span>
-                                <button name="follow" value="follow" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
+                                <button name="follow" value="follow;{{profile}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
                             </div>
                             {% endif %}   
                             {% endif %}
@@ -52,14 +52,26 @@
                         
                             <div class="div2">
                                 <h5 class="mt-2 mb-0">Követések:</h5>
+                                <form method=POST>
+                                    {% csrf_token %}
                                     
                                     {% for following in profile.follows.all %}
+                                    {% if following != self_profile %}
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
                                         <img src="{{following.imageURL}}" class="rounded-circle follower_img">
                                         <span class="span follower_a">{{following}}</span></a>
+
+                                        {% if following in self_profile.follows.all %}
+                                        <button name="follow" value="unfollow;{{following}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                        {% else %}
+                                        <button name="follow" value="follow;{{following}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                        {% endif %}
                                     </div>
+                                    {% endif %}
                                     {% endfor %} 
+
+                                </form>
                                 </div>
                             </div>
                         </div>
