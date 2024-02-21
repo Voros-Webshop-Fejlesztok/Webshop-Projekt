@@ -204,7 +204,27 @@ def processOrder(request):
 
 def forum(request):
 
-    context = {}
+    profiles = Customer.objects.all()
+
+    self_user = request.user.customer
+    self_profile = Customer.objects.get(id=self_user.id)
+
+    if request.method == "POST":
+            
+            data = request.POST['follow'].split(';')
+            action = data[0]
+            profile = data[1]
+            
+            current_profile = Customer.objects.get(name=profile)
+            
+            if action == 'unfollow':
+                self_profile.follows.remove(current_profile)
+            elif action == 'follow':
+                self_profile.follows.add(current_profile)
+            self_profile.save()
+            
+
+    context = {'profiles':profiles, 'self_profile':self_profile}
 
     return render(request, 'store/forum.html', context)
 
@@ -220,12 +240,18 @@ def profile(request, pk):
         products = Product.objects.filter(orderitem__in=order_items).distinct()
 
         if request.method == "POST":
-            action = request.POST['follow']
+            data = request.POST['follow'].split(';')
+            action = data[0]
+            profile2 = data[1]
+
+            current_profile = Customer.objects.get(name=profile2)
+
+            print(current_profile)
 
             if action == 'unfollow':
-                self_profile.follows.remove(profile)
+                self_profile.follows.remove(current_profile)
             elif action == 'follow':
-                self_profile.follows.add(profile)
+                self_profile.follows.add(current_profile)
             self_profile.save()
 
     context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products}
