@@ -71,11 +71,10 @@
                         
                             <div class="div2">
                                 <h5 class="mt-2 mb-0">Követések:</h5>
-                                <form method=POST>
+                                <form id="followers1" method=POST>
                                     {% csrf_token %}
                                     
-                                    {% for following in profile.follows.all %}
-                                        {% if forloop.counter <= num_displayed_followers %}
+                                    {% for following in profile.follows.all|slice:":1" %}
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
@@ -89,18 +88,35 @@
                                             {% endif %}
                                         {% endif %}
                                     </div>
-                                    {% endif %}
-                                    {% endfor %} 
-
-                                    <div style="margin-top: 15px;">
-                                        <button id="morefollower" name="follower_num" value="10" type="submit" class="bx bxs-down-arrow"></button>
-                                        <span class="span follower_a">További követések</span>
-                                    </div>
-                                    <div class="hidden" style="margin-top: 15px;">
-                                        <button id="lessfollower" name="follower_num" value="10" type="submit" class="bx bxs-down-arrow"></button>
-                                        <span class="span follower_a">További követések</span>
-                                    </div>
+                                    {% endfor %}
                                 </form>
+                                <form class="hidden" id="followers2" method=POST>
+                                    {% csrf_token %}
+                                    
+                                    {% for following in profile.follows.all %}
+                                    
+                                    
+                                    <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+                                        <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        <span class="span follower_a">{{following}}</span></a>
+                                        {% if following != self_profile %}
+                                            {% if following in self_profile.follows.all %}
+                                            <button name="follow" value="unfollow;{{following}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                            {% else %}
+                                            <button name="follow" value="follow;{{following}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                </form>
+                                <div id="morefollower" style="margin-top: 15px;">
+                                    <button id="morefollowerBtn"  name="follower_num" value="10" class="bx bxs-down-arrow"></button>
+                                    <span class="span follower_a">Több követés</span>
+                                </div>
+                                <div class="hidden" id="lessfollower" style="margin-top: 15px;">
+                                    <button id="lessfollowerBtn" name="follower_num" value="1" class="bx bxs-up-arrow"></button>
+                                    <span class="span follower_a">Kevesebb követés</span>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -165,17 +181,21 @@
 </body>
 
 <script>
-     var moreFollowerButton = document.getElementById("morefollower");
-    var lessFollowerButton = document.getElementById("lessfollower");
+    var moreFollowerButton = document.getElementById("morefollowerBtn");
+    var lessFollowerButton = document.getElementById("lessfollowerBtn");
 
     moreFollowerButton.addEventListener("click", function() {
         document.getElementById("morefollower").classList.add('hidden')
         document.getElementById("lessfollower").classList.remove('hidden')
+        document.getElementById("followers1").classList.add('hidden')
+        document.getElementById("followers2").classList.remove('hidden')
     });
 
     lessFollowerButton.addEventListener("click", function() {
         document.getElementById("morefollower").classList.remove('hidden')
         document.getElementById("lessfollower").classList.add('hidden')
+        document.getElementById("followers2").classList.add('hidden')
+        document.getElementById("followers1").classList.remove('hidden')
     });
 
 </script>

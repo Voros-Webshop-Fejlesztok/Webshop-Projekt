@@ -231,7 +231,6 @@ def forum(request):
     return render(request, 'store/forum.html', context)
 
 def profile(request, pk):
-    num_displayed_followers = 1
     
     if request.user.is_authenticated:
         profile = Customer.objects.get(user_id=pk)
@@ -261,10 +260,8 @@ def profile(request, pk):
                         
                 self_profile.save()
                 current_profile.save()
-            if 'follower_num' in request.POST:
-                num_displayed_followers = int(request.POST['follower_num'])
                 
 
-    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'num_displayed_followers':num_displayed_followers}
+    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products}
 
     return render(request, 'store/profile.html', context)   
