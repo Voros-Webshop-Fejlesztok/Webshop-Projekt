@@ -42,11 +42,13 @@
                             <span class="span">{{profile.description}}</span>
                             {% endif %}
                         </div>
+
                         <div class="sor">
                             <div class="div1">
                                 <h5 class="mt-2 mb-0">Követők:</h5>
                                 <div class="block">
-                                    <form method=POST>
+                                    
+                                    <form form id="follower1" method=POST>
                                         {% csrf_token %}
                                         
                                         {% for follower in profile.followers.all|slice:":1" %}
@@ -64,14 +66,45 @@
                                             {% endif %}
                                         </div>
                                         {% endfor %} 
+                                    </form>
+
+                                    <form id="follower2" class="hidden" method=POST>
+                                        {% csrf_token %}
+                                        
+                                        {% for follower in profile.followers.all %}
+                                        
+                                        <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
+                                            <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
+                                            <span class="span follower_a">{{follower}}</span></a>
+    
+                                            {% if follower != self_profile %}
+                                                {% if follower in profile.follows.all %}
+                                                <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                                {% else %}
+                                                <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %} 
     
                                     </form>
+                                    {% if profile.followers.all.count > 1 %}
+                                    <div id="morefollower" style="margin-top: 15px;">
+                                        <button id="morefollowerBtn" class="bx bxs-down-arrow"></button>
+                                        <span class="span follower_a">Több követés</span>
+                                    </div>
+                                    <div class="hidden" id="lessfollower" style="margin-top: 15px;">
+                                        <button id="lessfollowerBtn" class="bx bxs-up-arrow"></button>
+                                        <span class="span follower_a">Kevesebb követés</span>
+                                    </div>
+                                    {% endif %}
+
                                 </div>
                             </div>
                         
                             <div class="div2">
                                 <h5 class="mt-2 mb-0">Követések:</h5>
-                                <form id="followers1" method=POST>
+                                <form id="following1" method=POST>
                                     {% csrf_token %}
                                     
                                     {% for following in profile.follows.all|slice:":1" %}
@@ -89,8 +122,8 @@
                                         {% endif %}
                                     </div>
                                     {% endfor %}
-                                </form>
-                                <form class="hidden" id="followers2" method=POST>
+                                </form>      
+                                <form class="hidden" id="following2" method=POST>
                                     {% csrf_token %}
                                     
                                     {% for following in profile.follows.all %}
@@ -109,17 +142,18 @@
                                     </div>
                                     {% endfor %}
                                 </form>
-                                {% if profile.follows.all %}
-                                <div id="morefollower" style="margin-top: 15px;">
-                                    <button id="morefollowerBtn"  name="follower_num" value="10" class="bx bxs-down-arrow"></button>
+                                {% if profile.follows.all.count > 1 %}
+                                <div id="morefollowing" style="margin-top: 15px;">
+                                    <button id="morefollowingBtn" class="bx bxs-down-arrow"></button>
                                     <span class="span follower_a">Több követés</span>
                                 </div>
-                                <div class="hidden" id="lessfollower" style="margin-top: 15px;">
-                                    <button id="lessfollowerBtn" name="follower_num" value="1" class="bx bxs-up-arrow"></button>
+                                <div class="hidden" id="lessfollowing" style="margin-top: 15px;">
+                                    <button id="lessfollowingBtn" class="bx bxs-up-arrow"></button>
                                     <span class="span follower_a">Kevesebb követés</span>
                                 </div>
-                                </div>
                                 {% endif %}
+                            </div>
+                            
                             </div>
                         </div>
                     </div> 
@@ -183,21 +217,41 @@
 </body>
 
 <script>
+    var moreFollowingButton = document.getElementById("morefollowingBtn");
+    var lessFollowingButton = document.getElementById("lessfollowingBtn");
+
+    moreFollowingButton.addEventListener("click", function() {
+        document.getElementById("morefollowing").classList.add('hidden')
+        document.getElementById("lessfollowing").classList.remove('hidden')
+        document.getElementById("following1").classList.add('hidden')
+        document.getElementById("following2").classList.remove('hidden')
+    });
+
+    lessFollowingButton.addEventListener("click", function() {
+        document.getElementById("morefollowing").classList.remove('hidden')
+        document.getElementById("lessfollowing").classList.add('hidden')
+        document.getElementById("following2").classList.add('hidden')
+        document.getElementById("following1").classList.remove('hidden')
+    });
+
+</script>
+
+<script>
     var moreFollowerButton = document.getElementById("morefollowerBtn");
     var lessFollowerButton = document.getElementById("lessfollowerBtn");
 
     moreFollowerButton.addEventListener("click", function() {
         document.getElementById("morefollower").classList.add('hidden')
         document.getElementById("lessfollower").classList.remove('hidden')
-        document.getElementById("followers1").classList.add('hidden')
-        document.getElementById("followers2").classList.remove('hidden')
+        document.getElementById("follower1").classList.add('hidden')
+        document.getElementById("follower2").classList.remove('hidden')
     });
 
     lessFollowerButton.addEventListener("click", function() {
         document.getElementById("morefollower").classList.remove('hidden')
         document.getElementById("lessfollower").classList.add('hidden')
-        document.getElementById("followers2").classList.add('hidden')
-        document.getElementById("followers1").classList.remove('hidden')
+        document.getElementById("follower2").classList.add('hidden')
+        document.getElementById("follower1").classList.remove('hidden')
     });
 
 </script>
