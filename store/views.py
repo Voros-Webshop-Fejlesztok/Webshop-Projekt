@@ -203,6 +203,7 @@ def processOrder(request):
 ###########################################################
 
 def forum(request):
+    posts = Post.objects.all().order_by("-created")
 
     profiles = Customer.objects.all()
 
@@ -226,16 +227,15 @@ def forum(request):
             self_profile.save()
             
 
-    context = {'profiles':profiles, 'self_profile':self_profile}
+    context = {'profiles':profiles, 'self_profile':self_profile, 'posts':posts}
 
     return render(request, 'store/forum.html', context)
 
 def profile(request, pk):
+    
     if request.user.is_authenticated:
         profile = Customer.objects.get(user_id=pk)
-
-        print(profile.followers.all())
-
+        
         self_user = request.user.customer
         self_profile = Customer.objects.get(id=self_user.id)
 
@@ -244,21 +244,24 @@ def profile(request, pk):
         products = Product.objects.filter(orderitem__in=order_items).distinct()
 
         if request.method == "POST":
-            data = request.POST['follow'].split(';')
-            action = data[0]
-            profile2 = data[1]
 
-            current_profile = Customer.objects.get(name=profile2)
+            if 'follow' in request.POST:
+                data = request.POST['follow'].split(';')
+                action = data[0]
+                profile2 = data[1]
 
-            if action == 'unfollow':
-                self_profile.follows.remove(current_profile)
-                current_profile.followers.remove(self_profile)
-            elif action == 'follow':
-                self_profile.follows.add(current_profile)
-                current_profile.followers.add(self_profile)
+                current_profile = Customer.objects.get(name=profile2)
+
+                if action == 'unfollow':
+                    self_profile.follows.remove(current_profile)
+                    current_profile.followers.remove(self_profile)
+                elif action == 'follow':
+                    self_profile.follows.add(current_profile)
+                    current_profile.followers.add(self_profile)
+                        
+                self_profile.save()
+                current_profile.save()
                 
-            self_profile.save()
-            current_profile.save()
 
     context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products}
 

@@ -136,3 +136,14 @@ class BillingAddress(models.Model):
 
     def __str__(self):
         return self.city + ' ' + self.address
+    
+##############################################################################
+    
+class Post(models.Model):
+    profile = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, blank=True, null=True)
+    body = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(Customer, related_name='liked_by', symmetrical=False, blank=True)
+
+    def __str__(self):
+        return f"{self.profile} " + f"{self.created:%Y-%m-%d %H:%M}"
