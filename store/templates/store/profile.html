@@ -109,6 +109,7 @@
                                     </div>
                                     {% endfor %}
                                 </form>
+                                {% if profile.follows.all %}
                                 <div id="morefollower" style="margin-top: 15px;">
                                     <button id="morefollowerBtn"  name="follower_num" value="10" class="bx bxs-down-arrow"></button>
                                     <span class="span follower_a">Több követés</span>
@@ -118,6 +119,7 @@
                                     <span class="span follower_a">Kevesebb követés</span>
                                 </div>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div> 
