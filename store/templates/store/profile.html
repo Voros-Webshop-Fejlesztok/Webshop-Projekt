@@ -93,7 +93,11 @@
                                     {% endfor %} 
 
                                     <div style="margin-top: 15px;">
-                                        <button name="follower_num" value="10" type="submit" class="bx bxs-down-arrow"></button>
+                                        <button id="morefollower" name="follower_num" value="10" type="submit" class="bx bxs-down-arrow"></button>
+                                        <span class="span follower_a">További követések</span>
+                                    </div>
+                                    <div class="hidden" style="margin-top: 15px;">
+                                        <button id="lessfollower" name="follower_num" value="10" type="submit" class="bx bxs-down-arrow"></button>
                                         <span class="span follower_a">További követések</span>
                                     </div>
                                 </form>
@@ -159,5 +163,21 @@
     </div>
 
 </body>
+
+<script>
+     var moreFollowerButton = document.getElementById("morefollower");
+    var lessFollowerButton = document.getElementById("lessfollower");
+
+    moreFollowerButton.addEventListener("click", function() {
+        document.getElementById("morefollower").classList.add('hidden')
+        document.getElementById("lessfollower").classList.remove('hidden')
+    });
+
+    lessFollowerButton.addEventListener("click", function() {
+        document.getElementById("morefollower").classList.remove('hidden')
+        document.getElementById("lessfollower").classList.add('hidden')
+    });
+
+</script>
 
 {% endblock content %}
