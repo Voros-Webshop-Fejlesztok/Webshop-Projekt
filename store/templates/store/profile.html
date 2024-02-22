@@ -49,7 +49,7 @@
                                     <form method=POST>
                                         {% csrf_token %}
                                         
-                                        {% for follower in profile.followers.all %}
+                                        {% for follower in profile.followers.all|slice:":1" %}
                                         
                                         <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
                                             <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
@@ -75,6 +75,7 @@
                                     {% csrf_token %}
                                     
                                     {% for following in profile.follows.all %}
+                                        {% if forloop.counter <= num_displayed_followers %}
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
@@ -88,9 +89,13 @@
                                             {% endif %}
                                         {% endif %}
                                     </div>
-                                    
+                                    {% endif %}
                                     {% endfor %} 
 
+                                    <div style="margin-top: 15px;">
+                                        <button name="follower_num" value="10" type="submit" class="bx bxs-down-arrow"></button>
+                                        <span class="span follower_a">További követések</span>
+                                    </div>
                                 </form>
                                 </div>
                             </div>
