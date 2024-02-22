@@ -1,0 +1,98 @@
+p,
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 601px;
+  height: auto;
+  padding: 35px 31px;
+  gap: 15px;
+  border-radius: 10px;
+  background: #77c6ff;
+  box-shadow: var(--black) 0 0 1.6vh;
+}
+
+.user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.ava {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.icon {
+  font-size: 30px;
+  color: black;
+}
+
+.username {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.username .name {
+  line-height: normal;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.username .uname {
+  color: black;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.twitt .tag {
+  text-decoration: none;
+  color: #1da1f2;
+}
+
+.insight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: black;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.like {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.like svg:hover {
+  fill: crimson;
+  filter: drop-shadow(0 0 10px crimson);
+  cursor: pointer;
+}

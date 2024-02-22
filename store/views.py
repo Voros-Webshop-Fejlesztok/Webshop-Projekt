@@ -203,6 +203,7 @@ def processOrder(request):
 ###########################################################
 
 def forum(request):
+    posts = Post.objects.all().order_by("-created")
 
     profiles = Customer.objects.all()
 
@@ -226,7 +227,7 @@ def forum(request):
             self_profile.save()
             
 
-    context = {'profiles':profiles, 'self_profile':self_profile}
+    context = {'profiles':profiles, 'self_profile':self_profile, 'posts':posts}
 
     return render(request, 'store/forum.html', context)
 
