@@ -1,7 +1,6 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/forum.css' %}" />
 <h1>Fórum</h1>
 
 <form method=POST>
@@ -23,13 +22,13 @@
 
 {% for post in posts %}
 <div class="wrapper">
-    <div class="card">
+    <div class="card2">
       <div class="user">
         <div class="profile">
-          <img src="{{post.profile.imageURL}}" class="ava">
+          <a href="{% url 'profile' post.profile.user.id %}"><img src="{{post.profile.imageURL}}" class="ava"></a>
           <div class="username">
-            <h3 class="name">{{post.profile}}</h3>
-            <p class="uname">{{post.profile}}</p>
+            <a href="{% url 'profile' post.profile.user.id %}"><h3 class="uname">{{post.profile.user}}</h3></a>
+            <p class="name">{{post.title}}</p>
           </div>
         </div>
         <i class="fa-brands fa-twitter icon"></i>

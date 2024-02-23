@@ -128,9 +128,18 @@ body.dark .card{
 }
 
 .sor {
+    border-radius: 10px;
     display: flex;
-    box-shadow: grey 0 0 1vh;
     margin: 30px;
+    background: #77c6ff;
+    box-shadow: var(--black) 0 0 1.6vh;
+}
+.sor.post {
+    border-radius: 10px;
+    display: block;
+    margin: 30px;
+    background: #77c6ff;
+    box-shadow: var(--black) 0 0 1.6vh;
 }
 
 .div1, .div2 {
@@ -161,7 +170,9 @@ body.dark .card{
 .block.description{
     margin: auto; 
     max-width: 400px;
-    box-shadow: grey 0 0 0.6vh;
+    border-radius: 10px;
+    background: #77c6ff;
+    box-shadow: var(--black) 0 0 1.6vh;
 }
 
 a.follower_a{

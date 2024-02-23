@@ -235,6 +235,9 @@ def profile(request, pk):
     
     if request.user.is_authenticated:
         profile = Customer.objects.get(user_id=pk)
+
+        posts = Post.objects.all().order_by("-created")
+        posts = posts.filter(profile=profile)
         
         self_user = request.user.customer
         self_profile = Customer.objects.get(id=self_user.id)
@@ -263,6 +266,6 @@ def profile(request, pk):
                 current_profile.save()
                 
 
-    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products}
+    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'posts':posts}
 
     return render(request, 'store/profile.html', context)   
