@@ -226,6 +226,7 @@ def forum(request):
 def profile(request, pk):
     
     if request.user.is_authenticated:
+        delete_post_form = DeletePostForm()
         profile = Customer.objects.get(user_id=pk)
 
         posts = Post.objects.all().order_by("-created")
@@ -276,8 +277,6 @@ def profile(request, pk):
             if update_profile_form.is_valid():
                 update_profile_form.save()
                 return redirect(reverse('profile', kwargs={'pk': pk}))
-        else:
-            delete_post_form = DeletePostForm()
 
     context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'posts':posts, 'update_profile_form':update_profile_form, 'delete_post_form': delete_post_form,}
 
