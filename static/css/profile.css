@@ -209,3 +209,7 @@ button{
     height: 30px;
     font-size: 16px;
 }
+
+.updateProfileBtn{
+    cursor: pointer;
+}

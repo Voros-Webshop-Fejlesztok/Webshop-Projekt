@@ -142,7 +142,7 @@ class BillingAddress(models.Model):
 class Post(models.Model):
     profile = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, blank=True, null=True)
     title = models.CharField(max_length=30, blank=True, null=True)
-    body = models.CharField(max_length=200)
+    body = models.CharField(max_length=1000)
     created = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(Customer, related_name='liked_by', symmetrical=False, blank=True)
 

@@ -27,7 +27,15 @@
                             </div>
                             {% endif %}   
                             {% endif %}
-                        </form>
+                            {% if profile == self_profile %}
+                            <div>
+                                <span id="updateProfileBtn" class="updateProfileBtn bg-warning p-1 px-4 rounded text-white ">Szerkesztés</span>
+                            </div>
+                            <div>
+                                <span id="closeUpdateProfileBtn" class="hidden updateProfileBtn bg-warning p-1 px-4 rounded text-white ">Szerkesztés bezárása</span>
+                            </div>
+                            {% endif %}
+                    <div id="profileData">
                         <h4 class="mt-2 mb-0"><strong>{{profile.name}}</strong></h4>
                         <div class="block" style="margin-bottom: 20px; font-weight: 500;">
                             {% if profile.email != None %}
@@ -42,8 +50,31 @@
                             <span class="span">{{profile.description}}</span>
                             {% endif %}
                         </div>
+                    </div>
+                    </form>
 
-                        <div class="sor">
+                    <form method=POST>
+                    {% csrf_token %}
+                    <div id="updateProfileData" class="hidden">
+                        <h4 class="mt-2 mb-0"><strong>{{update_profile_form.name}}</strong></h4>
+                        <div class="block" style="margin-bottom: 20px; font-weight: 500;">
+                            <br>
+                            <span class="span">{{update_profile_form.email}}</span><br>
+                            <br>
+                            <span class="span">{{update_profile_form.phone_number}}</span>
+                        </div>
+                        <div class="block description">
+                            <br>
+                            <span class="span">{{update_profile_form.description}}</span>
+                            <hr>
+                        </div>
+                        <div>
+                            <button type="submit" class="updateProfileBtn bg-warning p-1 px-4 rounded text-white">Mentés</button>
+                        </div>
+                    </div>
+                    </form>
+
+                        <div id="followers_following" class="sor">
                             <div class="div1">
                                 <h5 class="mt-2 mb-0">Követők:</h5>
                                 <div class="block">
@@ -163,12 +194,12 @@
     </div>
     {% if profile == self_profile %}
     {% if orders %}
-    <div class="container mt-5">
+    <div id="orders" class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4"> 
                     <div class="text-center mt-3">
-                        <h3 class="mt-2 mb-0"><strong>Rendeléseim:</strong></h3>
+                        <h3 class="mt-2 mb-0"><strong>Rendeléseim</strong></h3>
                         {% for order in orders %}
                         {% if order.get_cart_total != 0 %}
                         <div class="sor">
@@ -200,7 +231,7 @@
     {% endif %}
     {% endif %}
     {% if posts %}
-    <div class="container mt-5">
+    <div id="posts" class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4">
@@ -208,7 +239,7 @@
                         <div style="margin-bottom: 50px;"><h4  class="mt-2 mb-0"><strong>Posztjaim:</strong></h4></div>
                         {% for post in posts %}
                         <div class="wrapper">
-                            <div class="card2">
+                            <div class="card2 post">
                             <div class="user">
                                 <div class="profile">
                                 <img src="{{post.profile.imageURL}}" class="ava">
@@ -245,6 +276,32 @@
     </div>
     {% endif %}
 </body>
+
+<script>
+    var updateProfileBtn = document.getElementById("updateProfileBtn");
+    var closeUpdateProfileBtn = document.getElementById("closeUpdateProfileBtn");
+
+    updateProfileBtn.addEventListener("click", function() {
+        document.getElementById('profileData').classList.add('hidden')
+        document.getElementById('updateProfileData').classList.remove('hidden')
+        document.getElementById('updateProfileBtn').classList.add('hidden')
+        document.getElementById('closeUpdateProfileBtn').classList.remove('hidden')
+        document.getElementById('followers_following').classList.add('hidden')
+        document.getElementById('posts').classList.add('hidden')
+        document.getElementById('orders').classList.add('hidden')
+    });
+
+    closeUpdateProfileBtn.addEventListener("click", function() {
+        document.getElementById('profileData').classList.remove('hidden')
+        document.getElementById('updateProfileData').classList.add('hidden')
+        document.getElementById('updateProfileBtn').classList.remove('hidden')
+        document.getElementById('closeUpdateProfileBtn').classList.add('hidden')
+        document.getElementById('followers_following').classList.remove('hidden')
+        document.getElementById('posts').classList.remove('hidden')
+        document.getElementById('orders').classList.remove('hidden')
+    });
+
+</script>
 
 <script>
     var moreFollowingButton = document.getElementById("morefollowingBtn");
@@ -285,5 +342,6 @@
     });
 
 </script>
+
 
 {% endblock content %}
