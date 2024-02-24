@@ -170,8 +170,6 @@ def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
 
-    print(data)
-
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -236,7 +234,6 @@ def profile(request, pk):
         self_user = request.user.customer
         self_profile = Customer.objects.get(id=self_user.id)
 
-        print(self_profile)
 
         orders = Order.objects.all().filter(customer_id=profile.id)
         order_items = OrderItem.objects.filter(order__in=orders)
@@ -266,6 +263,7 @@ def profile(request, pk):
             if 'delete_post' in request.POST:
                 delete_post_form = DeletePostForm(request.POST)
                 if delete_post_form.is_valid():
+                    print('jaja')
                     post_id = delete_post_form.cleaned_data['post_id']
                     post = get_object_or_404(Post, id=post_id)
 
@@ -278,6 +276,8 @@ def profile(request, pk):
             if update_profile_form.is_valid():
                 update_profile_form.save()
                 return redirect(reverse('profile', kwargs={'pk': pk}))
+        else:
+            delete_post_form = DeletePostForm()
 
     context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'posts':posts, 'update_profile_form':update_profile_form, 'delete_post_form': delete_post_form,}
 
