@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 import json
 import datetime
@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from .models import *
-from .forms import CreateUserForm, PostForm, UpdateProfileForm
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm
 from django.db.models import Q
 
 from .utils import cookieCart, cartData, guestOrder
@@ -262,12 +262,24 @@ def profile(request, pk):
                         
                 self_profile.save()
                 current_profile.save()
+
+            if 'delete_post' in request.POST:
+                delete_post_form = DeletePostForm(request.POST)
+                if delete_post_form.is_valid():
+                    post_id = delete_post_form.cleaned_data['post_id']
+                    post = get_object_or_404(Post, id=post_id)
+
+                    post.delete()
+                    messages.success(request, 'A poszt sikeresen törlésre került')
+
+                return redirect(reverse('profile', kwargs={'pk': pk}))
                 
             update_profile_form = UpdateProfileForm(request.POST, instance=self_profile)
             if update_profile_form.is_valid():
                 update_profile_form.save()
                 return redirect(reverse('profile', kwargs={'pk': pk}))
 
-    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'posts':posts, 'update_profile_form':update_profile_form}
+    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'posts':posts, 'update_profile_form':update_profile_form, 'delete_post_form': delete_post_form,}
 
-    return render(request, 'store/profile.html', context)   
+    return render(request, 'store/profile.html', context)
+

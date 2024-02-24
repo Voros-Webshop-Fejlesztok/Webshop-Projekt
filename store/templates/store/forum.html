@@ -11,13 +11,11 @@
     {% endif %}
     <div style="margin-top: 20px;" class="message {{ message.tags }}">{{message}}</div>
     <br>
-    {% if message|striptags != 'A posztod sikeresen létrejött' %}
         {% if message|striptags == 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet' %}
         <button style="background: red;" id="popupClose">OK</button>
         {% else %}
-        <button style="background: red;" id="popupClose">OK</button>
+        <button id="popupClose">OK</button>
         {% endif %}
-    {% endif %}
 </div>
 {% endfor %}
 

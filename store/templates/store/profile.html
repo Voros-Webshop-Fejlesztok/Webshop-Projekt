@@ -4,6 +4,16 @@
 {% load humanize %}
 
 <body className='snippet-body'>
+    {% for message in messages %}
+    <div style="display: block;" class="popup" id="popup">
+    <img src="{% static 'images/tick.png' %}" />
+    <div style="margin-top: 20px;" class="message {{ message.tags }}">{{message}}</div>
+        <button id="popupClose">OK</button>
+    </div>
+    {% endfor %}
+
+
+
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
@@ -248,7 +258,11 @@
                                     <p class="name">{{post.title}}</p>
                                 </div>
                                 </div>
+                                {% if profile == self_profile %}
+                                <button class='bx bx-trash icon' onclick="deletePost({{post.id}})"></button>
+                                {% else %}
                                 <i class="fa-brands fa-twitter icon"></i>
+                                {% endif %}            
                             </div>
                             <div class="twitt">
                                 <p>{{post.body}}</p>
@@ -342,6 +356,31 @@
     });
 
 </script>
+
+{% if messages %}
+<script>
+    popup = document.getElementById('popup');
+
+    popup.style.display = 'block';
+
+    setTimeout(loginAnimation, 6000);
+
+    function loginAnimation() {
+        document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
+
+        setTimeout(function() {
+            document.getElementById('popup').style.animation = "";
+            document.getElementById('popup').style.display = "none";
+        }, 500);  
+    }
+
+    var popupClose = document.getElementById('popupClose')
+    popupClose.addEventListener("click", function () {
+        loginAnimation()
+      });
+
+</script>
+{% endif %}
 
 
 {% endblock content %}
