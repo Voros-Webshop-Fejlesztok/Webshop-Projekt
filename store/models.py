@@ -25,6 +25,13 @@ class Customer(models.Model):
             url = ''
         return url
     
+    @property
+    def friends(self):
+        user_followers = self.followers.all()
+        user_following = self.follows.all()
+
+        return user_followers.intersection(user_following)
+    
 ###########################################################################################################
 
 class Category(models.Model):
@@ -148,3 +155,12 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.profile} " + f"{self.created:%Y-%m-%d %H:%M}"
+    
+class Message(models.Model):
+    sender = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='received_messages')
+    sent_date = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+
+    def __str__(self):
+        return f"{self.sender} -> {self.receiver} ({self.sent_date})"

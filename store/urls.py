@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name="logout"),
 
     path('forum/', views.forum, name="forum"),
+    path('messages/', views.messages, name="messages"),
     path('profile/<int:pk>', views.profile, name="profile"),
 
 

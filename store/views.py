@@ -282,3 +282,14 @@ def profile(request, pk):
 
     return render(request, 'store/profile.html', context)
 
+def messages(request):
+    self_user = request.user.customer
+    self_profile = Customer.objects.get(id=self_user.id)
+
+    current_friend = Customer.objects.get(name='Csete Ádám')
+
+    self_messages = Message.objects.all().filter(Q(receiver=self_profile)|  Q(sender=self_profile)).order_by("sent_date")
+
+    context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages}
+
+    return render(request, 'store/messages.html', context)
