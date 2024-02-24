@@ -45,6 +45,15 @@ body.dark .button-33.add-to-cart {
   transform: scale(1.2) rotate(-2deg);
 }
 
+.post {
+  background-color: lightgray;
+  font-weight: 600;
+}
+
+.button-33.post:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
 .add-to-cart {
   background-color: rgb(16, 184, 16);
   font-weight: 500;
@@ -54,6 +63,8 @@ body.dark .button-33.add-to-cart {
   background-color: rgba(173, 173, 255, 0.599);
   font-weight: 500;
 }
+
+
 
 /* light*/
 

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/register.css' %}" />
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
     <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/forum.css' %}" />
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
@@ -94,21 +95,15 @@
             <li class="nav-link basic"></li>
             {% endif %}
             <li class="nav-link">
-              <a href="">
+              <a href="https://www.youtube.com/watch?v=cf5xI0FG1_I&ab_channel=Hurvinyek" target="_blank">
                 <i class="bx bxl-youtube icon"></i>
                 <span class="text nav-text">Útmutató</span>
               </a>
             </li>
             <li class="nav-link">
-              <a href="">
+              <a href="https://www.youtube.com/watch?v=cf5xI0FG1_I&ab_channel=Hurvinyek" target="_blank">
                 <i class="bx bx-group icon"></i>
-                <span class="text nav-text">Rólunk</span>
-              </a>
-            </li>
-            <li class="nav-link">
-              <a href="">
-                <i class="bx bx-envelope icon"></i>
-                <span class="text nav-text">Kapcsolat</span>
+                <span class="text nav-text">Bemutatkozás</span>
               </a>
             </li>
           </ul>
@@ -130,6 +125,12 @@
               <a href="{% url 'profile' request.user.id %}">
                 <i class="bx bx-user icon"></i>
                 <span class="text nav-text">Fiók</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="">
+                <i class="bx bx-envelope icon"></i>
+                <span class="text nav-text">Üzenetek</span>
               </a>
             </li>
             <li class="nav-link">

@@ -1,35 +1,61 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/forum.css' %}" />
-<h1>Fórum</h1>
 
-<form method=POST>
+{% for message in messages %}
+<div style="display: block;" class="popup" id="popup">
+    {% if message|striptags == 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet' %}
+    <img src="{% static 'images/x.png' %}" />
+    {% else %}
+    <img src="{% static 'images/tick.png' %}" />
+    {% endif %}
+    <div style="margin-top: 20px;" class="message {{ message.tags }}">{{message}}</div>
+    <br>
+        {% if message|striptags == 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet' %}
+        <button style="background: red;" id="popupClose">OK</button>
+        {% else %}
+        <button id="popupClose">OK</button>
+        {% endif %}
+</div>
+{% endfor %}
+
+{% if form %}
+<form id="post" method=POST>
     {% csrf_token %}
 
-    {% for profile in profiles %}
-        {% if profile != self_profile %}
-        {% if profile in self_profile.follows.all %}
-        <a href="{% url 'profile' profile.user.id %}">{{profile.name}}</a><button name="follow" value="unfollow;{{profile}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button><br>
-        {% else %}
-        <a href="{% url 'profile' profile.user.id %}">{{profile.name}}</a>
-        <button name="follow" value="follow;{{profile}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button><br>
-        {% endif %}
-        {% endif %}
-    {% endfor %}
+    <div class="wrapper">
+      <div class="card2">
+        <div class="user">
+          <div class="profile">
+            <img src="{{self_profile.imageURL}}" class="ava">
+            <div class="username">
+              <h3 class="uname">{{self_profile.user}}</h3>
+              
+              <p class="name">{{form.title}}</p>
 
+            </div>
+          </div>
+          <i class="fa-brands fa-twitter icon"></i>
+        </div>
+        <div class="twitt">
+          <p>{{form.body}}</p>
+        </div>
+        <button class="button-33 post">Közlés</button>
+      </div>
+    </div>
 </form>
-<hr>
+{% endif %}
+
 
 {% for post in posts %}
 <div class="wrapper">
-    <div class="card">
+    <div class="card2">
       <div class="user">
         <div class="profile">
-          <img src="{{post.profile.imageURL}}" class="ava">
+          <a href="{% url 'profile' post.profile.user.id %}"><img src="{{post.profile.imageURL}}" class="ava"></a>
           <div class="username">
-            <h3 class="name">{{post.profile}}</h3>
-            <p class="uname">{{post.profile}}</p>
+            <a href="{% url 'profile' post.profile.user.id %}"><h3 class="uname">{{post.profile.user}}</h3></a>
+            <p class="name">{{post.title}}</p>
           </div>
         </div>
         <i class="fa-brands fa-twitter icon"></i>
@@ -54,5 +80,30 @@
   </div>
 {% endfor %}
 
+{% if messages %}
+<script>
+    popup = document.getElementById('popup');
+
+    popup.style.display = 'block';
+
+    setTimeout(loginAnimation, 6000);
+
+    function loginAnimation() {
+        document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
+
+        setTimeout(function() {
+            document.getElementById('popup').style.animation = "";
+            document.getElementById('popup').style.display = "none";
+        }, 500);  
+    }
+
+    var popupClose = document.getElementById('popupClose')
+    popupClose.addEventListener("click", function () {
+        loginAnimation()
+      });
+
+</script>
+{% endif %}
 
 {% endblock content %}
+

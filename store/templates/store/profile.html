@@ -4,6 +4,16 @@
 {% load humanize %}
 
 <body className='snippet-body'>
+    {% for message in messages %}
+    <div style="display: block;" class="popup" id="popup">
+    <img src="{% static 'images/tick.png' %}" />
+    <div style="margin-top: 20px;" class="message {{ message.tags }}">{{message}}</div>
+        <button id="popupClose">OK</button>
+    </div>
+    {% endfor %}
+
+
+
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
@@ -27,9 +37,17 @@
                             </div>
                             {% endif %}   
                             {% endif %}
-                        </form>
-                        <h4 class="mt-2 mb-0">{{profile.name}}</h4>
-                        <div class="block" style="margin-bottom: 20px;">
+                            {% if profile == self_profile %}
+                            <div>
+                                <span id="updateProfileBtn" class="updateProfileBtn bg-warning p-1 px-4 rounded text-white ">Szerkesztés</span>
+                            </div>
+                            <div>
+                                <span id="closeUpdateProfileBtn" class="hidden updateProfileBtn bg-warning p-1 px-4 rounded text-white ">Szerkesztés bezárása</span>
+                            </div>
+                            {% endif %}
+                    <div id="profileData">
+                        <h4 class="mt-2 mb-0"><strong>{{profile.name}}</strong></h4>
+                        <div class="block" style="margin-bottom: 20px; font-weight: 500;">
                             {% if profile.email != None %}
                             <span class="span">{{profile.email}}</span>
                             {% endif %}
@@ -42,8 +60,31 @@
                             <span class="span">{{profile.description}}</span>
                             {% endif %}
                         </div>
+                    </div>
+                    </form>
 
-                        <div class="sor">
+                    <form method=POST>
+                    {% csrf_token %}
+                    <div id="updateProfileData" class="hidden">
+                        <h4 class="mt-2 mb-0"><strong>{{update_profile_form.name}}</strong></h4>
+                        <div class="block" style="margin-bottom: 20px; font-weight: 500;">
+                            <br>
+                            <span class="span">{{update_profile_form.email}}</span><br>
+                            <br>
+                            <span class="span">{{update_profile_form.phone_number}}</span>
+                        </div>
+                        <div class="block description">
+                            <br>
+                            <span class="span">{{update_profile_form.description}}</span>
+                            <hr>
+                        </div>
+                        <div>
+                            <button type="submit" class="updateProfileBtn bg-warning p-1 px-4 rounded text-white">Mentés</button>
+                        </div>
+                    </div>
+                    </form>
+
+                        <div id="followers_following" class="sor">
                             <div class="div1">
                                 <h5 class="mt-2 mb-0">Követők:</h5>
                                 <div class="block">
@@ -51,7 +92,7 @@
                                     <form form id="follower1" method=POST>
                                         {% csrf_token %}
                                         
-                                        {% for follower in profile.followers.all|slice:":1" %}
+                                        {% for follower in profile.followers.all|slice:":3" %}
                                         
                                         <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
                                             <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
@@ -88,7 +129,7 @@
                                         {% endfor %} 
     
                                     </form>
-                                    {% if profile.followers.all.count > 1 %}
+                                    {% if profile.followers.all.count > 3 %}
                                     <div id="morefollower" style="margin-top: 15px;">
                                         <button id="morefollowerBtn" class="bx bxs-down-arrow"></button>
                                         <span class="span follower_a">Több követés</span>
@@ -107,7 +148,7 @@
                                 <form id="following1" method=POST>
                                     {% csrf_token %}
                                     
-                                    {% for following in profile.follows.all|slice:":1" %}
+                                    {% for following in profile.follows.all|slice:":3" %}
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
@@ -142,7 +183,7 @@
                                     </div>
                                     {% endfor %}
                                 </form>
-                                {% if profile.follows.all.count > 1 %}
+                                {% if profile.follows.all.count > 3 %}
                                 <div id="morefollowing" style="margin-top: 15px;">
                                     <button id="morefollowingBtn" class="bx bxs-down-arrow"></button>
                                     <span class="span follower_a">Több követés</span>
@@ -162,13 +203,15 @@
         </div>
     </div>
     {% if profile == self_profile %}
-    <div class="container mt-5">
+    {% if orders %}
+    <div id="orders" class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4"> 
                     <div class="text-center mt-3">
-                        <h3 class="mt-2 mb-0">Rendeléseim:</h3>
+                        <h3 class="mt-2 mb-0"><strong>Rendeléseim</strong></h3>
                         {% for order in orders %}
+                        {% if order.get_cart_total != 0 %}
                         <div class="sor">
                             <div class="div2">
                                 <h4 style="text-decoration: underline;" class="mt-2 mb-0">{{order}}</h4> 
@@ -188,6 +231,7 @@
                             {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -195,26 +239,87 @@
         </div>
     </div>
     {% endif %}
-    <div class="container mt-5">
+    {% endif %}
+    {% if posts %}
+    <div id="posts" class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
-                <div class="card p-3 py-4"> 
+                <div class="card p-3 py-4">
                     <div class="text-center mt-3">
-                        <h4 class="mt-2 mb-0">Posztjaim:</h4>
-                        <div>
-                            <img class="orderphoto" src="" width="400" class="rounded-circle">
+                        <div style="margin-bottom: 50px;"><h4  class="mt-2 mb-0"><strong>Posztjaim:</strong></h4></div>
+                        {% for post in posts %}
+                        <div class="wrapper">
+                            <div class="card2 post">
+                            <div class="user">
+                                <div class="profile">
+                                <img src="{{post.profile.imageURL}}" class="ava">
+                                <div class="username">
+                                    <h3 class="uname">{{post.profile.user}}</h3>
+                                    <p class="name">{{post.title}}</p>
+                                </div>
+                                </div>
+                                {% if profile == self_profile %}
+                                <form method="POST" id="deletePostForm">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button class='bx bx-trash icon' type="submit" name="delete_post"></button>
+                                </form>
+                                {% else %}
+                                <i class="fa-brands fa-twitter icon"></i>
+                                {% endif %}            
+                            </div>
+                            <div class="twitt">
+                                <p>{{post.body}}</p>
+                            </div>
+                            <div class="insight">
+                                <div class="like">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="heart">
+                                    <path id="Vector" d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.57831 8.50903 2.99871 7.05 2.99871C5.59096 2.99871 4.19169 3.57831 3.16 4.61C2.1283 5.64169 1.54871 7.04097 1.54871 8.5C1.54871 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22249 22.4518 8.5C22.4518 7.77751 22.3095 7.0621 22.0329 6.39464C21.7563 5.72718 21.351 5.12075 20.84 4.61V4.61Z" stroke="white" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </g>
+                                </svg>
+                                <p class="like-value">{{post.likes.all.count}}</p>
+                                </div>
+                                <div class="created">
+                                <p>{{post.created}}</p>
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="mt-2 mb-0">Poszt címe</h4>
-                            <p class="fonts">A poszt hosszabb leírása. </p>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    {% endif %}
 </body>
+
+<script>
+    var updateProfileBtn = document.getElementById("updateProfileBtn");
+    var closeUpdateProfileBtn = document.getElementById("closeUpdateProfileBtn");
+
+    updateProfileBtn.addEventListener("click", function() {
+        document.getElementById('profileData').classList.add('hidden')
+        document.getElementById('updateProfileData').classList.remove('hidden')
+        document.getElementById('updateProfileBtn').classList.add('hidden')
+        document.getElementById('closeUpdateProfileBtn').classList.remove('hidden')
+        document.getElementById('followers_following').classList.add('hidden')
+        document.getElementById('posts').classList.add('hidden')
+        document.getElementById('orders').classList.add('hidden')
+    });
+
+    closeUpdateProfileBtn.addEventListener("click", function() {
+        document.getElementById('profileData').classList.remove('hidden')
+        document.getElementById('updateProfileData').classList.add('hidden')
+        document.getElementById('updateProfileBtn').classList.remove('hidden')
+        document.getElementById('closeUpdateProfileBtn').classList.add('hidden')
+        document.getElementById('followers_following').classList.remove('hidden')
+        document.getElementById('posts').classList.remove('hidden')
+        document.getElementById('orders').classList.remove('hidden')
+    });
+
+</script>
 
 <script>
     var moreFollowingButton = document.getElementById("morefollowingBtn");
@@ -255,5 +360,31 @@
     });
 
 </script>
+
+{% if messages %}
+<script>
+    popup = document.getElementById('popup');
+
+    popup.style.display = 'block';
+
+    setTimeout(loginAnimation, 6000);
+
+    function loginAnimation() {
+        document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
+
+        setTimeout(function() {
+            document.getElementById('popup').style.animation = "";
+            document.getElementById('popup').style.display = "none";
+        }, 500);  
+    }
+
+    var popupClose = document.getElementById('popupClose')
+    popupClose.addEventListener("click", function () {
+        loginAnimation()
+      });
+
+</script>
+{% endif %}
+
 
 {% endblock content %}

@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 import json
 import datetime
-import time
+from django.urls import reverse
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from .models import *
-from .forms import CreateUserForm
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm
 from django.db.models import Q
 
 from .utils import cookieCart, cartData, guestOrder
@@ -170,8 +170,6 @@ def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
 
-    print(data)
-
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -203,6 +201,17 @@ def processOrder(request):
 ###########################################################
 
 def forum(request):
+    form = PostForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.profile = request.user.customer
+            post.save()
+            messages.success(request, 'A posztod sikeresen létrejött')
+            return redirect('forum')
+        else:
+            messages.info(request, 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet')
+
     posts = Post.objects.all().order_by("-created")
 
     profiles = Customer.objects.all()
@@ -210,38 +219,28 @@ def forum(request):
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
 
-    if request.method == "POST":
-            
-            data = request.POST['follow'].split(';')
-            action = data[0]
-            profile = data[1]
-            
-            current_profile = Customer.objects.get(name=profile)
-            
-            if action == 'unfollow':
-                self_profile.follows.remove(current_profile)
-                current_profile.followers.remove(self_profile)
-            elif action == 'follow':
-                self_profile.follows.add(current_profile)
-                current_profile.followers.add(self_profile)
-            self_profile.save()
-            
-
-    context = {'profiles':profiles, 'self_profile':self_profile, 'posts':posts}
+    context = {'profiles': profiles, 'self_profile': self_profile, 'posts': posts, 'form': form}
 
     return render(request, 'store/forum.html', context)
 
 def profile(request, pk):
     
     if request.user.is_authenticated:
+        delete_post_form = DeletePostForm()
         profile = Customer.objects.get(user_id=pk)
+
+        posts = Post.objects.all().order_by("-created")
+        posts = posts.filter(profile=profile)
         
         self_user = request.user.customer
         self_profile = Customer.objects.get(id=self_user.id)
 
+
         orders = Order.objects.all().filter(customer_id=profile.id)
         order_items = OrderItem.objects.filter(order__in=orders)
         products = Product.objects.filter(orderitem__in=order_items).distinct()
+
+        update_profile_form = UpdateProfileForm(instance=self_profile)
 
         if request.method == "POST":
 
@@ -261,8 +260,25 @@ def profile(request, pk):
                         
                 self_profile.save()
                 current_profile.save()
+
+            if 'delete_post' in request.POST:
+                delete_post_form = DeletePostForm(request.POST)
+                if delete_post_form.is_valid():
+                    print('jaja')
+                    post_id = delete_post_form.cleaned_data['post_id']
+                    post = get_object_or_404(Post, id=post_id)
+
+                    post.delete()
+                    messages.success(request, 'A poszt sikeresen törlésre került')
+
+                return redirect(reverse('profile', kwargs={'pk': pk}))
                 
+            update_profile_form = UpdateProfileForm(request.POST, instance=self_profile)
+            if update_profile_form.is_valid():
+                update_profile_form.save()
+                return redirect(reverse('profile', kwargs={'pk': pk}))
 
-    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products}
+    context = {'profile':profile, 'self_profile':self_profile,  'orders':orders, 'order_items':order_items, 'products':products, 'posts':posts, 'update_profile_form':update_profile_form, 'delete_post_form': delete_post_form,}
 
-    return render(request, 'store/profile.html', context)   
+    return render(request, 'store/profile.html', context)
+
