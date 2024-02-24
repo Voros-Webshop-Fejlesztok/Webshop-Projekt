@@ -38,6 +38,10 @@
   float: right;
 }
 
+.masodikresz h2 {
+  font-size: 40px;
+}
+
 .test {
   min-height: 100vh;
   justify-content: center;
