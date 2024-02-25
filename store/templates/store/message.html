@@ -56,9 +56,13 @@
             <div class="header">
                 <div class="imgText">
                     <div class="userimg">
-                        <img src="images/img1.jpg" alt="" class="cover">
+                        {% if current_friend %}
+                        <img src="" alt="" class="cover">
+                        {% endif %}
                     </div>
+                    {% if current_friend %}
                     <h4>{{current_friend}}<br><span>online</span></h4>
+                    {% endif %}
                 </div>
                 <ul class="nav_icons">
                     <li><ion-icon name="search-outline"></ion-icon></li>

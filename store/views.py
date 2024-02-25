@@ -282,20 +282,20 @@ def profile(request, pk):
 
     return render(request, 'store/profile.html', context)
 
-def messages(request):
+def message(request):
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
     self_messages = Message.objects.all().filter(Q(receiver=self_profile)|  Q(sender=self_profile)).order_by("sent_date")
-
-    current_friend = ""
+    current_friend = self_profile.last_friend
     
     if request.method == 'POST':
         current_friend = request.POST.get('friend_name', None)
-        print(current_friend)
         if current_friend:
             current_friend = Customer.objects.get(name=current_friend)
+            self_profile.last_friend = current_friend
+            self_profile.save()
     
 
     context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages}
 
-    return render(request, 'store/messages.html', context)
+    return render(request, 'store/message.html', context)
