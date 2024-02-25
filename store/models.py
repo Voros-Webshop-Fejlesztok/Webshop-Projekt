@@ -13,6 +13,7 @@ class Customer(models.Model):
     date_modified = models.DateTimeField(User, auto_now=True)
     image = models.ImageField(null=True, blank=True)
     description = models.CharField(max_length=500, null=True)
+    sender = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -24,6 +25,13 @@ class Customer(models.Model):
         except:
             url = ''
         return url
+    
+    @property
+    def friends(self):
+        user_followers = self.followers.all()
+        user_following = self.follows.all()
+
+        return user_followers.intersection(user_following)
     
 ###########################################################################################################
 
@@ -148,3 +156,12 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.profile} " + f"{self.created:%Y-%m-%d %H:%M}"
+    
+class Message(models.Model):
+    sender = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='received_messages')
+    sent_date = models.DateTimeField(auto_now_add=True)
+    content = models.TextField(default='')
+
+    def __str__(self):
+        return f"{self.sender} -> {self.receiver} ({self.sent_date})"

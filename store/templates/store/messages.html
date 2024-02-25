@@ -1,0 +1,110 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<link rel="stylesheet" href="{% static 'css/messages.css' %}" />
+<body>
+    <div class="container">
+        <div class="leftSide">
+            <!-- Header -->
+            <div class="header">
+                <div class="userimg">
+                    <img src="{{self_profile.imageURL}}" alt="" class="cover">
+                </div>
+                <ul class="nav_icons">
+                    <li><ion-icon name="scan-circle-outline"></ion-icon></li>
+                    <li><ion-icon name="chatbox"></ion-icon></li>
+                    <li><ion-icon name="ellipsis-vertical"></ion-icon></li>
+                </ul>
+            </div>
+            <!-- Search Chat -->
+            <div class="search_chat">
+                <div>
+                    <input type="text" placeholder="Search or start new chat">
+                    <ion-icon name="search-outline"></ion-icon> 
+                </div>                
+            </div>
+            <!-- CHAT LIST -->
+            <form method="POST" id="selectFriendForm">
+            {% csrf_token %}
+            <input type="hidden" name="friend_name" id="friendNameField" value="">
+            <div class="chatlist">
+                {% for friend in self_profile.friends.all %}
+                <div class="block friend" onclick="selectFriend('{{friend.name}}')">
+                    <div class="imgBox">
+                        <img src="{{friend.imageURL}}" class="cover">
+                    </div>
+                    <div class="details">
+                        <div class="listHead">
+                            <h4>{{friend.name}}</h4>
+                            <p class="time">10:56</p>
+                        </div>
+                        <div class="message_p">
+                            <p>How are you doing?</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <button type="submit" style="display: none;">Submit</button>
+            </div>
+            </form>
+
+        </div>
+        <div class="rightSide">
+            <div class="header">
+                <div class="imgText">
+                    <div class="userimg">
+                        <img src="images/img1.jpg" alt="" class="cover">
+                    </div>
+                    <h4>{{current_friend}}<br><span>online</span></h4>
+                </div>
+                <ul class="nav_icons">
+                    <li><ion-icon name="search-outline"></ion-icon></li>
+                    <li><ion-icon name="ellipsis-vertical"></ion-icon></li>
+                </ul>
+            </div>
+
+            <!-- CHAT-BOX -->
+            <div class="chatbox">
+                {% for message in self_messages.all %}
+                    {% if message.receiver == current_friend and message.sender == self_profile %}
+                    <div class="message my_msg">
+                        <p>{{message.content}}<br><span>{{message.sent_date|date:'Y.m.d - H:i'}}</span></p>
+                    </div>
+                    {% elif message.sender == current_friend and message.receiver == self_profile %}
+                    <div class="message friend_msg">
+                        <p>{{message.content}}<br><span>{{message.sent_date|date:'Y.m.d - H:i'}}</span></p>
+                    </div>
+                    {% endif %}
+
+
+                {% endfor %}
+            </div>
+            
+            <!-- CHAT INPUT -->
+        <form method="POST">
+        {% csrf_token %}
+            <div class="chat_input">
+                <ion-icon name="happy-outline"></ion-icon>
+                <input type="text" placeholder="Üzenet küldés">
+                <button type="submit" class='send_message bx bx-send'></button>
+            </div>
+        </form>
+    </div>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+    function selectFriend(friendName) {
+    document.getElementById('friendNameField').value = friendName;
+    document.getElementById('selectFriendForm').submit();
+    }
+    </script>
+
+</body>
+
+{% endblock content %}
