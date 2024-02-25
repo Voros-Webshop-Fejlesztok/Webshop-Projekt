@@ -6,8 +6,6 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.interval import IntervalTrigger
 from .models import *
 from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage
 from .utils import cookieCart, cartData, guestOrder
@@ -288,21 +286,6 @@ def message(request):
     self_profile = Customer.objects.get(id=self_user.id)
     self_messages = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
     current_friend = self_profile.last_friend
-
-    def check_messages_background():
-        self_messages2 = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
-        if self_messages2.count() > self_messages.count():
-            return redirect('message')
-
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(
-        check_messages_background,
-        trigger=IntervalTrigger(seconds=5),  # A futtatási időköz beállítása (5 másodpercenként)
-        id='check_messages_job',
-        name='Check Messages Job',
-        replace_existing=True,
-    )
-    scheduler.start()
     
     last_messages_with_friends = []
     for friend in self_profile.friends:
