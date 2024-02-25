@@ -3,15 +3,15 @@ from django.http import JsonResponse
 import json
 import datetime
 from django.urls import reverse
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-
+from django.db.models import Q
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from .models import *
 from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage
-from django.db.models import Q
-
 from .utils import cookieCart, cartData, guestOrder
+
 
 # Create your views here.
 
@@ -264,7 +264,7 @@ def profile(request, pk):
             if 'delete_post' in request.POST:
                 delete_post_form = DeletePostForm(request.POST)
                 if delete_post_form.is_valid():
-                    print('jaja')
+
                     post_id = delete_post_form.cleaned_data['post_id']
                     post = get_object_or_404(Post, id=post_id)
 
@@ -286,23 +286,36 @@ def message(request):
     form = SendMessage(request.POST or None)
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
-    self_messages = Message.objects.all().filter(Q(receiver=self_profile)|  Q(sender=self_profile)).order_by("sent_date")
+    self_messages = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
     current_friend = self_profile.last_friend
 
+    def check_messages_background():
+        self_messages2 = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
+        if self_messages2.count() > self_messages.count():
+            return redirect('message')
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        check_messages_background,
+        trigger=IntervalTrigger(seconds=5),  # A futtatási időköz beállítása (5 másodpercenként)
+        id='check_messages_job',
+        name='Check Messages Job',
+        replace_existing=True,
+    )
+    scheduler.start()
+    
     last_messages_with_friends = []
     for friend in self_profile.friends:
         last_message_with_friend = self_messages.filter(Q(sender=self_profile, receiver=friend) | Q(sender=friend, receiver=self_profile)).last()
         last_messages_with_friends.append((friend, last_message_with_friend))
 
-    print(last_messages_with_friends)
-    
     if request.method == 'POST':
         current_friend = request.POST.get('friend_name')
         if current_friend:
             current_friend = Customer.objects.get(name=current_friend)
             self_profile.last_friend = current_friend
             self_profile.save()
-        
+
         if form.is_valid():
             self_message = form.save(commit=False)
             self_message.sender = self_profile
@@ -310,7 +323,8 @@ def message(request):
             self_message.content = form['content'].value()
             self_message.save()
             return redirect('message')
-            
-    context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages, 'form':form, 'last_messages_with_friends': last_messages_with_friends,}
+
+    context = {'self_profile': self_profile, 'current_friend': current_friend, 'self_messages': self_messages,
+               'form': form, 'last_messages_with_friends': last_messages_with_friends}
 
     return render(request, 'store/message.html', context)
