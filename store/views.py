@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from .models import *
-from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage
 from django.db.models import Q
 
 from .utils import cookieCart, cartData, guestOrder
@@ -283,19 +283,34 @@ def profile(request, pk):
     return render(request, 'store/profile.html', context)
 
 def message(request):
+    form = SendMessage(request.POST or None)
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
     self_messages = Message.objects.all().filter(Q(receiver=self_profile)|  Q(sender=self_profile)).order_by("sent_date")
     current_friend = self_profile.last_friend
+
+    last_messages_with_friends = []
+    for friend in self_profile.friends:
+        last_message_with_friend = self_messages.filter(Q(sender=self_profile, receiver=friend) | Q(sender=friend, receiver=self_profile)).last()
+        last_messages_with_friends.append((friend, last_message_with_friend))
+
+    print(last_messages_with_friends)
     
     if request.method == 'POST':
-        current_friend = request.POST.get('friend_name', None)
+        current_friend = request.POST.get('friend_name')
         if current_friend:
             current_friend = Customer.objects.get(name=current_friend)
             self_profile.last_friend = current_friend
             self_profile.save()
-    
-
-    context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages}
+        
+        if form.is_valid():
+            self_message = form.save(commit=False)
+            self_message.sender = self_profile
+            self_message.receiver = self_profile.last_friend
+            self_message.content = form['content'].value()
+            self_message.save()
+            return redirect('message')
+            
+    context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages, 'form':form, 'last_messages_with_friends': last_messages_with_friends,}
 
     return render(request, 'store/message.html', context)

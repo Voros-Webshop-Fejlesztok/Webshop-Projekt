@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Post, Customer
+from .models import Post, Customer, Message
 
 
 from .models import Order
@@ -93,3 +93,19 @@ class UpdateProfileForm(forms.ModelForm):
 
 class DeletePostForm(forms.Form):
     post_id = forms.IntegerField()
+
+class SendMessage(forms.ModelForm):
+    content = forms.CharField(required=True,
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder":"Üzenet küldése",
+                   "class":"form-textarea",
+                   'cols':'40',
+                   'rows':'1',
+                   'maxlength':'1000',
+                   'required':'required',}),
+        label="")
+    
+    class Meta:
+        model = Message
+        fields = ['content']
+        exclude = ("user", 'sender', 'receiver',)

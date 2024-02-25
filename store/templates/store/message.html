@@ -39,11 +39,24 @@
                     <div class="details">
                         <div class="listHead">
                             <h4>{{friend.name}}</h4>
-                            <p class="time">10:56</p>
+
+                            {% for actual_friend, last_message_with_friend in last_messages_with_friends %}
+                                {% if last_message_with_friend and actual_friend == friend %}
+                                    <p class="time">{{ last_message_with_friend.sent_date|date:'Y.m.d - H:i'}}</p>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        <div class="message_p">
-                            <p>How are you doing?</p>
-                        </div>
+                        {% for actual_friend, last_message_with_friend in last_messages_with_friends %}
+                            <div class="message_p">
+                                {% if last_message_with_friend and friend == actual_friend %}
+                                    {% if last_message_with_friend.sender == friend %}
+                                        <p style="color: blue;">ő: {{ last_message_with_friend.content|slice:":30"}}...</p>
+                                    {% else %}
+                                        <p style="color: green;">te: {{ last_message_with_friend.content|slice:":30"}}...</p>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
@@ -57,11 +70,11 @@
                 <div class="imgText">
                     <div class="userimg">
                         {% if current_friend %}
-                        <img src="" alt="" class="cover">
+                        <img src="{{current_friend.imageURL}}" class="cover">
                         {% endif %}
                     </div>
                     {% if current_friend %}
-                    <h4>{{current_friend}}<br><span>online</span></h4>
+                    <h4>{{current_friend}}</h4>
                     {% endif %}
                 </div>
                 <ul class="nav_icons">
@@ -88,14 +101,16 @@
             </div>
             
             <!-- CHAT INPUT -->
-        <form method="POST">
+        {% if form %}
+        <form id="sent_message" method=POST>
         {% csrf_token %}
             <div class="chat_input">
                 <ion-icon name="happy-outline"></ion-icon>
-                <input type="text" placeholder="Üzenet küldés">
+                {{form.content}}
                 <button type="submit" class='send_message bx bx-send'></button>
             </div>
         </form>
+        {% endif %}
     </div>
 
 
