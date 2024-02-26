@@ -93,6 +93,8 @@ class UpdateProfileForm(forms.ModelForm):
 
 class DeletePostForm(forms.Form):
     post_id = forms.IntegerField()
+class DeleteMessageForm(forms.Form):
+    message_id = forms.IntegerField()
 
 class SendMessage(forms.ModelForm):
     content = forms.CharField(required=True,

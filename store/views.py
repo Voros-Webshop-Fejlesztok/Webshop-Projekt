@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from .models import *
-from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage, DeleteMessageForm
 from .utils import cookieCart, cartData, guestOrder
 
 
@@ -222,7 +222,6 @@ def forum(request):
     return render(request, 'store/forum.html', context)
 
 def profile(request, pk):
-    
     if request.user.is_authenticated:
         delete_post_form = DeletePostForm()
         profile = Customer.objects.get(user_id=pk)
@@ -281,12 +280,21 @@ def profile(request, pk):
     return render(request, 'store/profile.html', context)
 
 def message(request):
+    delete_message_form = DeletePostForm
+    friend_query = request.GET.get('friend_name')
+
     form = SendMessage(request.POST or None)
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
+    self_friends = self_profile.friends
     self_messages = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
     current_friend = self_profile.last_friend
-    
+
+    if is_valid_param(friend_query):
+        self_profile_followers = self_profile.followers.filter(name__icontains=friend_query)
+        self_profile_follows = self_profile.follows.filter(name__icontains=friend_query)
+        self_friends = self_profile_followers.intersection(self_profile_follows)
+
     last_messages_with_friends = []
     for friend in self_profile.friends:
         last_message_with_friend = self_messages.filter(Q(sender=self_profile, receiver=friend) | Q(sender=friend, receiver=self_profile)).last()
@@ -306,8 +314,18 @@ def message(request):
             self_message.content = form['content'].value()
             self_message.save()
             return redirect('message')
+        
+        if 'delete_message' in request.POST:
+            delete_message_form = DeleteMessageForm(request.POST)
+            if delete_message_form.is_valid():
+                message_id = delete_message_form.cleaned_data['message_id']
+                message = get_object_or_404(Message, id=message_id)
+                message.delete()
+                
+                return redirect('message')
+
 
     context = {'self_profile': self_profile, 'current_friend': current_friend, 'self_messages': self_messages,
-               'form': form, 'last_messages_with_friends': last_messages_with_friends}
+               'form': form, 'last_messages_with_friends': last_messages_with_friends,'self_friends':self_friends, 'delete_message_form':delete_message_form}
 
     return render(request, 'store/message.html', context)

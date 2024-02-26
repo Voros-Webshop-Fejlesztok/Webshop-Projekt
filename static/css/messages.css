@@ -360,3 +360,11 @@ body {
   border: none;
   font-size: 22px;
 }
+.my_msg_x{
+  z-index: 10;
+  margin-right: -1.2vh;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: -3.5vh;
+  border: none;
+}
