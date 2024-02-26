@@ -86,10 +86,11 @@ class UpdateProfileForm(forms.ModelForm):
         }),
         label=""
     )
+    image = forms.ImageField(label='Profile Picture')
 
     class Meta:
         model = Customer
-        fields = ['name', 'email', 'phone_number', 'image', 'description']
+        fields = ['name', 'email', 'phone_number', 'image', 'description', 'image']
 
 class DeletePostForm(forms.Form):
     post_id = forms.IntegerField()
