@@ -102,7 +102,9 @@ class SendMessage(forms.ModelForm):
                    'cols':'40',
                    'rows':'1',
                    'maxlength':'1000',
-                   'required':'required',}),
+                   'required':'required',
+                   'id':'chatInput',
+                   }),
         label="")
     
     class Meta:
