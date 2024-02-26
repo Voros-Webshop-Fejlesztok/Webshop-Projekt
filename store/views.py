@@ -270,7 +270,7 @@ def profile(request, pk):
 
                 return redirect(reverse('profile', kwargs={'pk': pk}))
                 
-            update_profile_form = UpdateProfileForm(request.POST, instance=self_profile)
+            update_profile_form = UpdateProfileForm(request.POST or None, request.FILES or None, instance=self_profile)
             if update_profile_form.is_valid():
                 update_profile_form.save()
                 return redirect(reverse('profile', kwargs={'pk': pk}))

@@ -18,12 +18,13 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4">
+                    <form method=POST>
+                    {% csrf_token %}
                     <div class="text-center">
                         <img src="{{profile.imageURL}}" class="rounded-circle profile_img">
                     </div>
                     <div class="text-center mt-3">
-                        <form method=POST>
-                        {% csrf_token %}
+                        
                             {% if profile != self_profile %}
                             {% if profile in self_profile.follows.all %}
                             <div>
@@ -63,9 +64,12 @@
                     </div>
                     </form>
 
-                    <form method=POST>
+                    <form method=POST enctype="multipart/form-data">
                     {% csrf_token %}
                     <div id="updateProfileData" class="hidden">
+                        <div class="image_edit">
+                            <p style="margin-bottom: -5vh;"><strong>Profilkép csere:</strong></p><p class="edit">{{update_profile_form.image}}</p>
+                        </div>
                         <h4 class="mt-2 mb-0"><strong>{{update_profile_form.name}}</strong></h4>
                         <div class="block" style="margin-bottom: 20px; font-weight: 500;">
                             <br>
@@ -86,6 +90,7 @@
 
                         <div id="followers_following" class="sor">
                             <div class="div1">
+                                <h5 class="mt-2 mb-0">{{profile.followers.all.count}}</h5>
                                 <h5 class="mt-2 mb-0">Követők:</h5>
                                 <div class="block">
                                     
@@ -144,6 +149,7 @@
                             </div>
                         
                             <div class="div2">
+                                <h5 class="mt-2 mb-0">{{profile.follows.all.count}}</h5>
                                 <h5 class="mt-2 mb-0">Követések:</h5>
                                 <form id="following1" method=POST>
                                     {% csrf_token %}
@@ -203,8 +209,8 @@
         </div>
     </div>
     {% if profile == self_profile %}
-    {% if orders %}
     <div id="orders" class="container mt-5">
+        {% if orders %}
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4"> 
@@ -240,8 +246,9 @@
     </div>
     {% endif %}
     {% endif %}
-    {% if posts %}
+    
     <div id="posts" class="container mt-5">
+        {% if posts %}
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4">
