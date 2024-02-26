@@ -122,7 +122,79 @@
     document.getElementById('friendNameField').value = friendName;
     document.getElementById('selectFriendForm').submit();
     }
-    </script>
+</script>
+
+<script>
+    function handleChatInput() {
+        var inputElement = document.getElementById('chatInput');
+        var chatboxElement = document.querySelector('.chatbox');
+
+        // Az oldal betöltésekor megpróbáljuk visszaállítani az értéket a cookie-ból
+        window.addEventListener('load', function() {
+            var storedValue = getCookie('chatValue');
+            inputElement.value = storedValue || '';
+            
+            // Aktiváljuk az input mezőt
+            inputElement.focus();
+
+            // Az újratöltés után görgetjük az aljára a chatbox-ot
+            scrollToBottom();
+        });
+
+        // Az üzenet mező tartalmának mentése cookie-ba 5 másodpercenként
+        setInterval(function() {
+            setCookie('chatValue', inputElement.value, 1);  // Harmadik paraméter a cookie élettartama napokban
+            location.reload();
+        }, 10000);
+
+        // Az űrlap elküldésekor frissítjük a cookie-t és beküldjük az űrlapot
+        document.getElementById('sent_message').addEventListener('submit', function(event) {
+            // Elmentjük az input mező értékét a cookie-ba
+            setCookie('chatValue', inputElement.value, 1);  // Harmadik paraméter a cookie élettartama napokban
+
+            // Töröljük a cookie-t
+            deleteCookie('chatValue');
+
+            // Az űrlap elküldése után görgetjük az aljára a chatbox-ot
+            scrollToBottom();
+        });
+
+        // Segédfüggvények a cookie kezeléshez
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = '; expires=' + date.toUTCString();
+            }
+            document.cookie = name + '=' + value + expires + '; path=/';
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + '=';
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        }
+
+        // Görgeti a chatbox-ot az aljára
+        function scrollToBottom() {
+            chatboxElement.scrollTop = chatboxElement.scrollHeight;
+            inputElement.setSelectionRange(inputElement.value.length, inputElement.value.length);
+        }
+    }
+
+    // A függvény hívása a dokumentum betöltése után
+    document.addEventListener('DOMContentLoaded', handleChatInput);
+</script>
 
 </body>
 
