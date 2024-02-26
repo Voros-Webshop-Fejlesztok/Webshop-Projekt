@@ -13,25 +13,25 @@
                 <div class="userimg">
                     <img src="{{self_profile.imageURL}}" alt="" class="cover">
                 </div>
-                <ul class="nav_icons">
-                    <li><ion-icon name="scan-circle-outline"></ion-icon></li>
-                    <li><ion-icon name="chatbox"></ion-icon></li>
-                    <li><ion-icon name="ellipsis-vertical"></ion-icon></li>
-                </ul>
             </div>
+        
             <!-- Search Chat -->
-            <div class="search_chat">
-                <div>
-                    <input type="text" placeholder="Search or start new chat">
-                    <ion-icon name="search-outline"></ion-icon> 
-                </div>                
-            </div>
+            <form method="GET" action=".">
+            {% csrf_token %}
+                <div class="search_chat">
+                    <div style="display: flex;">
+                        <button style="margin-right: 10px;" type="submit" class='send_message bx bx-search' id="friend_search"></button>
+                        <input placeholder="Chat keresése" type="search" name="friend_name" id="friendInput">
+                    </div>                
+                </div>
+            </form>
+
             <!-- CHAT LIST -->
             <form method="POST" id="selectFriendForm">
             {% csrf_token %}
-            <input type="hidden" name="friend_name" id="friendNameField" value="">
+            <input type="hidden" name="friend_name" id="friendNameField">
             <div class="chatlist">
-                {% for friend in self_profile.friends.all %}
+                {% for friend in self_friends %}
                 <div class="block friend" onclick="selectFriend('{{friend.name}}')">
                     <div class="imgBox">
                         <img src="{{friend.imageURL}}" class="cover">
@@ -77,17 +77,18 @@
                     <h4>{{current_friend}}</h4>
                     {% endif %}
                 </div>
-                <ul class="nav_icons">
-                    <li><ion-icon name="search-outline"></ion-icon></li>
-                    <li><ion-icon name="ellipsis-vertical"></ion-icon></li>
-                </ul>
             </div>
 
             <!-- CHAT-BOX -->
+            
             <div class="chatbox">
+                <form method="POST">
+                {% csrf_token %}
                 {% for message in self_messages.all %}
                     {% if message.receiver == current_friend and message.sender == self_profile %}
                     <div class="message my_msg">
+                        <input type="hidden" name="message_id" value="{{ message.id }}">
+                        <button class='my_msg_x bx bxs-x-circle' name="delete_message"></button>
                         <p>{{message.content}}<br><span>{{message.sent_date|date:'Y.m.d - H:i'}}</span></p>
                     </div>
                     {% elif message.sender == current_friend and message.receiver == self_profile %}
@@ -95,17 +96,16 @@
                         <p>{{message.content}}<br><span>{{message.sent_date|date:'Y.m.d - H:i'}}</span></p>
                     </div>
                     {% endif %}
-
-
                 {% endfor %}
+            </form>
             </div>
+            
             
             <!-- CHAT INPUT -->
         {% if form %}
         <form id="sent_message" method=POST>
         {% csrf_token %}
             <div class="chat_input">
-                <ion-icon name="happy-outline"></ion-icon>
                 {{form.content}}
                 <button type="submit" class='send_message bx bx-send'></button>
             </div>
@@ -127,15 +127,24 @@
 <script>
     function handleChatInput() {
         var inputElement = document.getElementById('chatInput');
+        var friendInputElement = document.getElementById('friendInput');
         var chatboxElement = document.querySelector('.chatbox');
 
         // Az oldal betöltésekor megpróbáljuk visszaállítani az értéket a cookie-ból
         window.addEventListener('load', function() {
-            var storedValue = getCookie('chatValue');
-            inputElement.value = storedValue || '';
+            var storedChatValue = getCookie('chatValue');
+            var storedFriendValue = getCookie('friendValue');
             
-            // Aktiváljuk az input mezőt
-            inputElement.focus();
+            
+            inputElement.value = storedChatValue || '';
+            friendInputElement.value = storedFriendValue || '';
+
+            // Aktiváljuk az input mezőket
+            if (storedChatValue != '') {
+                inputElement.focus();
+            } else if (storedFriendValue != '') {
+                friendInputElement.focus();
+            }
 
             // Az újratöltés után görgetjük az aljára a chatbox-ot
             scrollToBottom();
@@ -144,6 +153,7 @@
         // Az üzenet mező tartalmának mentése cookie-ba 5 másodpercenként
         setInterval(function() {
             setCookie('chatValue', inputElement.value, 1);  // Harmadik paraméter a cookie élettartama napokban
+            setCookie('friendValue', friendInputElement.value, 1);  // FriendInput értékének mentése cookie-ba
             location.reload();
         }, 6000);
 
@@ -152,14 +162,26 @@
             // Elmentjük az input mező értékét a cookie-ba
             setCookie('chatValue', inputElement.value, 1);  // Harmadik paraméter a cookie élettartama napokban
 
-            // Töröljük a cookie-t
+            // Töröljük a cookie-kat
             deleteCookie('chatValue');
 
             // Az űrlap elküldése után görgetjük az aljára a chatbox-ot
             scrollToBottom();
         });
 
-        // Segédfüggvények a cookie kezeléshez
+        document.getElementById('friend_search').addEventListener('click', function(event) {
+
+            // Elmentjük a friendInput mező értékét a cookie-ba
+            setCookie('friendValue', friendInputElement.value, 1);
+
+            // Töröljük a cookie-kat
+            deleteCookie('friendValue');
+
+            // Az űrlap elküldése után görgetjük az aljára a chatbox-ot
+            scrollToBottom();
+        });
+
+        // Segédfüggvények a cookie kezeléséhez
         function setCookie(name, value, days) {
             var expires = '';
             if (days) {
