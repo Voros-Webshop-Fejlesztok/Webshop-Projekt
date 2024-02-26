@@ -9,6 +9,10 @@ from django.db.models import Q
 from .models import *
 from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage, DeleteMessageForm
 from .utils import cookieCart, cartData, guestOrder
+from django.conf import settings
+from django.core.files import File
+from django.core.files.images import ImageFile
+import os
 
 
 # Create your views here.
@@ -28,7 +32,11 @@ def registerPage(request):
             name = first_name + ' ' + last_name
 
             user = User.objects.get(username = user_name)
-            customer = Customer(user=user, email=email, name=name, phone_number='')
+
+            default_image_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'placeholder_img.jpg')
+            image_file = ImageFile(open(default_image_path, 'rb'))
+
+            customer = Customer(user=user, email=email, name=name, phone_number='', image=image_file)
             
             customer.save()
 

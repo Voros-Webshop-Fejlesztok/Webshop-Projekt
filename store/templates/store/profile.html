@@ -104,7 +104,7 @@
                                             <span class="span follower_a">{{follower}}</span></a>
     
                                             {% if follower != self_profile %}
-                                                {% if follower in profile.follows.all %}
+                                                {% if follower in self_profile.follows.all %}
                                                 <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                                 {% else %}
                                                 <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
@@ -124,7 +124,7 @@
                                             <span class="span follower_a">{{follower}}</span></a>
     
                                             {% if follower != self_profile %}
-                                                {% if follower in profile.follows.all %}
+                                                {% if follower in self_profile.follows.all %}
                                                 <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                                 {% else %}
                                                 <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
@@ -136,11 +136,11 @@
                                     </form>
                                     {% if profile.followers.all.count > 3 %}
                                     <div id="morefollower" style="margin-top: 15px;">
-                                        <button id="morefollowerBtn" class="bx bxs-down-arrow"></button>
+                                        <button type="button" type="button" id="morefollowerBtn" class="bx bxs-down-arrow"></button>
                                         <span class="span follower_a">Több követés</span>
                                     </div>
                                     <div class="hidden" id="lessfollower" style="margin-top: 15px;">
-                                        <button id="lessfollowerBtn" class="bx bxs-up-arrow"></button>
+                                        <button type="button" id="lessfollowerBtn" class="bx bxs-up-arrow"></button>
                                         <span class="span follower_a">Kevesebb követés</span>
                                     </div>
                                     {% endif %}
@@ -191,11 +191,11 @@
                                 </form>
                                 {% if profile.follows.all.count > 3 %}
                                 <div id="morefollowing" style="margin-top: 15px;">
-                                    <button id="morefollowingBtn" class="bx bxs-down-arrow"></button>
+                                    <button type="button" id="morefollowingBtn" class="bx bxs-down-arrow"></button>
                                     <span class="span follower_a">Több követés</span>
                                 </div>
                                 <div class="hidden" id="lessfollowing" style="margin-top: 15px;">
-                                    <button id="lessfollowingBtn" class="bx bxs-up-arrow"></button>
+                                    <button type="button" id="lessfollowingBtn" class="bx bxs-up-arrow"></button>
                                     <span class="span follower_a">Kevesebb követés</span>
                                 </div>
                                 {% endif %}
@@ -302,6 +302,7 @@
     {% endif %}
 </body>
 
+{% if profile == self_profile %}
 <script>
     var updateProfileBtn = document.getElementById("updateProfileBtn");
     var closeUpdateProfileBtn = document.getElementById("closeUpdateProfileBtn");
@@ -325,9 +326,10 @@
         document.getElementById('posts').classList.remove('hidden')
         document.getElementById('orders').classList.remove('hidden')
     });
-
 </script>
+{% endif %}
 
+{% if profile.follows.all.count > 3 %}
 <script>
     var moreFollowingButton = document.getElementById("morefollowingBtn");
     var lessFollowingButton = document.getElementById("lessfollowingBtn");
@@ -345,9 +347,10 @@
         document.getElementById("following2").classList.add('hidden')
         document.getElementById("following1").classList.remove('hidden')
     });
-
 </script>
+{% endif %}
 
+{% if profile.followers.all.count > 3 %}
 <script>
     var moreFollowerButton = document.getElementById("morefollowerBtn");
     var lessFollowerButton = document.getElementById("lessfollowerBtn");
@@ -365,8 +368,8 @@
         document.getElementById("follower2").classList.add('hidden')
         document.getElementById("follower1").classList.remove('hidden')
     });
-
 </script>
+{% endif %}
 
 {% if messages %}
 <script>
