@@ -33,12 +33,12 @@
                             {% if profile in self_profile.follows.all %}
                             <div>
                                 <span class="bg-success p-1 px-4 rounded text-white">Követed</span>
-                                <button name="follow" value="unfollow;{{profile}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
+                                <button name="follow" value="unfollow;{{profile.id}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
                             </div>
                             {% else %}
                             <div>
                                 <span class="bg-danger p-1 px-4 rounded text-white">Nem követed</span>
-                                <button name="follow" value="follow;{{profile}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
+                                <button name="follow" value="follow;{{profile.id}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
                             </div>
                             {% endif %}   
                             {% endif %}
@@ -104,14 +104,20 @@
                                         {% for follower in profile.followers.all|slice:":3" %}
                                         
                                         <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
+
+                                            {% if follower.imageURL %}
                                             <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
+                                            {% else %}
+                                            <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                            {% endif %} 
+
                                             <span class="span follower_a">{{follower}}</span></a>
     
                                             {% if follower != self_profile %}
                                                 {% if follower in self_profile.follows.all %}
-                                                <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                                <button name="follow" value="unfollow;{{follower.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                                 {% else %}
-                                                <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                                <button name="follow" value="follow;{{follower.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -124,14 +130,18 @@
                                         {% for follower in profile.followers.all %}
                                         
                                         <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
+                                            {% if follower.imageURL %}
                                             <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
+                                            {% else %}
+                                            <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                            {% endif %} 
                                             <span class="span follower_a">{{follower}}</span></a>
     
                                             {% if follower != self_profile %}
                                                 {% if follower in self_profile.follows.all %}
-                                                <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                                <button name="follow" value="unfollow;{{follower.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                                 {% else %}
-                                                <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                                <button name="follow" value="follow;{{follower.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -162,13 +172,19 @@
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+
+                                        {% if following.imageURL %}
                                         <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        {% else %}
+                                        <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                        {% endif %} 
+
                                         <span class="span follower_a">{{following}}</span></a>
                                         {% if following != self_profile %}
                                             {% if following in self_profile.follows.all %}
-                                            <button name="follow" value="unfollow;{{following}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                            <button name="follow" value="unfollow;{{following.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                             {% else %}
-                                            <button name="follow" value="follow;{{following}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                            <button name="follow" value="follow;{{following.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -181,13 +197,19 @@
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+
+                                        {% if following.imageURL %}
                                         <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        {% else %}
+                                        <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                        {% endif %} 
+
                                         <span class="span follower_a">{{following}}</span></a>
                                         {% if following != self_profile %}
                                             {% if following in self_profile.follows.all %}
-                                            <button name="follow" value="unfollow;{{following}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                            <button name="follow" value="unfollow;{{following.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                             {% else %}
-                                            <button name="follow" value="follow;{{following}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                            <button name="follow" value="follow;{{following.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                             {% endif %}
                                         {% endif %}
                                     </div>

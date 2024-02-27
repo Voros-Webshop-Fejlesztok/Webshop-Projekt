@@ -52,7 +52,7 @@
 
       <div class="menu-bar">
         <div class="menu">
-          <ul class="menu-links">
+          <ul class="menu-links" id="menu-links">
             <li class="nav-link basic">
               {% if request.user.id is None %}
               <i class="bx bx-user-x icon"></i>
@@ -110,7 +110,7 @@
         </div>
 
         <div class="bottom-content">
-          <ul>
+          <ul id="menu-links">
             {% if request.user.id is None %}
             <li class="nav-link">
               <a href="{% url 'register' %}">

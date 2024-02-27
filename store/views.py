@@ -42,6 +42,23 @@ def registerPage(request):
             messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű felhasználói fiókját')
 
             return redirect('login')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    print(error)
+                    if error == 'This password is too common.':
+                        messages.success(request, 'Vegye már észre kolléga, ez a jelszó túl primitív!')
+                    elif error == 'The password is too similar to the username.':
+                        messages.success(request, 'Most komolyan? Ne hasonlítson már a jelszavad a felhasználónedhez!')
+                    elif error == 'The password is too similar to the last name.' or error == 'The password is too similar to the first name.':
+                        messages.success(request, 'Ne szórakozz már! Ne a saját neved takarja a jelszavad...')
+                    elif error == 'A user with that username already exists.':
+                        messages.success(request, 'Hoppá, valaki megelőzött. Ez a felhasználónév már foglalt.')
+                    elif error == 'This password is too short. It must contain at least 8 characters.':
+                        messages.success(request, 'Rövid szerszámmal szexelni sem lehet. Adjál már meg hosszabb jelszót!')
+                    elif error == 'The two password fields didn’t match.':
+                        messages.success(request, 'Ne legyél már ennyire szenilis, a jelszavaid egyezzenek már meg!')
+
 
     context = {'form':form}
     return render(request, 'store/register.html', context)
@@ -57,17 +74,17 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, 'Sikeresen bejelentkezett ' + username + ' felhasználó')
+            messages.success(request, 'Örülök, hogy betévedtél a Dáridó Shopba ' + username + ', de remélem, hogy nem a GPS hibázott!')
             return redirect('home')
         else:
-            messages.info(request, 'Helytelen felhasználónév vagy jelszó')
+            messages.info(request, 'Ha Póda Laci emlékszik arra, hogy 30 éve hogyan darált az AK-val, te is emlékezz a felhasználónév és jelszó kombinációdra')
             return redirect('login')
 
     return render(request, 'store/login.html', context)
 
 def logoutUser(request):
 
-    messages.success(request, 'Sikeresen kijelentkezett')
+    messages.success(request, 'Ahogy most kijelentkeztél, s majd bezárod a böngészőt, úgy nyiss ki egy üveg whiskeyt is, hisz minden fejezet lezárásánál egy új kezdődik az előző helyett.')
 
     logout(request)
 
@@ -259,7 +276,7 @@ def profile(request, pk):
                 action = data[0]
                 profile2 = data[1]
 
-                current_profile = Customer.objects.get(name=profile2)
+                current_profile = Customer.objects.get(id=profile2)
 
                 if action == 'unfollow':
                     self_profile.follows.remove(current_profile)
@@ -316,7 +333,7 @@ def message(request):
     if request.method == 'POST':
         current_friend = request.POST.get('friend_name')
         if current_friend:
-            current_friend = Customer.objects.get(name=current_friend)
+            current_friend = Customer.objects.get(id=current_friend)
             self_profile.last_friend = current_friend
             self_profile.save()
 
