@@ -416,6 +416,10 @@ body.dark .thumbnail {
   color: rgb(210, 178, 0);
 }
 
+.stock {
+  font-size: 2.2vh;
+}
+
 .rating-star {
   font-size: 2.3vh;
   float: right;
