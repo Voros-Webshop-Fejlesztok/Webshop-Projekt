@@ -63,7 +63,7 @@ function updateUserOrder(productId, action) {
     .then((data) => {
         var path = window.location.pathname;
         if (path == "/store/") {
-            succesfulOrder()
+            succesfulOrder()  
         }else{
             location.reload()
         }
@@ -84,6 +84,7 @@ function succesfulOrder() {
         document.getElementById("popup").style.display = 'none';
         document.getElementById('formContent').style.opacity = '1';
         document.getElementById("popup").style.animation = "";
+        location.reload()
     }, 500);
   
   });
@@ -97,6 +98,8 @@ function succesfulOrder() {
         document.getElementById("popup").style.display = 'none';
         document.getElementById('formContent').style.opacity = '1';
         document.getElementById("popup").style.animation = "";
+        location.reload()
     }, 500);
     }
+    
 }

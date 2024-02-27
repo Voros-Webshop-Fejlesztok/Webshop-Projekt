@@ -13,6 +13,8 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.images import ImageFile
 import os
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 
 # Create your views here.
@@ -155,16 +157,21 @@ def updateItem(request):
     user = request.user
 
     product = Product.objects.get(id = productId)
-    order, created = Order.objects.get_or_create(customer = customer, complete=False)
+    order, created = Order.objects.get_or_create(customer = customer, complete='Nem visszaigazolt')
 
     orderItem, created = OrderItem.objects.get_or_create(order = order, product = product)
 
     if action == 'add':
+        current_product = orderItem.product
+        current_product.stock -= 1
         orderItem.quantity = (orderItem.quantity + 1)
     elif action == 'remove':
+        current_product = orderItem.product
+        current_product.stock += 1
         orderItem.quantity = (orderItem.quantity - 1)
 
     orderItem.save()
+    current_product.save()
 
     if orderItem.quantity <= 0:
         orderItem.delete()
@@ -178,7 +185,7 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt')
 
     else:
         customer, order = guestOrder(request, data)
@@ -187,7 +194,7 @@ def processOrder(request):
     order.transaction_id = transaction_id
 
     if total == order.get_cart_total:
-        order.complete = True
+        order.complete = 'Visszaigazolt'
     order.save()
     
     if order.shipping:
@@ -199,6 +206,7 @@ def processOrder(request):
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
             )
+        
 
     return JsonResponse('Payment was complete', safe=False)
 
