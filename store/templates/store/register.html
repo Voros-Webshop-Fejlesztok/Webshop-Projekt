@@ -89,23 +89,23 @@
     content.style.opacity = '0.1'
     popup.style.display = 'block';
 
-    setTimeout(loginAnimation, 80000);
+    setTimeout(registerContentAnimation, 8000);
 
-    function loginAnimation() {
+    function registerContentAnimation() {
         document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
-        document.getElementById('loginContent').style.animation = "opacityAnimation 0.5s ease.out";
+        document.getElementById('registerContent').style.animation = "opacityAnimation 0.5s ease.out";
 
         setTimeout(function() {
             document.getElementById('popup').style.animation = "";
-            document.getElementById('loginContent').style.animation = "";
+            document.getElementById('registerContent').style.animation = "";
             document.getElementById('popup').style.display = "none";
-            document.getElementById('loginContent').style.opacity = 1;
+            document.getElementById('registerContent').style.opacity = 1;
         }, 500);  
     }
 
     var popupClose = document.getElementById('popupClose')
     popupClose.addEventListener("click", function () {
-        loginAnimation()
+        registerContentAnimation()
       });
 
 </script>

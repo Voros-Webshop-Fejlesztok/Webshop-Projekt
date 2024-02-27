@@ -45,7 +45,6 @@ def registerPage(request):
         else:
             for field, errors in form.errors.items():
                 for error in errors:
-                    print(error)
                     if error == 'This password is too common.':
                         messages.success(request, 'Vegye már észre kolléga, ez a jelszó túl primitív!')
                     elif error == 'The password is too similar to the username.':
@@ -57,7 +56,7 @@ def registerPage(request):
                     elif error == 'This password is too short. It must contain at least 8 characters.':
                         messages.success(request, 'Rövid szerszámmal szexelni sem lehet. Adjál már meg hosszabb jelszót!')
                     elif error == 'The two password fields didn’t match.':
-                        messages.success(request, 'Ne legyél már ennyire szenilis, a jelszavaid egyezzenek már meg!')
+                        messages.success(request, 'Most komolyan? Kétszer kellene ugyanazt a jelszót begépelned, de úgy látom neked már ez is nehezedre esik...')
 
 
     context = {'form':form}
