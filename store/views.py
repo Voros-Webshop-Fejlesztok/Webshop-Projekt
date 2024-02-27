@@ -3,19 +3,15 @@ from django.http import JsonResponse
 import json
 import datetime
 from django.urls import reverse
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.db.models import Q
-from .models import *
-from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage, DeleteMessageForm
-from .utils import cookieCart, cartData, guestOrder
-from django.conf import settings
-from django.core.files import File
-from django.core.files.images import ImageFile
-import os
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
 
+from .models import *
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm
+from django.db.models import Q
+
+from .utils import cookieCart, cartData, guestOrder
 
 # Create your views here.
 
@@ -34,11 +30,7 @@ def registerPage(request):
             name = first_name + ' ' + last_name
 
             user = User.objects.get(username = user_name)
-
-            default_image_path = os.path.join(settings.MEDIA_ROOT, 'placeholder_img.jpg')
-            image_file = ImageFile(open(default_image_path, 'rb'))
-
-            customer = Customer(user=user, email=email, name=name, phone_number='', image=image_file)
+            customer = Customer(user=user, email=email, name=name, phone_number='')
             
             customer.save()
 
@@ -157,21 +149,16 @@ def updateItem(request):
     user = request.user
 
     product = Product.objects.get(id = productId)
-    order, created = Order.objects.get_or_create(customer = customer, complete='Nem visszaigazolt')
+    order, created = Order.objects.get_or_create(customer = customer, complete=False)
 
     orderItem, created = OrderItem.objects.get_or_create(order = order, product = product)
 
     if action == 'add':
-        current_product = orderItem.product
-        current_product.stock -= 1
         orderItem.quantity = (orderItem.quantity + 1)
     elif action == 'remove':
-        current_product = orderItem.product
-        current_product.stock += 1
         orderItem.quantity = (orderItem.quantity - 1)
 
     orderItem.save()
-    current_product.save()
 
     if orderItem.quantity <= 0:
         orderItem.delete()
@@ -185,7 +172,7 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt')
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
     else:
         customer, order = guestOrder(request, data)
@@ -194,7 +181,7 @@ def processOrder(request):
     order.transaction_id = transaction_id
 
     if total == order.get_cart_total:
-        order.complete = 'Visszaigazolt'
+        order.complete = True
     order.save()
     
     if order.shipping:
@@ -206,7 +193,6 @@ def processOrder(request):
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
             )
-        
 
     return JsonResponse('Payment was complete', safe=False)
 
@@ -238,6 +224,7 @@ def forum(request):
     return render(request, 'store/forum.html', context)
 
 def profile(request, pk):
+    
     if request.user.is_authenticated:
         delete_post_form = DeletePostForm()
         profile = Customer.objects.get(user_id=pk)
@@ -277,7 +264,7 @@ def profile(request, pk):
             if 'delete_post' in request.POST:
                 delete_post_form = DeletePostForm(request.POST)
                 if delete_post_form.is_valid():
-
+                    print('jaja')
                     post_id = delete_post_form.cleaned_data['post_id']
                     post = get_object_or_404(Post, id=post_id)
 
@@ -286,7 +273,7 @@ def profile(request, pk):
 
                 return redirect(reverse('profile', kwargs={'pk': pk}))
                 
-            update_profile_form = UpdateProfileForm(request.POST or None, request.FILES or None, instance=self_profile)
+            update_profile_form = UpdateProfileForm(request.POST, instance=self_profile)
             if update_profile_form.is_valid():
                 update_profile_form.save()
                 return redirect(reverse('profile', kwargs={'pk': pk}))
@@ -295,53 +282,14 @@ def profile(request, pk):
 
     return render(request, 'store/profile.html', context)
 
-def message(request):
-    delete_message_form = DeletePostForm
-    friend_query = request.GET.get('friend_name')
-
-    form = SendMessage(request.POST or None)
+def messages(request):
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
-    self_friends = self_profile.friends
-    self_messages = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
-    current_friend = self_profile.last_friend
 
-    if is_valid_param(friend_query):
-        self_profile_followers = self_profile.followers.filter(name__icontains=friend_query)
-        self_profile_follows = self_profile.follows.filter(name__icontains=friend_query)
-        self_friends = self_profile_followers.intersection(self_profile_follows)
+    current_friend = Customer.objects.get(name='Csete Ádám')
 
-    last_messages_with_friends = []
-    for friend in self_profile.friends:
-        last_message_with_friend = self_messages.filter(Q(sender=self_profile, receiver=friend) | Q(sender=friend, receiver=self_profile)).last()
-        last_messages_with_friends.append((friend, last_message_with_friend))
+    self_messages = Message.objects.all().filter(Q(receiver=self_profile)|  Q(sender=self_profile)).order_by("sent_date")
 
-    if request.method == 'POST':
-        current_friend = request.POST.get('friend_name')
-        if current_friend:
-            current_friend = Customer.objects.get(name=current_friend)
-            self_profile.last_friend = current_friend
-            self_profile.save()
+    context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages}
 
-        if form.is_valid():
-            self_message = form.save(commit=False)
-            self_message.sender = self_profile
-            self_message.receiver = self_profile.last_friend
-            self_message.content = form['content'].value()
-            self_message.save()
-            return redirect('message')
-        
-        if 'delete_message' in request.POST:
-            delete_message_form = DeleteMessageForm(request.POST)
-            if delete_message_form.is_valid():
-                message_id = delete_message_form.cleaned_data['message_id']
-                message = get_object_or_404(Message, id=message_id)
-                message.delete()
-                
-                return redirect('message')
-
-
-    context = {'self_profile': self_profile, 'current_friend': current_friend, 'self_messages': self_messages,
-               'form': form, 'last_messages_with_friends': last_messages_with_friends,'self_friends':self_friends, 'delete_message_form':delete_message_form}
-
-    return render(request, 'store/message.html', context)
+    return render(request, 'store/messages.html', context)

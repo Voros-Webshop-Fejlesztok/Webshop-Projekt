@@ -13,7 +13,6 @@ class Customer(models.Model):
     date_modified = models.DateTimeField(User, auto_now=True)
     image = models.ImageField(null=True, blank=True)
     description = models.CharField(max_length=500, null=True)
-    last_friend = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -77,7 +76,7 @@ class Product(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    complete = models.CharField(max_length=200, null = True)
+    complete = models.BooleanField(default=False, null=True, blank=False)
     transaction_id = models.CharField(max_length=200, null = True)
 
     def __str__(self):
@@ -161,7 +160,7 @@ class Message(models.Model):
     sender = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='received_messages')
     sent_date = models.DateTimeField(auto_now_add=True)
-    content = models.TextField(default='')
+    content = models.TextField()
 
     def __str__(self):
         return f"{self.sender} -> {self.receiver} ({self.sent_date})"
