@@ -35,7 +35,7 @@ def registerPage(request):
 
             user = User.objects.get(username = user_name)
 
-            default_image_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'placeholder_img.jpg')
+            default_image_path = os.path.join(settings.MEDIA_ROOT, 'placeholder_img.jpg')
             image_file = ImageFile(open(default_image_path, 'rb'))
 
             customer = Customer(user=user, email=email, name=name, phone_number='', image=image_file)
