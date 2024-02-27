@@ -21,7 +21,11 @@
                     <form method=POST>
                     {% csrf_token %}
                     <div class="text-center">
+                        {% if profile.imageURL %}
                         <img src="{{profile.imageURL}}" class="rounded-circle profile_img">
+                        {% else %}
+                        <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle profile_img">
+                        {% endif %} 
                     </div>
                     <div class="text-center mt-3">
                         
@@ -259,7 +263,11 @@
                             <div class="card2 post">
                             <div class="user">
                                 <div class="profile">
-                                <img src="{{post.profile.imageURL}}" class="ava">
+                                {% if post.profile.imageURL %}
+                                    <img src="{{post.profile.imageURL}}" class="ava">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder_img.jpg' %}" class="ava">
+                                {% endif %} 
                                 <div class="username">
                                     <h3 class="uname">{{post.profile.user}}</h3>
                                     <p class="name">{{post.title}}</p>
