@@ -213,3 +213,24 @@ button{
 .updateProfileBtn{
     cursor: pointer;
 }
+
+.edit {
+    visibility: hidden; /* Az "edit" osztályú p elem tartalmát láthatatlanná teszi, de a helyét megőrzi */
+    
+}
+
+.edit p{
+    visibility: visible; /* Az "edit" osztályú p elem tartalmát láthatatlanná teszi, de a helyét megőrzi */
+}
+
+.edit input{
+    visibility: visible; /* Az "image" input mezőt láthatóvá teszi */
+}
+
+.image_edit{
+    border: 1px solid grey;
+    margin: auto;
+    width: 400px;
+    margin-bottom: 3vh;
+    margin-top: 3vh;
+}

@@ -59,18 +59,24 @@
     </div>
     
   </div>
-</div>
-  <div class="form-group">
-    <div class="form-check">
-      <button style="background-color: skyblue; width: 200px; margin: auto; display: block; font-weight: bold;" class="button-33 add-to-cart" role="button">Keresés</button>
-    </div>
   </div>
+    <div class="form-group">
+      <div class="form-check">
+        <button style="background-color: skyblue; width: 200px; margin: auto; display: block; font-weight: bold;" class="button-33 add-to-cart" role="button">Keresés</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-check">
+        <button style="background-color: rgb(255, 119, 0); width: 200px; margin: auto; display: block; font-weight: bold;" class="button-33 add-to-cart" role="button">Termékek újratöltése</button>
+      </div>
+    </div>
 </form>
 
 
 
 <div class="row" style="margin-top: 100px;" id="lightStore">
   {% for product in products %}
+  {% if product.stock > 0 %}
   {% if product.darkweb == False %}
     <div class="col-lg-4 col-md-6 col-sm-12 balance">
       <img class="thumbnail" src="{{ product.imageURL }}" />
@@ -85,7 +91,7 @@
         <hr>
         <h6 style="font-size: small; height: 30px;">{{ product.description }}</h6>
         <hr>
-        <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span></h4>
+        <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span><br><span class="stock">Raktáron: {{ product.stock }} db</span></h4><br>
         
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
         <button class="button-33 view" role="button" onclick="lightopenQuickView( '{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
@@ -104,6 +110,7 @@
         </div>
       </div>
     </div>
+  {% endif %}
   {% endif %}
   {% endfor %}
 </div>
@@ -126,6 +133,7 @@
 
 <div class="row hidden" style="margin-top: 100px;" id="darkStore">
   {% for product in products %}
+  {% if product.stock > 0 %}
   {% if product.darkweb == True %}
     <div class="col-lg-4 col-md-6 col-sm-12 balance">
       <img class="thumbnail" src="{{ product.imageURL }}" />
@@ -159,6 +167,7 @@
         </div>
       </div>
     </div>
+  {% endif %}
   {% endif %}
   {% endfor %}
 </div>

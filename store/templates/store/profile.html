@@ -18,22 +18,27 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4">
+                    <form method=POST>
+                    {% csrf_token %}
                     <div class="text-center">
+                        {% if profile.imageURL %}
                         <img src="{{profile.imageURL}}" class="rounded-circle profile_img">
+                        {% else %}
+                        <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle profile_img">
+                        {% endif %} 
                     </div>
                     <div class="text-center mt-3">
-                        <form method=POST>
-                        {% csrf_token %}
+                        
                             {% if profile != self_profile %}
                             {% if profile in self_profile.follows.all %}
                             <div>
                                 <span class="bg-success p-1 px-4 rounded text-white">Követed</span>
-                                <button name="follow" value="unfollow;{{profile}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
+                                <button name="follow" value="unfollow;{{profile.id}}" type="submit" class="bx bx-user-minus unfollow_btn big_btn"></button>
                             </div>
                             {% else %}
                             <div>
                                 <span class="bg-danger p-1 px-4 rounded text-white">Nem követed</span>
-                                <button name="follow" value="follow;{{profile}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
+                                <button name="follow" value="follow;{{profile.id}}" type="submit" class="bx bx-user-plus follow_btn big_btn"></button>
                             </div>
                             {% endif %}   
                             {% endif %}
@@ -63,9 +68,12 @@
                     </div>
                     </form>
 
-                    <form method=POST>
+                    <form method=POST enctype="multipart/form-data">
                     {% csrf_token %}
                     <div id="updateProfileData" class="hidden">
+                        <div class="image_edit">
+                            <p style="margin-bottom: -5vh;"><strong>Profilkép csere:</strong></p><p class="edit">{{update_profile_form.image}}</p>
+                        </div>
                         <h4 class="mt-2 mb-0"><strong>{{update_profile_form.name}}</strong></h4>
                         <div class="block" style="margin-bottom: 20px; font-weight: 500;">
                             <br>
@@ -86,6 +94,7 @@
 
                         <div id="followers_following" class="sor">
                             <div class="div1">
+                                <h5 class="mt-2 mb-0">{{profile.followers.all.count}}</h5>
                                 <h5 class="mt-2 mb-0">Követők:</h5>
                                 <div class="block">
                                     
@@ -95,14 +104,20 @@
                                         {% for follower in profile.followers.all|slice:":3" %}
                                         
                                         <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
+
+                                            {% if follower.imageURL %}
                                             <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
+                                            {% else %}
+                                            <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                            {% endif %} 
+
                                             <span class="span follower_a">{{follower}}</span></a>
     
                                             {% if follower != self_profile %}
-                                                {% if follower in profile.follows.all %}
-                                                <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                                {% if follower in self_profile.follows.all %}
+                                                <button name="follow" value="unfollow;{{follower.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                                 {% else %}
-                                                <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                                <button name="follow" value="follow;{{follower.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -115,14 +130,18 @@
                                         {% for follower in profile.followers.all %}
                                         
                                         <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' follower.user.id %}">
+                                            {% if follower.imageURL %}
                                             <img src="{{follower.imageURL}}" class="rounded-circle follower_img">
+                                            {% else %}
+                                            <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                            {% endif %} 
                                             <span class="span follower_a">{{follower}}</span></a>
     
                                             {% if follower != self_profile %}
-                                                {% if follower in profile.follows.all %}
-                                                <button name="follow" value="unfollow;{{follower}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                                {% if follower in self_profile.follows.all %}
+                                                <button name="follow" value="unfollow;{{follower.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                                 {% else %}
-                                                <button name="follow" value="follow;{{follower}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                                <button name="follow" value="follow;{{follower.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -131,11 +150,11 @@
                                     </form>
                                     {% if profile.followers.all.count > 3 %}
                                     <div id="morefollower" style="margin-top: 15px;">
-                                        <button id="morefollowerBtn" class="bx bxs-down-arrow"></button>
+                                        <button type="button" type="button" id="morefollowerBtn" class="bx bxs-down-arrow"></button>
                                         <span class="span follower_a">Több követés</span>
                                     </div>
                                     <div class="hidden" id="lessfollower" style="margin-top: 15px;">
-                                        <button id="lessfollowerBtn" class="bx bxs-up-arrow"></button>
+                                        <button type="button" id="lessfollowerBtn" class="bx bxs-up-arrow"></button>
                                         <span class="span follower_a">Kevesebb követés</span>
                                     </div>
                                     {% endif %}
@@ -144,6 +163,7 @@
                             </div>
                         
                             <div class="div2">
+                                <h5 class="mt-2 mb-0">{{profile.follows.all.count}}</h5>
                                 <h5 class="mt-2 mb-0">Követések:</h5>
                                 <form id="following1" method=POST>
                                     {% csrf_token %}
@@ -152,13 +172,19 @@
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+
+                                        {% if following.imageURL %}
                                         <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        {% else %}
+                                        <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                        {% endif %} 
+
                                         <span class="span follower_a">{{following}}</span></a>
                                         {% if following != self_profile %}
                                             {% if following in self_profile.follows.all %}
-                                            <button name="follow" value="unfollow;{{following}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                            <button name="follow" value="unfollow;{{following.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                             {% else %}
-                                            <button name="follow" value="follow;{{following}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                            <button name="follow" value="follow;{{following.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -171,13 +197,19 @@
                                     
                                     
                                     <div style="margin-top: 15px;"><a class="follower_a" href=" {% url 'profile' following.user.id %}">
+
+                                        {% if following.imageURL %}
                                         <img src="{{following.imageURL}}" class="rounded-circle follower_img">
+                                        {% else %}
+                                        <img src="{% static 'images/placeholder_img.jpg' %}" class="rounded-circle follower_img">
+                                        {% endif %} 
+
                                         <span class="span follower_a">{{following}}</span></a>
                                         {% if following != self_profile %}
                                             {% if following in self_profile.follows.all %}
-                                            <button name="follow" value="unfollow;{{following}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
+                                            <button name="follow" value="unfollow;{{following.id}}" type="submit" class="bx bx-user-minus unfollow_btn"></button>
                                             {% else %}
-                                            <button name="follow" value="follow;{{following}}" type="submit" class="bx bx-user-plus follow_btn"></button>
+                                            <button name="follow" value="follow;{{following.id}}" type="submit" class="bx bx-user-plus follow_btn"></button>
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -185,11 +217,11 @@
                                 </form>
                                 {% if profile.follows.all.count > 3 %}
                                 <div id="morefollowing" style="margin-top: 15px;">
-                                    <button id="morefollowingBtn" class="bx bxs-down-arrow"></button>
+                                    <button type="button" id="morefollowingBtn" class="bx bxs-down-arrow"></button>
                                     <span class="span follower_a">Több követés</span>
                                 </div>
                                 <div class="hidden" id="lessfollowing" style="margin-top: 15px;">
-                                    <button id="lessfollowingBtn" class="bx bxs-up-arrow"></button>
+                                    <button type="button" id="lessfollowingBtn" class="bx bxs-up-arrow"></button>
                                     <span class="span follower_a">Kevesebb követés</span>
                                 </div>
                                 {% endif %}
@@ -203,8 +235,8 @@
         </div>
     </div>
     {% if profile == self_profile %}
-    {% if orders %}
     <div id="orders" class="container mt-5">
+        {% if orders %}
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4"> 
@@ -240,8 +272,9 @@
     </div>
     {% endif %}
     {% endif %}
-    {% if posts %}
+    
     <div id="posts" class="container mt-5">
+        {% if posts %}
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4">
@@ -252,7 +285,11 @@
                             <div class="card2 post">
                             <div class="user">
                                 <div class="profile">
-                                <img src="{{post.profile.imageURL}}" class="ava">
+                                {% if post.profile.imageURL %}
+                                    <img src="{{post.profile.imageURL}}" class="ava">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder_img.jpg' %}" class="ava">
+                                {% endif %} 
                                 <div class="username">
                                     <h3 class="uname">{{post.profile.user}}</h3>
                                     <p class="name">{{post.title}}</p>
@@ -295,6 +332,7 @@
     {% endif %}
 </body>
 
+{% if profile == self_profile %}
 <script>
     var updateProfileBtn = document.getElementById("updateProfileBtn");
     var closeUpdateProfileBtn = document.getElementById("closeUpdateProfileBtn");
@@ -318,9 +356,10 @@
         document.getElementById('posts').classList.remove('hidden')
         document.getElementById('orders').classList.remove('hidden')
     });
-
 </script>
+{% endif %}
 
+{% if profile.follows.all.count > 3 %}
 <script>
     var moreFollowingButton = document.getElementById("morefollowingBtn");
     var lessFollowingButton = document.getElementById("lessfollowingBtn");
@@ -338,9 +377,10 @@
         document.getElementById("following2").classList.add('hidden')
         document.getElementById("following1").classList.remove('hidden')
     });
-
 </script>
+{% endif %}
 
+{% if profile.followers.all.count > 3 %}
 <script>
     var moreFollowerButton = document.getElementById("morefollowerBtn");
     var lessFollowerButton = document.getElementById("lessfollowerBtn");
@@ -358,8 +398,8 @@
         document.getElementById("follower2").classList.add('hidden')
         document.getElementById("follower1").classList.remove('hidden')
     });
-
 </script>
+{% endif %}
 
 {% if messages %}
 <script>

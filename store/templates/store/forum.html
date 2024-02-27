@@ -27,7 +27,11 @@
       <div class="card2">
         <div class="user">
           <div class="profile">
-            <img src="{{self_profile.imageURL}}" class="ava">
+            {% if self_profile.profile.imageURL %}
+              <img src="{{self_profile.profile.imageURL}}" class="ava">
+            {% else %}
+              <img src="{% static 'images/placeholder_img.jpg' %}" class="ava">
+            {% endif %} 
             <div class="username">
               <h3 class="uname">{{self_profile.user}}</h3>
               
@@ -52,7 +56,13 @@
     <div class="card2">
       <div class="user">
         <div class="profile">
-          <a href="{% url 'profile' post.profile.user.id %}"><img src="{{post.profile.imageURL}}" class="ava"></a>
+          <a href="{% url 'profile' post.profile.user.id %}">
+            {% if post.profile.imageURL %}
+                <img src="{{post.profile.imageURL}}" class="ava">
+            {% else %}
+                <img src="{% static 'images/placeholder_img.jpg' %}" class="ava">
+            {% endif %} 
+          </a>
           <div class="username">
             <a href="{% url 'profile' post.profile.user.id %}"><h3 class="uname">{{post.profile.user}}</h3></a>
             <p class="name">{{post.title}}</p>
@@ -73,7 +83,7 @@
           <p class="like-value">{{post.likes.all.count}}</p>
         </div>
         <div class="created">
-          <p>{{post.created}}</p>
+          <p>{{post.created|date:'Y.m.d - H:i'}}</p>
         </div>
       </div>
     </div>
