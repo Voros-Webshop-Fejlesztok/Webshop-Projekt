@@ -36,7 +36,7 @@
       <header>
         <div class="image-text">
           <span class="image" style="margin-left: 2.5vh">
-            <img src="{% static 'images/logo.png' %}" />
+            <img src="{% static 'images/logo1.png' %}" />
           </span>
 
           <div class="text header-text">
@@ -52,7 +52,7 @@
 
       <div class="menu-bar">
         <div class="menu">
-          <ul class="menu-links">
+          <ul class="menu-links" id="menu-links">
             <li class="nav-link basic">
               {% if request.user.id is None %}
               <i class="bx bx-user-x icon"></i>
@@ -110,7 +110,7 @@
         </div>
 
         <div class="bottom-content">
-          <ul>
+          <ul id="menu-links">
             {% if request.user.id is None %}
             <li class="nav-link">
               <a href="{% url 'register' %}">
@@ -128,7 +128,7 @@
               </a>
             </li>
             <li class="nav-link">
-              <a href="{% url 'messages' %}">
+              <a href="{% url 'message' %}">
                 <i class="bx bx-envelope icon"></i>
                 <span class="text nav-text">Üzenetek</span>
               </a>

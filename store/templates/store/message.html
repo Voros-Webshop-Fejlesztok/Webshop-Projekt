@@ -1,0 +1,235 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<link rel="stylesheet" href="{% static 'css/messages.css' %}" />
+<body>
+    <div class="container">
+        <div class="leftSide">
+            <!-- Header -->
+            <div class="header">
+                <div class="userimg">
+                    {% if self_profile.profile.imageURL %}
+                    <img src="{{self_profile.profile.imageURL}}" class="cover">
+                    {% else %}
+                    <img src="{% static 'images/placeholder_img.jpg' %}" class="cover">
+                    {% endif %} 
+                </div>
+            </div>
+        
+            <!-- Search Chat -->
+            <form method="GET" action=".">
+            {% csrf_token %}
+                <div class="search_chat">
+                    <div style="display: flex;">
+                        <button style="margin-right: 10px;" type="submit" class='send_message bx bx-search' id="friend_search"></button>
+                        <input placeholder="Chat keresése" type="search" name="friend_name" id="friendInput">
+                    </div>                
+                </div>
+            </form>
+
+            <!-- CHAT LIST -->
+            <form method="POST" id="selectFriendForm">
+            {% csrf_token %}
+            <input type="hidden" name="friend_name" id="friendNameField">
+            <div class="chatlist">
+                {% for friend in self_friends %}
+                <div class="block friend" onclick="selectFriend('{{friend.id}}')">
+                    <div class="imgBox">
+                        {% if friend.imageURL %}
+                        <img src="{{friend.imageURL}}" class="cover">
+                        {% else %}
+                        <img src="{% static 'images/placeholder_img.jpg' %}" class="cover">
+                        {% endif %} 
+                    </div>
+                    <div class="details">
+                        <div class="listHead">
+                            <h4>{{friend.name}}</h4>
+
+                            {% for actual_friend, last_message_with_friend in last_messages_with_friends %}
+                                {% if last_message_with_friend and actual_friend == friend %}
+                                    <p class="time">{{ last_message_with_friend.sent_date|date:'Y.m.d - H:i'}}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% for actual_friend, last_message_with_friend in last_messages_with_friends %}
+                            <div class="message_p">
+                                {% if last_message_with_friend and friend == actual_friend %}
+                                    {% if last_message_with_friend.sender == friend %}
+                                        <p style="color: blue;">ő: {{ last_message_with_friend.content|slice:":30"}}...</p>
+                                    {% else %}
+                                        <p style="color: green;">te: {{ last_message_with_friend.content|slice:":30"}}...</p>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <button type="submit" style="display: none;">Submit</button>
+            </div>
+            </form>
+
+        </div>
+        <div class="rightSide">
+            <div class="header">
+                <div class="imgText">
+                    <div class="userimg">
+                        {% if current_friend %}
+                        {% if current_friend.imageURL %}
+                        <img src="{{current_friend.imageURL}}" class="cover">
+                        {% else %}
+                        <img src="{% static 'images/placeholder_img.jpg' %}" class="cover">
+                        {% endif %} 
+                        {% endif %}
+                    </div>
+                    {% if current_friend %}
+                    <h4>{{current_friend}}</h4>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- CHAT-BOX -->
+            
+            <div class="chatbox">
+                <form method="POST">
+                {% csrf_token %}
+                {% for message in self_messages.all %}
+                    {% if message.receiver == current_friend and message.sender == self_profile %}
+                    <div class="message my_msg">
+                        <input type="hidden" name="message_id" value="{{ message.id }}">
+                        <button class='my_msg_x bx bxs-x-circle' name="delete_message"></button>
+                        <p>{{message.content}}<br><span>{{message.sent_date|date:'Y.m.d - H:i'}}</span></p>
+                    </div>
+                    {% elif message.sender == current_friend and message.receiver == self_profile %}
+                    <div class="message friend_msg">
+                        <p>{{message.content}}<br><span>{{message.sent_date|date:'Y.m.d - H:i'}}</span></p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </form>
+            </div>
+            
+            
+            <!-- CHAT INPUT -->
+        {% if form %}
+        <form id="sent_message" method=POST>
+        {% csrf_token %}
+            <div class="chat_input">
+                {{form.content}}
+                <button type="submit" class='send_message bx bx-send'></button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+    function selectFriend(friendName) {
+    document.getElementById('friendNameField').value = friendName;
+    document.getElementById('selectFriendForm').submit();
+    }
+</script>
+
+<script>
+    function handleChatInput() {
+        var inputElement = document.getElementById('chatInput');
+        var friendInputElement = document.getElementById('friendInput');
+        var chatboxElement = document.querySelector('.chatbox');
+
+        // Az oldal betöltésekor megpróbáljuk visszaállítani az értéket a cookie-ból
+        window.addEventListener('load', function() {
+            var storedChatValue = getCookie('chatValue');
+            var storedFriendValue = getCookie('friendValue');
+            
+            
+            inputElement.value = storedChatValue || '';
+            friendInputElement.value = storedFriendValue || '';
+
+            // Aktiváljuk az input mezőket
+            if (storedChatValue != '') {
+                inputElement.focus();
+            } else if (storedFriendValue != '') {
+                friendInputElement.focus();
+            }
+
+            // Az újratöltés után görgetjük az aljára a chatbox-ot
+            scrollToBottom();
+        });
+
+        // Az üzenet mező tartalmának mentése cookie-ba 5 másodpercenként
+        setInterval(function() {
+            setCookie('chatValue', inputElement.value, 1);  // Harmadik paraméter a cookie élettartama napokban
+            setCookie('friendValue', friendInputElement.value, 1);  // FriendInput értékének mentése cookie-ba
+            location.reload();
+        }, 6000);
+
+        // Az űrlap elküldésekor frissítjük a cookie-t és beküldjük az űrlapot
+        document.getElementById('sent_message').addEventListener('submit', function(event) {
+            // Elmentjük az input mező értékét a cookie-ba
+            setCookie('chatValue', inputElement.value, 1);  // Harmadik paraméter a cookie élettartama napokban
+
+            // Töröljük a cookie-kat
+            deleteCookie('chatValue');
+
+            // Az űrlap elküldése után görgetjük az aljára a chatbox-ot
+            scrollToBottom();
+        });
+
+        document.getElementById('friend_search').addEventListener('click', function(event) {
+
+            // Elmentjük a friendInput mező értékét a cookie-ba
+            setCookie('friendValue', friendInputElement.value, 1);
+
+            // Töröljük a cookie-kat
+            deleteCookie('friendValue');
+
+            // Az űrlap elküldése után görgetjük az aljára a chatbox-ot
+            scrollToBottom();
+        });
+
+        // Segédfüggvények a cookie kezeléséhez
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = '; expires=' + date.toUTCString();
+            }
+            document.cookie = name + '=' + value + expires + '; path=/';
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + '=';
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        }
+
+        // Görgeti a chatbox-ot az aljára
+        function scrollToBottom() {
+            chatboxElement.scrollTop = chatboxElement.scrollHeight;
+            inputElement.setSelectionRange(inputElement.value.length, inputElement.value.length);
+        }
+    }
+
+    // A függvény hívása a dokumentum betöltése után
+    document.addEventListener('DOMContentLoaded', handleChatInput);
+</script>
+
+</body>
+
+{% endblock content %}

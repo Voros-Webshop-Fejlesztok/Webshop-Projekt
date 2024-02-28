@@ -12,7 +12,6 @@ urlpatterns = [
     path('message/', views.message, name="message"),
 
     path('forum/', views.forum, name="forum"),
-    path('messages/', views.messages, name="messages"),
     path('profile/<int:pk>', views.profile, name="profile"),
 
 

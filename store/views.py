@@ -3,15 +3,19 @@ from django.http import JsonResponse
 import json
 import datetime
 from django.urls import reverse
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-
-from .models import *
-from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm
 from django.db.models import Q
-
+from .models import *
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage, DeleteMessageForm
 from .utils import cookieCart, cartData, guestOrder
+from django.conf import settings
+from django.core.files import File
+from django.core.files.images import ImageFile
+import os
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
 
 # Create your views here.
 
@@ -30,6 +34,7 @@ def registerPage(request):
             name = first_name + ' ' + last_name
 
             user = User.objects.get(username = user_name)
+
             customer = Customer(user=user, email=email, name=name, phone_number='')
             
             customer.save()
@@ -37,6 +42,22 @@ def registerPage(request):
             messages.success(request, 'Sikeresen létrehoztuk a ' + user_name + ' nevű felhasználói fiókját')
 
             return redirect('login')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    if error == 'This password is too common.':
+                        messages.success(request, 'Vegye már észre kolléga, ez a jelszó túl primitív!')
+                    elif error == 'The password is too similar to the username.':
+                        messages.success(request, 'Most komolyan? Ne hasonlítson már a jelszavad a felhasználónedhez!')
+                    elif error == 'The password is too similar to the last name.' or error == 'The password is too similar to the first name.':
+                        messages.success(request, 'Ne szórakozz már! Ne a saját neved takarja a jelszavad...')
+                    elif error == 'A user with that username already exists.':
+                        messages.success(request, 'Hoppá, valaki megelőzött. Ez a felhasználónév már foglalt.')
+                    elif error == 'This password is too short. It must contain at least 8 characters.':
+                        messages.success(request, 'Rövid szerszámmal szexelni sem lehet. Adjál már meg hosszabb jelszót!')
+                    elif error == 'The two password fields didn’t match.':
+                        messages.success(request, 'Most komolyan? Kétszer kellene ugyanazt a jelszót begépelned, de úgy látom neked már ez is nehezedre esik...')
+
 
     context = {'form':form}
     return render(request, 'store/register.html', context)
@@ -52,17 +73,17 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, 'Sikeresen bejelentkezett ' + username + ' felhasználó')
+            messages.success(request, 'Örülök, hogy betévedtél a Dáridó Shopba ' + username + ', de remélem, hogy nem a GPS hibázott!')
             return redirect('home')
         else:
-            messages.info(request, 'Helytelen felhasználónév vagy jelszó')
+            messages.info(request, 'Ha Póda Laci emlékszik arra, hogy 30 éve hogyan darált az AK-val, te is emlékezz a felhasználónév és jelszó kombinációdra')
             return redirect('login')
 
     return render(request, 'store/login.html', context)
 
 def logoutUser(request):
 
-    messages.success(request, 'Sikeresen kijelentkezett')
+    messages.success(request, 'Ahogy most kijelentkeztél, s majd bezárod a böngészőt, úgy nyiss ki egy üveg whiskeyt is, hisz minden fejezet lezárásánál egy új kezdődik az előző helyett.')
 
     logout(request)
 
@@ -149,16 +170,21 @@ def updateItem(request):
     user = request.user
 
     product = Product.objects.get(id = productId)
-    order, created = Order.objects.get_or_create(customer = customer, complete=False)
+    order, created = Order.objects.get_or_create(customer = customer, complete='Nem visszaigazolt')
 
     orderItem, created = OrderItem.objects.get_or_create(order = order, product = product)
 
     if action == 'add':
+        current_product = orderItem.product
+        current_product.stock -= 1
         orderItem.quantity = (orderItem.quantity + 1)
     elif action == 'remove':
+        current_product = orderItem.product
+        current_product.stock += 1
         orderItem.quantity = (orderItem.quantity - 1)
 
     orderItem.save()
+    current_product.save()
 
     if orderItem.quantity <= 0:
         orderItem.delete()
@@ -172,7 +198,7 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt')
 
     else:
         customer, order = guestOrder(request, data)
@@ -181,7 +207,7 @@ def processOrder(request):
     order.transaction_id = transaction_id
 
     if total == order.get_cart_total:
-        order.complete = True
+        order.complete = 'Visszaigazolt'
     order.save()
     
     if order.shipping:
@@ -193,6 +219,7 @@ def processOrder(request):
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
             )
+        
 
     return JsonResponse('Payment was complete', safe=False)
 
@@ -224,7 +251,6 @@ def forum(request):
     return render(request, 'store/forum.html', context)
 
 def profile(request, pk):
-    
     if request.user.is_authenticated:
         delete_post_form = DeletePostForm()
         profile = Customer.objects.get(user_id=pk)
@@ -249,7 +275,7 @@ def profile(request, pk):
                 action = data[0]
                 profile2 = data[1]
 
-                current_profile = Customer.objects.get(name=profile2)
+                current_profile = Customer.objects.get(id=profile2)
 
                 if action == 'unfollow':
                     self_profile.follows.remove(current_profile)
@@ -264,7 +290,7 @@ def profile(request, pk):
             if 'delete_post' in request.POST:
                 delete_post_form = DeletePostForm(request.POST)
                 if delete_post_form.is_valid():
-                    print('jaja')
+
                     post_id = delete_post_form.cleaned_data['post_id']
                     post = get_object_or_404(Post, id=post_id)
 
@@ -273,7 +299,7 @@ def profile(request, pk):
 
                 return redirect(reverse('profile', kwargs={'pk': pk}))
                 
-            update_profile_form = UpdateProfileForm(request.POST, instance=self_profile)
+            update_profile_form = UpdateProfileForm(request.POST or None, request.FILES or None, instance=self_profile)
             if update_profile_form.is_valid():
                 update_profile_form.save()
                 return redirect(reverse('profile', kwargs={'pk': pk}))
@@ -282,14 +308,53 @@ def profile(request, pk):
 
     return render(request, 'store/profile.html', context)
 
-def messages(request):
+def message(request):
+    delete_message_form = DeletePostForm
+    friend_query = request.GET.get('friend_name')
+
+    form = SendMessage(request.POST or None)
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
+    self_friends = self_profile.friends
+    self_messages = Message.objects.all().filter(Q(receiver=self_profile) | Q(sender=self_profile)).order_by("sent_date")
+    current_friend = self_profile.last_friend
 
-    current_friend = Customer.objects.get(name='Csete Ádám')
+    if is_valid_param(friend_query):
+        self_profile_followers = self_profile.followers.filter(name__icontains=friend_query)
+        self_profile_follows = self_profile.follows.filter(name__icontains=friend_query)
+        self_friends = self_profile_followers.intersection(self_profile_follows)
 
-    self_messages = Message.objects.all().filter(Q(receiver=self_profile)|  Q(sender=self_profile)).order_by("sent_date")
+    last_messages_with_friends = []
+    for friend in self_profile.friends:
+        last_message_with_friend = self_messages.filter(Q(sender=self_profile, receiver=friend) | Q(sender=friend, receiver=self_profile)).last()
+        last_messages_with_friends.append((friend, last_message_with_friend))
 
-    context = {'self_profile':self_profile,'current_friend':current_friend, 'self_messages':self_messages}
+    if request.method == 'POST':
+        current_friend = request.POST.get('friend_name')
+        if current_friend:
+            current_friend = Customer.objects.get(id=current_friend)
+            self_profile.last_friend = current_friend
+            self_profile.save()
 
-    return render(request, 'store/messages.html', context)
+        if form.is_valid():
+            self_message = form.save(commit=False)
+            self_message.sender = self_profile
+            self_message.receiver = self_profile.last_friend
+            self_message.content = form['content'].value()
+            self_message.save()
+            return redirect('message')
+        
+        if 'delete_message' in request.POST:
+            delete_message_form = DeleteMessageForm(request.POST)
+            if delete_message_form.is_valid():
+                message_id = delete_message_form.cleaned_data['message_id']
+                message = get_object_or_404(Message, id=message_id)
+                message.delete()
+                
+                return redirect('message')
+
+
+    context = {'self_profile': self_profile, 'current_friend': current_friend, 'self_messages': self_messages,
+               'form': form, 'last_messages_with_friends': last_messages_with_friends,'self_friends':self_friends, 'delete_message_form':delete_message_form}
+
+    return render(request, 'store/message.html', context)
