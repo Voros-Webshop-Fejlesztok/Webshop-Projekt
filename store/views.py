@@ -200,6 +200,19 @@ def processOrder(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt')
 
+        template = render_to_string('store/email.html', {'name':customer.name})
+
+        email = EmailMessage(
+            'Köszönjük a rendelésed!',
+            template,
+            settings.EMAIL_HOST_USER,
+            ['csongorkiss12@gmail.com'],
+        )
+
+        email.content_subtype = "html"
+        email.fail_silently=False
+        email.send()
+
     else:
         customer, order = guestOrder(request, data)
 
