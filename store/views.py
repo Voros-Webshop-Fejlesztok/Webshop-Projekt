@@ -211,10 +211,16 @@ def processOrder(request):
 
         email.content_subtype = "html"
         email.fail_silently=False
-        email.send()
+        #email.send()
 
     else:
         customer, order = guestOrder(request, data)
+        order_items = OrderItem.objects.filter(order=order)
+        products = Product.objects.filter(orderitem__in=order_items).distinct()
+
+        for product in products:
+            product.stock -= 1
+            product.save()
 
     total = float(data['form']['total'])
     order.transaction_id = transaction_id

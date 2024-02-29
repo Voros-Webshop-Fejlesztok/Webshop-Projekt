@@ -30,30 +30,53 @@
             <hr/>
             <hr>
             <div class="form-field">
-              <input class="form-control" type="text" name="zipcode" placeholder="Irányítószám" />
+              <input required class="form-control" type="number" name="zipcode" placeholder="Irányítószám" min="1007"/>
             </div>
             <div class="form-field">
-              <input class="form-control" type="text" name="city" placeholder="Település" />
+              <input required class="form-control" type="text" name="city" placeholder="Település" />
             </div>
             <div class="form-field">
-              <input class="form-control" type="text" name="state" placeholder="Megye" />
+              <input required class="form-control" type="text" name="state" placeholder="Megye" />
             </div>
             <div class="form-field">
-              <input class="form-control" type="text" name="address" placeholder="Közterület neve és jellege" />
+              <input required class="form-control" type="text" name="address" placeholder="Közterület neve és jellege" />
             </div>          
             <div class="form-field">
-              <input class="form-control" type="text" name="house_number" placeholder="Házszám" />
+              <input required class="form-control" type="text" name="house_number" placeholder="Házszám" />
             </div>          
           </div>
-          <hr />
-          <input id="form-button" class="btn btn-success btn-block" type="submit" value="Folytatás" />
+          <hr/>
+          <input required id="form-button" class="btn btn-success btn-block" type="submit" value="Folytatás" />
         </form>
       </div>
 
-      <br />
+      <br/>
       <div class="box-element hidden" id="payment-info">
-        <small>Fizetési opciók</small>
-        <button id="make-payment">Fizetés</button>
+        <p id="delivery-options1" style="text-align: center; font-weight: 500;">Szállítási lehetőségek</p>
+        <div id="delivery-options2" style="margin: auto;" class="radio-inputs">
+          <label class="radio">
+            <input checked type="radio" name="delivery">
+            <span class="name">Magyar Posta</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="delivery">
+            <span class="name">GLS futárszolgálat</span>
+          </label>
+        </div>
+        <br>
+        <p style="text-align: center; font-weight: 500;">Fizetési lehetőségek</p>
+            <div style="margin: auto;" class="radio-inputs">
+                <label class="radio">
+                  <input checked type="radio" name="payment">
+                  <span class="name">Bankkártyás fizetés</span>
+                </label>
+                  <label id="delivery-options3" class="radio">
+                    <input type="radio" name="payment">
+                    <span class="name">Utánvét</span>
+                  </label>   
+            </div>
+            <br>
+            <button class="button-33" style="margin: auto; display: flex; background: green;" id="make-payment"><strong>Rendelés leadása</strong></button>
       </div>
     </div>
 
@@ -73,8 +96,6 @@
           </div>
           <div style="flex: 1">
             <p>{{item.product.price|floatformat:0|intcomma}} Ft</p>
-          </div>
-          <div style="flex: 1">
             <p>{{item.quantity}} db</p>
           </div>
         </div>
@@ -103,6 +124,9 @@
 
     if (shipping == "False") {
       document.getElementById("shipping-info").innerHTML = "";
+      document.getElementById("delivery-options1").style.display = 'none';
+      document.getElementById("delivery-options2").style.display = 'none';
+      document.getElementById("delivery-options3").style.display = 'none';
     }
 
     if (user != "AnonymousUser") {

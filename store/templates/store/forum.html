@@ -27,22 +27,24 @@
       <div class="card2">
         <div class="user">
           <div class="profile">
+            <div class="row">
+            <div class="col-md-12 col-lg-2">
             {% if self_profile.profile.imageURL %}
               <img src="{{self_profile.profile.imageURL}}" class="ava">
             {% else %}
               <img src="{% static 'images/placeholder_img.jpg' %}" class="ava">
-            {% endif %} 
-            <div class="username">
+            {% endif %}
+            </div> 
+            <div style="margin-left: 10px;" class="username col-md-12 col-lg-7">
               <h3 class="uname">{{self_profile.user}}</h3>
               
-              <p class="name">{{form.title}}</p>
-
+              <p style="margin: 0;" class="name">{{form.title}}</p>
+            </div>
             </div>
           </div>
-          <i class="fa-brands fa-twitter icon"></i>
         </div>
         <div class="twitt">
-          <p>{{form.body}}</p>
+          <p style="margin: auto;">{{form.body}}</p>
         </div>
         <button class="button-33 post">Közlés</button>
       </div>
@@ -67,8 +69,7 @@
             <a href="{% url 'profile' post.profile.user.id %}"><h3 class="uname">{{post.profile.user}}</h3></a>
             <p class="name">{{post.title}}</p>
           </div>
-        </div>
-        <i class="fa-brands fa-twitter icon"></i>
+        </div>        
       </div>
       <div class="twitt">
         <p>{{post.body}}</p>
