@@ -98,20 +98,17 @@ body.dark .card{
 
 
 .buttons button:nth-child(1){
-       border:1px solid #0b35a5 !important;
        color:#0b35a5;
        height:40px;
 }
 
 .buttons button:nth-child(1):hover{
-       border:1px solid #0b35a5 !important;
        color:#fff;
        height:40px;
        background-color:#0b35a5;
 }
 
 .buttons button:nth-child(2){
-       border:1px solid #0b35a5 !important;
        background-color:#0b35a5;
        color:#fff;
         height:40px;
@@ -199,8 +196,8 @@ a.follower_a{
 }
 
 button{
-    border: 0.5px solid black;
-    border-radius: 50%;
+    background-color: green;
+    border-radius: 20%;
     background: none;
 
 }.big_btn{

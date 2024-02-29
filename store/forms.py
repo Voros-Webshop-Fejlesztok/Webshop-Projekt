@@ -17,6 +17,7 @@ class PostForm(forms.ModelForm):
         widget=forms.widgets.Textarea(
             attrs={"placeholder":"Poszt címe",
                    "class":"form-textarea",
+                   'style':'max-width: 600px;',
                    'cols':'40',
                    'rows':'1',
                    'maxlength':'50',
@@ -26,7 +27,8 @@ class PostForm(forms.ModelForm):
         widget=forms.widgets.Textarea(
             attrs={"placeholder":"Mi jár a fejedben?",
                    "class":"form-textarea",
-                   'cols':'65',
+                   'style':'max-width: 650px; margin: auto; display: flex;',
+                   'cols':'60',
                    'rows':'10',
                    'maxlength':'1000',
                    'required':'required',}),

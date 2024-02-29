@@ -198,7 +198,7 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt')
+        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt', pay=data['order_info']['payment'], delivery=data['order_info']['delivery'])
 
         template = render_to_string('store/email.html', {'name':customer.name})
 
@@ -211,10 +211,16 @@ def processOrder(request):
 
         email.content_subtype = "html"
         email.fail_silently=False
-        email.send()
+        #email.send()
 
     else:
         customer, order = guestOrder(request, data)
+        order_items = OrderItem.objects.filter(order=order)
+        products = Product.objects.filter(orderitem__in=order_items).distinct()
+
+        for product in products:
+            product.stock -= 1
+            product.save()
 
     total = float(data['form']['total'])
     order.transaction_id = transaction_id
@@ -371,3 +377,8 @@ def message(request):
                'form': form, 'last_messages_with_friends': last_messages_with_friends,'self_friends':self_friends, 'delete_message_form':delete_message_form}
 
     return render(request, 'store/message.html', context)
+
+def owner(request):
+    context = {}
+
+    return render(request, 'store/owner.html', context)
