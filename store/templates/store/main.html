@@ -94,6 +94,7 @@
             {% else %}
             <li class="nav-link basic"></li>
             {% endif %}
+            {% if request.user.is_superuser == False %}
             <li class="nav-link">
               <a href="https://www.youtube.com/watch?v=cf5xI0FG1_I&ab_channel=Hurvinyek" target="_blank">
                 <i class="bx bxl-youtube icon"></i>
@@ -106,6 +107,7 @@
                 <span class="text nav-text">Bemutatkozás</span>
               </a>
             </li>
+            {% endif %}
           </ul>
         </div>
 
@@ -151,6 +153,14 @@
                 <span class="switch"></span>
               </div>
             </li>
+            {% if request.user.is_superuser %}
+            <li style="margin-top: 50px;" class="nav-link">
+              <a href="{% url 'owner' %}">
+                <i class='bx bx-shield-quarter icon'></i>
+                <span class="text nav-text">Tulajdonos</span>
+              </a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>

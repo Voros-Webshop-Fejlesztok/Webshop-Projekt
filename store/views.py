@@ -377,3 +377,8 @@ def message(request):
                'form': form, 'last_messages_with_friends': last_messages_with_friends,'self_friends':self_friends, 'delete_message_form':delete_message_form}
 
     return render(request, 'store/message.html', context)
+
+def owner(request):
+    context = {}
+
+    return render(request, 'store/owner.html', context)
