@@ -15,7 +15,6 @@
   border-top: 2px solid #021032;
   padding-top: 10px;
   text-transform: capitalize;
-  color: black;
 }
 
 .masodikresz {
@@ -41,7 +40,6 @@
 
 .masodikresz h2 {
   font-size: 40px;
-  color: black;
 }
 
 .test {
@@ -62,7 +60,7 @@
 
 .product .product-card {
   z-index: 1;
-  background: #89cff3;
+  background: #010d2c;
   position: relative;
   width: 300px;
   height: 400px;
@@ -72,7 +70,7 @@
 
 .product .product-card:before {
   content: "";
-  background: rgba(255, 255, 255, 0.121);
+  background: rgba(255, 255, 255, 0.1);
   position: absolute;
   display: block;
   top: 0;
@@ -96,7 +94,7 @@
 
 .product .product-card .name {
   z-index: 2;
-  color: black;
+  color: #fff;
   position: absolute;
   width: 100%;
   text-align: center;
@@ -107,7 +105,7 @@
 
 .product .product-card .price {
   z-index: 2;
-  color: black;
+  color: #fff;
   position: absolute;
   width: 100%;
   text-align: center;
@@ -118,8 +116,8 @@
 
 .product .product-card .popup-btn {
   z-index: 2;
-  color: black;
-  background: #CDF5FD;
+  color: #021032;
+  background: #fefefe;
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -165,7 +163,7 @@
 
 .product .popup-card .product-img {
   z-index: 2;
-  background: #00A9FF;
+  background: #021032;
   position: relative;
   display: flex;
   justify-content: center;
@@ -187,8 +185,8 @@
 
 .product .popup-card .info {
   z-index: 2;
-  background: #CDF5FD;
-  color: black;
+  background: #0433ab;
+  color: #fff;
   display: flex;
   flex-direction: column;
   width: 75%;
@@ -199,7 +197,7 @@
 }
 
 .product .popup-card .close-btn {
-  color: black;
+  color: #fff;
   z-index: 3;
   position: absolute;
   right: 0;
@@ -209,14 +207,14 @@
 }
 
 .product .popup-card .info h2 {
-  color: black;
+  color: #fff;
   font-size: 40px;
   line-height: 20px;
   margin: 10px;
 }
 
 .product .popup-card .info h2 span {
-  color: black;
+  color: #fff;
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 2px;

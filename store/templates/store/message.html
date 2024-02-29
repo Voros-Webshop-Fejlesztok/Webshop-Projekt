@@ -11,7 +11,11 @@
             <!-- Header -->
             <div class="header">
                 <div class="userimg">
-                    <img src="{{self_profile.imageURL}}" alt="" class="cover">
+                    {% if self_profile.profile.imageURL %}
+                    <img src="{{self_profile.profile.imageURL}}" class="cover">
+                    {% else %}
+                    <img src="{% static 'images/placeholder_img.jpg' %}" class="cover">
+                    {% endif %} 
                 </div>
             </div>
         
@@ -32,9 +36,13 @@
             <input type="hidden" name="friend_name" id="friendNameField">
             <div class="chatlist">
                 {% for friend in self_friends %}
-                <div class="block friend" onclick="selectFriend('{{friend.name}}')">
+                <div class="block friend" onclick="selectFriend('{{friend.id}}')">
                     <div class="imgBox">
+                        {% if friend.imageURL %}
                         <img src="{{friend.imageURL}}" class="cover">
+                        {% else %}
+                        <img src="{% static 'images/placeholder_img.jpg' %}" class="cover">
+                        {% endif %} 
                     </div>
                     <div class="details">
                         <div class="listHead">
@@ -70,7 +78,11 @@
                 <div class="imgText">
                     <div class="userimg">
                         {% if current_friend %}
+                        {% if current_friend.imageURL %}
                         <img src="{{current_friend.imageURL}}" class="cover">
+                        {% else %}
+                        <img src="{% static 'images/placeholder_img.jpg' %}" class="cover">
+                        {% endif %} 
                         {% endif %}
                     </div>
                     {% if current_friend %}

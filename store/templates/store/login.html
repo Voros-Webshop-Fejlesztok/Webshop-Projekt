@@ -44,7 +44,7 @@
 
 {% for message in messages %}
 <div style="display: block;" class="popup" id="popup">
-    {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
+    {% if message|striptags == 'Ha Póda Laci emlékszik arra, hogy 30 éve hogyan darált az AK-val, te is emlékezz a felhasználónév és jelszó kombinációdra' %}
     <img src="{% static 'images/x.png' %}" />
     {% else %}
     <img src="{% static 'images/tick.png' %}" />
@@ -52,8 +52,8 @@
     <h2></h2>
     <div class="message {{ message.tags }}">{{message}}</div>
     <br>
-    {% if message|striptags != 'Sikeres bejelentkezés' %}
-        {% if message|striptags == 'Helytelen felhasználónév vagy jelszó' %}
+    {% if message|striptags != 'Üdv a béke szigetén' %}
+        {% if message|striptags == 'Ha Póda Laci emlékszik arra, hogy 30 éve hogyan darált az AK-val, te is emlékezz a felhasználónév és jelszó kombinációdra' %}
         <button style="background: red;" id="popupClose">OK</button>
         {% else %}
         <button id="popupClose">OK</button>
@@ -70,7 +70,7 @@
     content.style.opacity = '0.1'
     popup.style.display = 'block';
 
-    setTimeout(loginAnimation, 4000);
+    setTimeout(loginAnimation, 10000);
 
     function loginAnimation() {
         document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";

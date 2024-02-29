@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{% static 'css/register.css' %}">
 
 
-
+<div id="registerContent">
 <div class="container h-100">
     <div class="d-flex justify-content-center h-100">
         <div class="user_card">
@@ -56,7 +56,6 @@
                         <input class="btn login_btn" type="submit" value="Regisztráció">
                     </div>
                 </form>
-                <div>{{form.errors}}</div>
             </div>
 
             <div class="mt-4">
@@ -67,6 +66,53 @@
         </div>
     </div>
 </div>
+</div>
+
+
+{% if messages %}
+<div style="display: block;" class="popup" id="popup">
+    <img src="{% static 'images/x.png' %}" />
+    <h2></h2>
+    {% for message in messages %}
+    <div class="message {{message.tags}}">{{ forloop.counter }}. {{message}}</div><br>
+    {% endfor %}
+    <button style="background: red;" id="popupClose">OK</button>
+</div>
+{% endif %}
+
+
+{% if messages %}
+<script>
+    popup = document.getElementById('popup');
+    content = document.getElementById('registerContent')
+
+    content.style.opacity = '0.1'
+    popup.style.display = 'block';
+
+    setTimeout(registerContentAnimation, 8000);
+
+    function registerContentAnimation() {
+        document.getElementById('popup').style.animation = "closePopupAnimation 0.5s ease-in-out";
+        document.getElementById('registerContent').style.animation = "opacityAnimation 0.5s ease.out";
+
+        setTimeout(function() {
+            document.getElementById('popup').style.animation = "";
+            document.getElementById('registerContent').style.animation = "";
+            document.getElementById('popup').style.display = "none";
+            document.getElementById('registerContent').style.opacity = 1;
+        }, 500);  
+    }
+
+    var popupClose = document.getElementById('popupClose')
+    popupClose.addEventListener("click", function () {
+        registerContentAnimation()
+      });
+
+</script>
+{% endif %}
+
+
+
 <script>
 
     /* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
