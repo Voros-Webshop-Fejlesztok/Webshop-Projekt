@@ -79,6 +79,8 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.CharField(max_length=200, null = True)
     transaction_id = models.CharField(max_length=200, null = True)
+    pay =  models.CharField(max_length=10, blank=True, null=True)
+    delivery = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return f'{self.id}. rendelés '

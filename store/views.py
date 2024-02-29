@@ -198,7 +198,7 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt')
+        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt', pay=data['order_info']['payment'], delivery=data['order_info']['delivery'])
 
         template = render_to_string('store/email.html', {'name':customer.name})
 

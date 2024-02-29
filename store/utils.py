@@ -60,6 +60,8 @@ def guestOrder(request, data):
     name = data['form']['name']
     email = data['form']['email']
     phonenumber = data['form']['phonenumber']
+    pay = data['order_info']['payment']
+    delivery = data['order_info']['delivery']
 
     cookieData = cookieCart(request)
     items = cookieData['items']
@@ -75,6 +77,8 @@ def guestOrder(request, data):
     order = Order.objects.create(
         customer=customer,
         complete='Nem visszaigazolt',
+        pay=pay,
+        delivery=delivery,
     )
 
     for item in items:
