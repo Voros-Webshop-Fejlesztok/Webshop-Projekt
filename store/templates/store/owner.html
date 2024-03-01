@@ -16,6 +16,8 @@
 </form>
 
 
+<form method=POST>
+{% csrf_token %}
 
 <div id="orders" class="container mt-5">
     {% if orders %}
@@ -23,13 +25,45 @@
         <div class="col-md-7">
             <div class="card p-3 py-4"> 
                 <div class="text-center mt-3">
-                    <h3 class="mt-2 mb-0"><strong>Rendelések</strong></h3>
+                    <h3 class="mt-2 mb-0"><strong>Rendeléseim</strong></h3>
                     {% for order in orders %}
                     {% if order.get_cart_total != 0 %}
-                    <div class="sor">
+                    <div class="row sor">
                         <div class="div2">
                             <h4 style="text-decoration: underline;" class="mt-2 mb-0">{{order}}</h4> 
-                            <h5 class="mt-2 mb-0">{{order.get_cart_total|intcomma}} Ft</h5> 
+                            <h5 class="mt-2 mb-0">{{order.get_cart_total|intcomma}} Ft</h5>
+                            <br>
+                            <div style="margin: auto;" class="radio-inputs">
+                                <label class="radio">
+                                  <input type="radio" name="status;{{order.id}}" value="confirmed"
+                                  {% if order.status == 'confirmed' %}checked{% endif %}>
+                                  <span class="name">Visszaigazolva</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="status;{{order.id}}" value="processing"
+                                    {% if order.status == 'processing' %}checked{% endif %}>
+                                    <span class="name">Feldolgozás alatt</span>
+                                </label>
+                            </div>
+                            <div style="margin: auto;" class="radio-inputs">
+                                <label class="radio">
+                                    <input type="radio" name="status;{{order.id}}" value="shipped"
+                                    {% if order.status == 'shipped' %}checked{% endif %}>
+                                    <span class="name">Szállítás alatt</span>
+                                  </label>
+                                  <label class="radio">
+                                      <input type="radio" name="status;{{order.id}}" value="completed"
+                                      {% if order.status == 'completed' %}checked{% endif %}>
+                                      <span class="name">Teljesítve</span>
+                                  </label>   
+                            </div>
+                            <br>
+                            <div>
+                                <button  type="submit" class=" bg-info p-1 px-4 rounded text-white">Mentés</button>
+                            </div>
+                        </form>
+
+
                         </div>
                         <div class="div1">
                         {% for order_item in order_items %}

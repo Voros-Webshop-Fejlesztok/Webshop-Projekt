@@ -248,6 +248,23 @@
                             <div class="div2">
                                 <h4 style="text-decoration: underline;" class="mt-2 mb-0">{{order}}</h4> 
                                 <h5 class="mt-2 mb-0">{{order.get_cart_total|intcomma}} Ft</h5> 
+                                <br>
+                                <div style="margin: auto;" class="radio-inputs">
+                                    <label class="radio">
+                                        {% if order.status == 'confirmed' %}
+                                        <span style="cursor: default;" class="name">Visszaigazolva</span>
+                                        {% endif %}
+                                        {% if order.status == 'processing' %}
+                                        <span style="cursor: default;" class="name">Feldolgozás alatt</span>
+                                        {% endif %}
+                                        {% if order.status == 'shipped' %}
+                                        <span style="cursor: default;" class="name">Szállítás alatt</span>
+                                        {% endif %}
+                                        {% if order.status == 'completed' %}
+                                        <span style="cursor: default;" class="name">Teljesítve</span>
+                                        {% endif %}
+                                    </label>
+                                </div>
                             </div>
                             <div class="div1">
                             {% for order_item in order_items %}
