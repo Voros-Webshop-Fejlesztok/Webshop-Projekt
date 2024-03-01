@@ -1,7 +1,57 @@
 {% extends 'store/main.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 
+<form method="GET" action=".">
+    {% csrf_token %}
+  
+    <div style="margin: auto;" class="form-group col-lg-4 col-md-4 col-sm-4 balance">
+      <div class="input-group" style="padding-top: 32px;">
+        <input style="border-radius: 20px;" class="form-control py-2 border-right-0 search-box" type="search" placeholder="Rendelés azonosító" name="order_id" id="pname">
+        <span class="input-group-append" id="pname-icon">
+        </span>
+        </div>
+    </div>
+</form>
 
+
+
+<div id="orders" class="container mt-5">
+    {% if orders %}
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7">
+            <div class="card p-3 py-4"> 
+                <div class="text-center mt-3">
+                    <h3 class="mt-2 mb-0"><strong>Rendelések</strong></h3>
+                    {% for order in orders %}
+                    {% if order.get_cart_total != 0 %}
+                    <div class="sor">
+                        <div class="div2">
+                            <h4 style="text-decoration: underline;" class="mt-2 mb-0">{{order}}</h4> 
+                            <h5 class="mt-2 mb-0">{{order.get_cart_total|intcomma}} Ft</h5> 
+                        </div>
+                        <div class="div1">
+                        {% for order_item in order_items %}
+                            {% if order.id == order_item.order_id %} 
+                                {% for product in products %}
+                                    {% if product.id == order_item.product_id %}
+                                        <img class="orderphoto" src="{{product.imageURL}}" class="rounded-circle">
+                                        <h6 class="fonts">{{order_item.quantity}} db - {{order_item.product}}</h6>
+                                        <h6 class="fonts">{{product.price|intcomma}} Ft</h6>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock content %}

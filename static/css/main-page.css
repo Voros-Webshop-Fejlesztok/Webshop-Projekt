@@ -832,3 +832,8 @@ body.dark .product .popup-card .info .add-wish {
   background-color: #fff;
   font-weight: 600;
 }
+
+.search-box{
+  text-align: center;
+  border-radius: 20px;
+}

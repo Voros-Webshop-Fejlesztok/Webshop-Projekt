@@ -379,6 +379,13 @@ def message(request):
     return render(request, 'store/message.html', context)
 
 def owner(request):
-    context = {}
+    orders = Order.objects.all()
+    order_id = request.GET.get('order_id')
+
+    if is_valid_param(order_id):
+        print('fasza')
+        orders = orders.filter(id = order_id)
+
+    context = {'orders':orders}
 
     return render(request, 'store/owner.html', context)
