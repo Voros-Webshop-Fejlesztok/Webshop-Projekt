@@ -200,8 +200,17 @@ button{
     background-color: green;
     border-radius: 20%;
     background: none;
+    border: none;
+}
+p.likes{
+    font-weight: 600;
+}
+p.likes:hover{
+    font-weight: 700;
+    cursor: pointer;
+}
 
-}.big_btn{
+.big_btn{
     margin-left: 5px;
     width: 30px;
     height: 30px;

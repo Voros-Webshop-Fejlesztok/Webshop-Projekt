@@ -102,3 +102,7 @@ h4 {
   resize: none;
   border-radius: 7px;
 }
+
+.like-value{
+  font-weight: 400;
+}
