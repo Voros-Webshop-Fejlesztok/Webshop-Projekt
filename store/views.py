@@ -397,7 +397,7 @@ def owner(request):
                 current_order = Order.objects.get(id=order.id)
                 data = request.POST[f'status;{order.id}']
                 print(data)
-                if data == 'comleted':
+                if data == 'completed':
                     current_order.delete()
                 else:
                     current_order.status = data

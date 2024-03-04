@@ -88,9 +88,16 @@
         <hr>
         <h6 style="font-size: small; height: 30px;">{{ product.description }}</h6>
         <hr>
-        <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span><br><span class="stock">Raktáron: {{ product.stock }} db</span></h4><br>
-        
+        <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span><br>  
+          {% if product.stock > 0 %}
+          <span style="color: black;" class="stock">Raktáron: {{ product.stock }} db</span>
+          {% else %}
+          <span style="color: red;" class="stock">Nincs raktáron</span>
+          {% endif %}
+        </h4><br>
+        {% if product.stock > 0 %}
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
+        {% endif %}
         <button class="button-33 view" role="button" onclick="lightopenQuickView( '{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
       </div>
     </div>
@@ -103,7 +110,9 @@
         <div class="lightinfók">
           <h2 id="lightquick-view-name"></h2>
           <p id="lightquick-view-details"></p>
+          {% if product.stock > 0 %}
           <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart quickview" id="lightupdate-cart" role="button">Kosárba</button>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -130,7 +139,6 @@
 
 <div class="row hidden" style="margin-top: 100px;" id="darkStore">
   {% for product in products %}
-  {% if product.stock > 0 %}
   {% if product.darkweb == True %}
     <div class="col-lg-4 col-md-6 col-sm-12 balance">
       <img class="thumbnail" src="{{ product.imageURL }}" />
@@ -145,9 +153,16 @@
         <hr>
         <h6 style="font-size: small; height: 30px;">{{ product.description }}</h6>
         <hr>
-        <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span></h4>
-        
+        <h4><strong>{{ product.price|floatformat:0|intcomma }} Ft</strong><i class='bx bx-star rating-star'></i><span class="rating">{{ product.rating }}</span><br>
+          {% if product.stock > 0 %}
+          <span style="color: black;" class="stock">Raktáron: {{ product.stock }} db</span>
+          {% else %}
+          <span style="color: red;" class="stock">Nincs raktáron</span>
+          {% endif %}
+        </h4><br>
+        {% if product.stock > 0 %}
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
+        {% endif %}
         <button class="button-33 view" role="button" onclick="darkopenQuickView('{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
       </div>
     </div>
@@ -160,11 +175,12 @@
         <div class="darkinfók">
           <h2 id="darkquick-view-name"></h2>
           <p id="darkquick-view-details"></p>
+          {% if product.stock > 0 %}
           <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart quickview" id="darkupdate-cart" role="button">Kosárba</button>
+          {% endif %}
         </div>
       </div>
     </div>
-  {% endif %}
   {% endif %}
   {% endfor %}
 </div>
