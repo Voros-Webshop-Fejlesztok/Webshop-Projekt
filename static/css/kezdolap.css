@@ -3,6 +3,16 @@
   padding: 0;
 }
 
+.Lapozo {
+  max-height: 800px;
+}
+
+body.dark .homep {
+  color: white;
+}
+
+
+
 .elerhetoseg {
   left: 20px;
   font-weight: 600;
@@ -119,7 +129,7 @@
 .product .product-card .popup-btn {
   z-index: 2;
   color: black;
-  background: #CDF5FD;
+  background: #cdf5fd;
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -165,7 +175,7 @@
 
 .product .popup-card .product-img {
   z-index: 2;
-  background: #00A9FF;
+  background: #00a9ff;
   position: relative;
   display: flex;
   justify-content: center;
@@ -187,7 +197,7 @@
 
 .product .popup-card .info {
   z-index: 2;
-  background: #CDF5FD;
+  background: #cdf5fd;
   color: black;
   display: flex;
   flex-direction: column;
