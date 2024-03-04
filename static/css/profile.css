@@ -201,10 +201,10 @@ button{
     border-radius: 50%;
     background: none;
 }
-p.likes{
+.likes{
     font-weight: 600;
 }
-p.likes:hover{
+.likes:hover{
     font-weight: 700;
     cursor: pointer;
 }
