@@ -92,9 +92,9 @@
           {% endif %}
           {% if post.likes.all.count > 1 %}
           {% if post.likes.all.0.user == request.user %}
-          <p class="like-value"><strong>Kedveled</strong> és rajtad kívül további <span class="likes">{{post.number_of_likes}} személy </span>kedveli a bejegyzést</p>
+          <p class="like-value"><strong>Kedveled</strong> és rajtad kívül további <span data-target="{{post.id}}" id="showLikes" class="likes">{{post.number_of_likes}} személy </span>kedveli a bejegyzést</p>
           {% else %} 
-          <p class="like-value"><a class="liker" href="{% url 'profile' post.likes.all.0.user.id %}">{{post.likes.all.0.user}}</a> és további <span class="likes">{{post.number_of_likes}} személy</span> kedveli a bejegyzést</p>
+          <p class="like-value"><a class="liker" href="{% url 'profile' post.likes.all.0.user.id %}">{{post.likes.all.0.user}}</a> és további <span data-target="{{post.id}}" id="showLikes" class="likes">{{post.number_of_likes}} személy</span> kedveli a bejegyzést</p>
           {% endif %} 
           {% endif %} 
         </div>
@@ -106,8 +106,8 @@
   </div>
 
 
-  <div style="display: block;" class="popup" id="likes;{{post.id}}">
-    <i id="closeLikers" style="font-size: 25px; float: right; margin-top: 20px; cursor: pointer;" class='bx bxs-x-circle'></i>
+  <div style="display: block;" class="popup hidden" id="likes{{post.id}}">
+    <i id="closeLikes" data-target="{{post.id}}" style="font-size: 25px; float: right; margin-top: 20px; cursor: pointer;" class='bx bxs-x-circle'></i>
     <div style="margin-top: 10px;">
     <p ><strong>Összesen {{post.likes.all.count}} kedvelés van a bejegyzésen</strong></p><hr>
     {% for liker in post.likes.all %}
@@ -151,6 +151,45 @@
 
 </script>
 {% endif %}
+
+
+<script>
+  const showLikesElements = document.querySelectorAll('#showLikes');
+  const closeLikesElements = document.querySelectorAll('#closeLikes');
+
+  showLikesElements.forEach(spanElement => {
+            spanElement.addEventListener('click', function() {
+                handleSpanClick(this);
+            });
+        });
+
+        function handleSpanClick(spanElement) {
+            // Az adott span elemhez tartozó data-target érték lekérdezése
+            const dataTargetValue = spanElement.getAttribute('data-target');
+
+            const divId = `likes${dataTargetValue}`;
+            const targetDiv = document.getElementById(divId)
+
+            targetDiv.classList.remove('hidden')
+            
+        }
+
+  closeLikesElements.forEach(spanElement => {
+            spanElement.addEventListener('click', function() {
+                handleCloseClick(this);
+            });
+        });
+
+        function handleCloseClick(spanElement) {
+            // Az adott span elemhez tartozó data-target érték lekérdezése
+            const dataTargetValue = spanElement.getAttribute('data-target');
+
+            const divId = `likes${dataTargetValue}`;
+            const targetDiv = document.getElementById(divId)
+
+            targetDiv.classList.add('hidden')   
+        }
+</script>
 
 {% endblock content %}
 
