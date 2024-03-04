@@ -12,7 +12,7 @@ class Customer(models.Model):
     followers = models.ManyToManyField("self", related_name='followed_by',symmetrical=False, blank=True)
     date_modified = models.DateTimeField(User, auto_now=True)
     image = models.ImageField(null=True, blank=True)
-    description = models.CharField(max_length=500, null=True)
+    description = models.CharField(max_length=500, null=True, blank=True)
     last_friend = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -155,6 +155,9 @@ class Post(models.Model):
     body = models.CharField(max_length=1000)
     created = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(Customer, related_name='liked_by', symmetrical=False, blank=True)
+
+    def number_of_likes(self):
+        return self.likes.count() - 1
 
     def __str__(self):
         return f"{self.profile} " + f"{self.created:%Y-%m-%d %H:%M}"

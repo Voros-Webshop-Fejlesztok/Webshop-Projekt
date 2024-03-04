@@ -837,3 +837,18 @@ body.dark .product .popup-card .info .add-wish {
   text-align: center;
   border-radius: 20px;
 }
+
+a.liker{
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+a.liker:hover{
+  font-weight: 700;
+}
+
+.close_likers{
+  font-size: 50px;
+  float: right;
+}

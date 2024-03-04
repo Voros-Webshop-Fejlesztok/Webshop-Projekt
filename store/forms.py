@@ -17,7 +17,7 @@ class PostForm(forms.ModelForm):
         widget=forms.widgets.Textarea(
             attrs={"placeholder":"Poszt címe",
                    "class":"form-textarea",
-                   'style':'max-width: 600px;',
+                   'style':'max-width: 380px;',
                    'cols':'40',
                    'rows':'1',
                    'maxlength':'50',
@@ -27,7 +27,7 @@ class PostForm(forms.ModelForm):
         widget=forms.widgets.Textarea(
             attrs={"placeholder":"Mi jár a fejedben?",
                    "class":"form-textarea",
-                   'style':'max-width: 650px; margin: auto; display: flex;',
+                   'style':'max-width: 500px; margin: auto; display: flex;',
                    'cols':'60',
                    'rows':'10',
                    'maxlength':'1000',
@@ -36,7 +36,7 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        exclude = ("user",)
+        exclude = ("user", "likes")
 
 class UpdateProfileForm(forms.ModelForm):
     name = forms.CharField(

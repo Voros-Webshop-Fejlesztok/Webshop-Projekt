@@ -409,3 +409,15 @@ def owner(request):
     context = {'orders':orders, 'order_items':order_items, 'products':products}
 
     return render(request, 'store/owner.html', context)
+
+def post_like(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    self_user = request.user.customer
+    self_profile = Customer.objects.get(id=self_user.id)
+
+    if post.likes.filter(id=self_profile.id):
+        post.likes.remove(self_profile)
+    else:
+        post.likes.add(self_profile)
+
+    return redirect('forum')
