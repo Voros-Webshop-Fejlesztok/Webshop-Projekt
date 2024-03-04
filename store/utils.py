@@ -44,7 +44,7 @@ def cookieCart(request):
 def cartData(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer = customer, complete='Nem visszaigazolt')
+        order, created = Order.objects.get_or_create(customer = customer, status='not confirmed')
         items = order.orderitem_set.all()
         cartItems = order.get_cart_items
     else:
@@ -76,7 +76,7 @@ def guestOrder(request, data):
 
     order = Order.objects.create(
         customer=customer,
-        complete='Nem visszaigazolt',
+        status='not confirmed',
         pay=pay,
         delivery=delivery,
     )

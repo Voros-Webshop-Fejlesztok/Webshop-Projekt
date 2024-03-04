@@ -170,7 +170,7 @@ def updateItem(request):
     user = request.user
 
     product = Product.objects.get(id = productId)
-    order, created = Order.objects.get_or_create(customer = customer, complete='Nem visszaigazolt')
+    order, created = Order.objects.get_or_create(customer = customer, status='not confirmed')
 
     orderItem, created = OrderItem.objects.get_or_create(order = order, product = product)
 
@@ -198,7 +198,10 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete='Nem visszaigazolt', pay=data['order_info']['payment'], delivery=data['order_info']['delivery'])
+        order, created = Order.objects.get_or_create(customer=customer, status='not confirmed')
+        
+        order.pay=data['order_info']['payment']
+        order.delivery=data['order_info']['delivery']
 
         template = render_to_string('store/email.html', {'name':customer.name})
 
@@ -226,7 +229,7 @@ def processOrder(request):
     order.transaction_id = transaction_id
 
     if total == order.get_cart_total:
-        order.complete = 'Visszaigazolt'
+        order.status = 'confirmed'
     order.save()
     
     if order.shipping:
@@ -379,6 +382,30 @@ def message(request):
     return render(request, 'store/message.html', context)
 
 def owner(request):
-    context = {}
+    orders = Order.objects.all()
+    order_id = request.GET.get('order_id')
+    order_items = OrderItem.objects.filter(order__in=orders)
+    products = Product.objects.filter(orderitem__in=order_items).distinct()
+
+    if is_valid_param(order_id):
+        orders = orders.filter(id = order_id)
+
+    if request.method == "POST":
+        for order in orders:
+            key = f'status;{order.id}'
+            if key in request.POST:
+                current_order = Order.objects.get(id=order.id)
+                data = request.POST[f'status;{order.id}']
+                print(data)
+                if data == 'comleted':
+                    current_order.delete()
+                else:
+                    current_order.status = data
+                    current_order.save()
+
+        return redirect('owner')
+
+
+    context = {'orders':orders, 'order_items':order_items, 'products':products}
 
     return render(request, 'store/owner.html', context)
