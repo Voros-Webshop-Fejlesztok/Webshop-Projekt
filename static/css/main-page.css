@@ -847,3 +847,8 @@ a.liker{
 a.liker:hover{
   font-weight: 700;
 }
+
+.close_likers{
+  font-size: 50px;
+  float: right;
+}

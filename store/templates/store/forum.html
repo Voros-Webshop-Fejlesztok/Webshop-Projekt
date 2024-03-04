@@ -104,6 +104,27 @@
       </div>
     </div>
   </div>
+
+
+  <div style="display: block;" class="popup" id="likes;{{post.id}}">
+    <i id="closeLikers" style="font-size: 25px; float: right; margin-top: 20px; cursor: pointer;" class='bx bxs-x-circle'></i>
+    <div style="margin-top: 10px;">
+    <p ><strong>Összesen {{post.likes.all.count}} kedvelés van a bejegyzésen</strong></p><hr>
+    {% for liker in post.likes.all %}
+        <div style="margin: 10px;">
+        {% if liker.imageURL %}
+        <img src="{{liker.imageURL}}" style="width: 20px; height: 20px; margin: auto;">
+        {% else %}
+        <img src="{% static 'images/placeholder_img.jpg' %}" style="width: 20px; height: 20px; margin: auto;">
+        {% endif %}
+        <a class="liker" href="{% url 'profile' liker.user.id %}">{{liker.user}}</a>
+        </div>
+    {% endfor %} 
+    </div>
+</div>
+
+
+
 {% endfor %}
 
 {% if messages %}
