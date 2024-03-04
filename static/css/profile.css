@@ -198,9 +198,8 @@ a.follower_a{
 
 button{
     background-color: green;
-    border-radius: 20%;
+    border-radius: 50%;
     background: none;
-    border: none;
 }
 p.likes{
     font-weight: 600;

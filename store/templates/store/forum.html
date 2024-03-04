@@ -84,10 +84,10 @@
           </svg>
           </a>
           {% if post.likes.all.count == 1 %}
-          <p class="like-value">Kedveli {{post.likes.all.0}}</p>
+          <p class="like-value">Kedveli <a class="liker" href="{% url 'profile' post.likes.all.0.user.id %}">{{post.likes.all.0}}</a></p>
           {% endif %}
           {% if post.likes.all.count > 1 %}
-          <p class="like-value">Kedveli {{post.likes.all.0}} és további <p class="likes">{{post.number_of_likes}} személy</p></p>
+          <p class="like-value">Kedveli <a class="liker" href="{% url 'profile' post.likes.all.0.user.id %}">{{post.likes.all.0.user}}</a> és további <p class="likes">{{post.number_of_likes}} személy</p></p>
           {% endif %} 
         </div>
         </div>
