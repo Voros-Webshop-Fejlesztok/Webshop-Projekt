@@ -73,7 +73,6 @@
 
 <div class="row" style="margin-top: 100px;" id="lightStore">
   {% for product in products %}
-  {% if product.stock > 0 %}
   {% if product.darkweb == False %}
     <div class="col-lg-4 col-md-6 col-sm-12 balance">
       <img class="thumbnail" src="{{ product.imageURL }}" />
@@ -116,7 +115,6 @@
         </div>
       </div>
     </div>
-  {% endif %}
   {% endif %}
   {% endfor %}
 </div>
