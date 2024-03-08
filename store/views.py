@@ -105,9 +105,14 @@ def store(request):
     price_max = request.GET.get('price_max')
     category = request.GET.get('category')
     brand = request.GET.get('brand')
-    
-    
+    digital = request.GET.get('digital')
+    is_digital = False
 
+    if digital == 'false':
+        is_digital = False
+    elif digital == 'true':
+        is_digital = True
+    
     if is_valid_param(product_name_query):
         products = products.filter(Q(pname__icontains=product_name_query)|  Q(brand__name__icontains=product_name_query)|  Q(category__name__icontains=product_name_query)|  Q(pname__icontains=product_name_query)|  Q(description__icontains=product_name_query))
 
@@ -128,6 +133,9 @@ def store(request):
         
     if is_valid_param(brand) and brand != '':
         products = products.filter(brand__name=brand)
+
+    if is_valid_param(is_digital):
+        products = products.filter(digital=is_digital)
     
     context = {'products':products,'categories':categories,'brands':brands, 'shipping':False}
 
