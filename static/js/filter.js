@@ -30,8 +30,6 @@ window.onload = function() {
     // Ellenőrizd, hogy van-e tárolt érték a checkbox cookie-ben
     var isDigitalChecked = getCookie("isDigitalChecked");
 
-    console.log(isDigitalChecked)
-
     // Ha nincs tárolt érték, alapértelmezetten állítsd false-ra
     if (isDigitalChecked === null) {
         isDigitalChecked = "false";
@@ -102,6 +100,14 @@ resetFilter.addEventListener("click", function() {
     });
 });
 
+// Input és select mezők eseménykezelője
+document.querySelectorAll("#ratingMin, #ratingMax, #priceMin, #priceMax, #inputBrand, #inputCategory, #pname").forEach(function(element) {
+    element.addEventListener("input", function() {
+        // Adatok mentése
+        saveFilterData();
+    });
+});
+
 // Cookie-k létrehozása és lekérdezése
 function setCookie(name, value, days) {
     var expires = "";
@@ -139,6 +145,9 @@ function applyFilterData(filterData) {
     document.getElementById("pname").value = filterData.pname || "";
     // Digitális adat alkalmazása
     document.getElementById("digital").value = filterData.digital || "";
+
+    // Az input mezők értékeinek beállítása
+    saveFilterData();
 }
 
 // Funkció az értékek mentésére a cookie-ba

@@ -211,7 +211,7 @@ def processOrder(request):
         order.pay=data['order_info']['payment']
         order.delivery=data['order_info']['delivery']
 
-        template = render_to_string('store/email.html', {'name':customer.name})
+        template = render_to_string('store/emails/processOrderEmail.html', {'name':customer.name})
 
         email = EmailMessage(
             'Köszönjük a rendelésed!',
