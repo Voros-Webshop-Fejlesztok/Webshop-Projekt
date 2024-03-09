@@ -62,6 +62,7 @@ def guestOrder(request, data):
     phonenumber = data['form']['phonenumber']
     pay = data['order_info']['payment']
     delivery = data['order_info']['delivery']
+    total = data['order_info']['total']
 
     cookieData = cookieCart(request)
     items = cookieData['items']
@@ -79,6 +80,7 @@ def guestOrder(request, data):
         status='not confirmed',
         pay=pay,
         delivery=delivery,
+        total=total,
     )
 
     for item in items:
