@@ -85,8 +85,10 @@
                 {% endfor %}
                 
                 <p style="Margin:0;font-size:16px;font-family:montserrat,sans-serif;line-height:32px;color:#333333">
-                    <br>Részösszeg<strong>: <span style="color:#294e9c">{{order.get_cart_total|floatformat:0|intcomma}}</span></strong>
-                    <br>Szállítási költség:
+                    <br>Részösszeg<strong>: <span style="color:#294e9c">{{order.get_cart_total|floatformat:0|intcomma}} Ft</span></strong>
+                    <br>
+                    {% if order.shipping %}
+                    Szállítási költség:
                     <strong>
                     {% if order.delivery == 'gls' %}
                         1,790 Ft
@@ -105,6 +107,9 @@
                     {% endif %}
                     </strong>
                     <br><strong>Összesen:&nbsp;<span style="color:#294e9c">{{order.total}} Ft</span></strong>
+                    {% else %}
+                    <strong>Összesen:&nbsp;<span style="color:#294e9c">{{order.get_cart_total|floatformat:0|intcomma}}Ft</span></strong>
+                    {% endif %}
 
             </div>
             

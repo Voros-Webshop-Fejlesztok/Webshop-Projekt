@@ -248,7 +248,7 @@ def processOrder(request):
         'Köszönjük a rendelésed!',
         template,
         settings.EMAIL_HOST_USER,
-        ['csongorkiss12@gmail.com'],
+        [customer.email],
     )
 
     email.content_subtype = "html"

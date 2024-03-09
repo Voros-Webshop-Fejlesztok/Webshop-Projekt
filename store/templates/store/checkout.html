@@ -47,7 +47,8 @@
             </div>          
           </div>
           <hr/>
-          <input required id="form-button" class="btn btn-success btn-block" type="submit" value="Folytatás" />     
+          <input required id="form-button" class="btn btn-success btn-block" type="submit" value="Folytatás" />
+          <input required id="form-button2" class="btn btn-success btn-block" type="submit" value="Folytatás" />    
       </div>
 
       <br/>
@@ -135,6 +136,9 @@
             document.getElementById("delivery-options1").style.display = 'none';
             document.getElementById("delivery-options2").style.display = 'none';
             document.getElementById("delivery-options3").style.display = 'none';
+            document.getElementById("form-button").style.display = 'none';
+        } else{
+          document.getElementById("form-button2").style.display = 'none';
         }
 
         if (user != "AnonymousUser") {
