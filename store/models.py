@@ -81,6 +81,7 @@ class Order(models.Model):
     transaction_id = models.CharField(max_length=200, null = True)
     pay =  models.CharField(max_length=10, blank=True, null=True)
     delivery = models.CharField(max_length=10, blank=True, null=True)
+    total = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
         return f'{self.id}. rendelés '

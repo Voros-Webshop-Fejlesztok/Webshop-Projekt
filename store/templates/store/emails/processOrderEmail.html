@@ -1,0 +1,182 @@
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<table style="width:600px;margin:0 auto" width="600">
+    <tbody><tr>
+       <td align="center" style="font-family:montserrat,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0px;background-color:#ffffff">
+           <a href="https://darido.pythonanywhere.com/" style="font-size:14px;text-decoration:underline;color:#2cb543" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://aqua.hu/&amp;source=gmail&amp;ust=1709238901360000&amp;usg=AOvVaw2VvMMqcJGGpA_nrrmwCzJY">
+               <img class="m_2592366382512491283adapt-img CToWUd" src="{% static 'images/logo.png' %}" alt="" style="display:block;border:0;outline:none;text-decoration:none" width="350" data-bit="iit"></a>
+           
+           <h1 style="margin:0;font-size:22px;line-height:26px;font-style:normal;font-weight:normal;padding-top:20px"><strong>Kedves {{name}}!</strong></h1>
+
+           <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:21px;color:#808080;padding:30px 10px">Köszönjük rendelésed, ha csomagod átvehető lesz,<br>új e-mailt fogunk küldeni.</p>
+
+           <h4 style="Margin:0;line-height:120%;font-family:montserrat,sans-serif;text-align:center;padding-top:10px;padding-bottom:20px;font-size:20px">Rendelés azonosítód:<br>
+            <a href="https://darido.pythonanywhere.com/" style="Margin:0;font-family:montserrat,sans-serif;text-align:center;font-size:20px;color:#294e9c;text-decoration:none" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://aqua.hu/ugyfelkapu/rendeleseim.html&amp;source=gmail&amp;ust=1709238901360000&amp;usg=AOvVaw1IrDmPZU3-uQKKPDnlbDBU">{{order.id}}</a></h4>
+       </td>
+    </tr>
+    <tr>
+        <td align="center" style="font-family:montserrat,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0px;padding-bottom:20px">
+            <p style="Margin:0;font-size:18px;font-family:montserrat,sans-serif;line-height:22px;color:#000000;padding-top:20px"><strong>Megrendelés részletei:</strong></p>
+
+            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="border-collapse:collapse;border-spacing:0px">
+                <tbody><tr style="border-collapse:collapse">
+                    <td width="80" align="center" style="padding:0;Margin:0;font-size:0px;padding-top:20px" class="m_2592366382512491283es-adapt-td">
+                        <img src="https://ci3.googleusercontent.com/meips/ADKq_NYflBxTMu8saGcB0eEGq6T4BimnxUBzCRjFvy52Dvkt52rHqm6HxH1d2EDv56CjjwuAgXqReyy_BGskIhBZFAQchuBXwUXYXRkdm1Ezb2gUHCeGPKkVVZ6Ti5Clx-scmQ=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/29241583162149935.png" alt="" style="display:block;border:0;outline:none;text-decoration:none" width="40" class="CToWUd" data-bit="iit">
+                    </td>
+                    <td align="left" class="m_2592366382512491283es-m-txt-c m_2592366382512491283es-adapt-td" style="padding:0;Margin:0;white-space:nowrap;padding-top:20px">
+                        <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:17px;color:#333333"><strong>Rendelés dátuma:</strong>
+                            <br>{{order.date_ordered|date:"Y. M. j. H:i"}}</p>
+                    </td>
+                    <td width="80" align="center" class="m_2592366382512491283es-adapt-td" style="padding:0;Margin:0;font-size:0px;padding-top:20px">
+                        <img src="https://ci3.googleusercontent.com/meips/ADKq_NZ9ZGTc1k0n68rlhfvvhV_MEorpjPOVWJXJKGauFxQtoQSFhUHQCAFluJik4w82BB3Ys5IR0fVkZVpabhwEU4BmpOxVR4KmT_KHaFucsteHJThxKO9D8CckBUUIeJLW8g=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/69191583162150144.png" alt="" style="display:block;border:0;outline:none;text-decoration:none" width="40" class="CToWUd" data-bit="iit">
+                    </td>
+                    <td align="left" class="m_2592366382512491283es-m-txt-c m_2592366382512491283es-adapt-td" style="padding:0;Margin:0;padding-top:20px">
+                        <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:21px;color:#333333"><strong>Fizetési mód:</strong><br>
+                        {% if order.pay == 'cash' %}
+                            Utánvét
+                        {% endif %}
+                        {% if order.pay == 'card' %}
+                            Bankkártya
+                        {% endif %} 
+                    </p>
+                    </td>
+                </tr>
+                {% if order.shipping %}
+                <tr style="border-collapse:collapse">
+                    <td align="center" style="padding:0;Margin:0;font-size:0px;padding-top:20px" class="m_2592366382512491283es-adapt-td">
+                        <img src="https://ci3.googleusercontent.com/meips/ADKq_NaYQbTDR-CTmwzlNqLP1Br4qATtf2CpTfBoBYOMO8kh1ewyngaHjpd-gWZJD3IdiGV9MbsbWEHFO6gLqehfJn2VeF94gSbWwj2P2BIIwCPb0B1HpGb6_s-c6NIYKIaYHw=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/30161583162150117.png" alt="" style="display:block;border:0;outline:none;text-decoration:none" width="40" class="CToWUd" data-bit="iit">
+                    </td>
+                    <td align="left" class="m_2592366382512491283es-m-txt-c m_2592366382512491283es-adapt-td" style="padding:0;Margin:0;padding-right:15px;padding-top:20px;max-width:200px">
+                        <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:17px;color:#333333"><strong>Átvétel helye:</strong>
+                            <br>{{shipping}}</p>
+                    </td>
+                    <td align="center" style="padding:0;Margin:0;font-size:0px;padding-top:20px" class="m_2592366382512491283es-adapt-td">
+                        <img src="https://ci3.googleusercontent.com/meips/ADKq_NbIfokGhmba82GoMuCN8uf2Sc7Lgfbxwc5u9vvdQ8Tdwb3b_tfSeEMWKKDhm0wxUMrf_2QtKlCat08bCsPMkTtxxfD9Wu7bQkRLFjgqn4tJQXB3BnMDwIi-O8ntzkfBBg=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/24351583162148903.png" alt="" style="display:block;border:0;outline:none;text-decoration:none" width="40" class="CToWUd" data-bit="iit">
+                    </td>
+                    <td align="left" class="m_2592366382512491283es-m-txt-c m_2592366382512491283es-adapt-td" style="padding:0;Margin:0;padding-top:20px">
+                        <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:21px;color:#333333"><strong>Házhozszállítás módja:</strong><br>
+                        {% if order.delivery == 'gls' %}
+                            GLS futárszolgálat
+                        {% endif %}
+                        {% if order.delivery == 'mpl' %}
+                            Magyar Posta házhozszállítás
+                        {% endif %}   
+                    </p>
+                    </td>
+                </tr>
+                {% endif %} 
+            </tbody></table>
+
+            <p style="margin:0;padding-top:30px"><span class="m_2592366382512491283es-button-border" style="border-style:solid;border-color:#294e9c;background:#294e9c;border-width:0px;display:inline-block;border-radius:30px;width:auto">
+                <a href="https://darido.pythonanywhere.com/login/" class="m_2592366382512491283es-button" style="text-decoration:none;font-family:Montserrat,sans-serif;font-size:16px;color:#ffffff;border-style:solid;border-color:#294e9c;border-width:10px 20px 10px 20px;display:inline-block!important;background:#294e9c;border-radius:30px;font-weight:bold;font-style:normal;line-height:19px;width:auto;text-align:center" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://aqua.hu/ugyfelkapu/rendeleseim.html&amp;source=gmail&amp;ust=1709238901360000&amp;usg=AOvVaw1IrDmPZU3-uQKKPDnlbDBU">
+                    <img src="https://ci3.googleusercontent.com/meips/ADKq_NYqfMWUnBrqRg5rHjFCU-PIUREuZgHi1CizoNOCRDsAiaWvJolsiu_URvUE-kJA05V4bXaO-P6NdAlcUODYppNWjSzH9VkzaJM=s0-d-e1-ft#https://aqua.hu/files/rendszeruzenetek/usericon.png" alt="Profilom" style="display:inline-block;border:none;width:15px;height:15px;margin-right:10px" width="15" height="15" class="CToWUd" data-bit="iit"><span style="display:inline-block">PROFILOM</span>
+                </a></span></p>
+            <p style="Margin:0;font-size:12px;font-family:montserrat,sans-serif;line-height:14px;color:#a9a9a9;padding:20px">Rendelésedről a Profilom menüben is tájékozódhatsz.</p>
+            
+            <div style="background:white;padding:20px">
+                {% for order_item in order_items %}
+                <p><span style="background:#294e9c;display:inline-block;padding:3px 9px;color:white;border-radius:10px;font-weight:bold">{{order_item.quantity}} db</span></p>
+                <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:21px;color:#333333">{{order_item.product.pname}}</p>
+                <p style="Margin:0;font-size:18px;font-family:montserrat,sans-serif;line-height:27px;color:#294e9c"><strong>{{order_item.product.price|floatformat:0|intcomma}} Ft</strong></p>
+                <hr style="margin:40px;font-size:0;height:0px;border:none;border-top:1px solid silver">
+                {% endfor %}
+                
+                <p style="Margin:0;font-size:16px;font-family:montserrat,sans-serif;line-height:32px;color:#333333">
+                    <br>Részösszeg<strong>: <span style="color:#294e9c">{{order.get_cart_total|floatformat:0|intcomma}}</span></strong>
+                    <br>Szállítási költség:
+                    <strong>
+                    {% if order.delivery == 'gls' %}
+                        1,790 Ft
+                    {% endif %}
+                    {% if order.delivery == 'mpl' %}
+                        1,390 Ft
+                    {% endif %}
+                    </strong>
+                    <br>Utánvét díj:
+                    <strong>
+                    {% if order.pay == 'cash' %}
+                        490 Ft
+                    {% endif %}
+                    {% if order.pay == 'card' %}
+                        0 Ft
+                    {% endif %}
+                    </strong>
+                    <br><strong>Összesen:&nbsp;<span style="color:#294e9c">{{order.total}} Ft</span></strong>
+
+            </div>
+            
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color:white;padding-bottom:15px;font-family:montserrat,sans-serif" align="center">
+        <div align="center"><h4 style="Margin:0;line-height:120%;font-family:montserrat,sans-serif;text-align:center;padding-top:10px;padding-bottom:20px;font-size:20px">Szaküzletünk</h4></div>
+            <table width="90%" cellspacing="0" cellpadding="0"><tbody><tr><td width="30%" style="font-size:13px" valign="top">                        
+                    
+                    </td><td width="39%" valign="top" style="font-size:13px;border-left:1px solid #dfdfdf;border-right:1px solid #dfdfdf;padding:0 10px;margin-right:20px">                        
+                    <p><strong style="color:#294e9c;font-size:15px">DÁRIDÓ KFT</strong></p>
+                    <span>9024 Győr</span> <br>
+                    <span>Baross Gábor út 184.</span><br><span style="font-size:10px">(Bejárat a kanális fedőn)</span>
+                    <p>H-P: 08:00-18:00</p><p> Szo: 14:00-16:00</p><p> V: Zárva</p>
+                    </td><td width="30%" valign="top" style="padding-left:20px;font-size:13px">                        
+                    
+                    </td></tr></tbody></table>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="font-family:montserrat,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0px;padding-bottom:20px">
+           <p style="margin:0;padding:0;padding-top:20px;padding-bottom:20px;font-size:16px;line-height:24px">Probléma esetén keress minket:</p>
+           <table class="m_2592366382512491283es-table-not-adapt m_2592366382512491283es-social" cellspacing="0" cellpadding="0" role="presentation" style="border-collapse:collapse;border-spacing:0px">
+               <tbody><tr style="border-collapse:collapse">
+                  <td valign="top" align="center" style="padding:0;Margin:0;padding-right:20px">
+                     <a href="tel:+36703586135" style="font-size:14px;text-decoration:underline;color:#2cb543" target="_blank"><img title="Phone" src="https://ci3.googleusercontent.com/meips/ADKq_NbPqFbaWNOPu6blj14UKc9wprFaimpV6E3R7oe-OQeNLjIorM263tY97QWD_YyqbYgRTeywPRuoLavHIo1azFQtsGOOLKTztvlsyq0sOeTARYGUsnvg4AfYY2ENO0RrEMigYr-mmvB8TZ4c5djT8geVwALHaRNDzMmw5ftq1eCuv1QizYveuCNL=s0-d-e1-ft#https://fatbco.stripocdn.email/content/assets/img/other-icons/circle-black-bordered/phone-circle-black-bordered.png" alt="Phone" width="32" height="32" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit"></a>
+                  </td>
+                  <td valign="top" align="center" style="padding:0;Margin:0;padding-right:20px"><a href="https://darido.pythonanywhere.com/" style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;text-decoration:underline;color:#2cb543" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.messenger.com/t/112876152075278&amp;source=gmail&amp;ust=1709238901361000&amp;usg=AOvVaw3Omc-n7p7qBR8C5E-ATKt0">
+                     <img title="Messenger" src="https://ci3.googleusercontent.com/meips/ADKq_NZ23iyW3kN9H3D2qDlWKxLk66Y89mtJOFcZP-cAgKNPqwVGde8A--REj5C-Tqwsnb01FP1tI81hTQAVchZ5klFXdHBsZFZMEdrKCQ5kTe08HPkHDejNPnPx1GEcKAp1t9TDUoaEWgEKCcz-AOYo=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/messenger-circle-black-bordered.png" alt="Messenger" width="32" height="32" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit"></a>
+                  </td>
+                  <td valign="top" align="center" style="padding:0;Margin:0"><a href="mailto:darido@gmail.com" style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;text-decoration:underline;color:#2cb543" target="_blank"><img title="Email" src="https://ci3.googleusercontent.com/meips/ADKq_Nbi6IfL4rR3F4rYMAt7TALrSTFK9rXbMo1qJiBCQ-GEIHk-6g3TCyoGP-cnNnKr9zE-B1mCVZZJLspL-O4zGMKFekYiLVe5DTdmynH08tHX5uiuuyDLueCvFl3NE2RrJ0B0mqV3WE0iyZsbfFAOeQLx6VfxXXk1iZVuPwuXAFsg9mYNTHxz3wo=s0-d-e1-ft#https://fatbco.stripocdn.email/content/assets/img/other-icons/circle-black-bordered/mail-circle-black-bordered.png" alt="Email" width="32" height="32" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit"></a></td>
+               </tr>
+            </tbody></table>
+        </td>
+    </tr>
+    <tr>
+       <td align="center" style="font-family:montserrat,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0px;background-color:#ffffff">
+           <p style="margin:0;padding:0;padding-top:20px;font-size:18px;line-height:27px"><strong>Üdvözlettel:</strong></p>
+           <p style="margin:0;padding:0;padding-bottom:50px"><img src="{% static 'images/logo.png' %}" alt="" style="display:block;border:0;outline:none;text-decoration:none" width="250" class="CToWUd" data-bit="iit"></p>
+           <table class="m_2592366382512491283es-table-not-adapt m_2592366382512491283es-social" cellspacing="0" cellpadding="0" role="presentation" style="border-collapse:collapse;border-spacing:0px">
+               <tbody>
+               <tr style="border-collapse:collapse">
+                   <td valign="top" align="center" style="padding:0;Margin:0;padding-right:20px">
+                       <a href="hhttps://darido.pythonanywhere.com/" style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;text-decoration:underline;color:#2cb543" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.facebook.com/aqua.webaruhaz/&amp;source=gmail&amp;ust=1709238901361000&amp;usg=AOvVaw0tIWLTze9bNYutyui44Sgn">
+                           <img title="Facebook" src="https://ci3.googleusercontent.com/meips/ADKq_NbiFrhCB8Vx2wcYlGIMelj6eiZcrV2_qnjG3ZD-4eOJPpf2p123RhMlMkKldLXrXOOLFDxMw9Sq4pY4wWerVOgJDzf2WqAGWrpgwSzWbenguLCq6oI2FebksQHCfe2EIs8ccdGLtcPh74_anHEUaLTq9Ge6VDSg=s0-d-e1-ft#https://fatbco.stripocdn.email/content/assets/img/social-icons/logo-black/facebook-logo-black.png" alt="Fb" width="48" height="48" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit">
+                       </a>
+                   </td>
+                   <td valign="top" align="center" style="padding:0;Margin:0;padding-right:20px">
+                       <a href="https://darido.pythonanywhere.com/" style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;text-decoration:underline;color:#2cb543" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.youtube.com/aquawebaruhaz&amp;source=gmail&amp;ust=1709238901361000&amp;usg=AOvVaw0uHxqD95LjsRnlwgnlnMfd">
+                           <img title="Youtube" src="https://ci3.googleusercontent.com/meips/ADKq_NYnGuk7AQPthScE39zyuoZswvG5QrSbp0CaGZk_oSytg6c7DhYAn5_iR5S2EC5GLTUVZ9aILe-xwPP6wGUoNXaNLUsFkUL2BAyUlceAfJa5d-kUUDF3UOCaOc5C1IF6Tpk=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/youtube-logo-black.png" alt="Yt" width="48" height="48" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit">
+                       </a>
+                   </td>
+                   <td valign="top" align="center" style="padding:0;Margin:0;padding-right:20px">
+                       <a href="https://darido.pythonanywhere.com/" style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;text-decoration:underline;color:#2cb543" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.instagram.com/aqua.webaruhaz/?hl%3Dhu&amp;source=gmail&amp;ust=1709238901361000&amp;usg=AOvVaw06kLcmwJrFani83S2FdRE0">
+                           <img title="Instagram" src="https://ci3.googleusercontent.com/meips/ADKq_NaPlKtxcYFzqNxp6MOfGx1llVYtlDAO9jL_YW0ZpG5k_crv4UCzQoFYK1bJA6d7rbdWYcVDne2vBn3YhwzdetKrpCCcqC99PmFdmEkY6_WT0Bk0FJPNTmfRcIgoILJNfBKvBMoSqNu3nEKRm62knEK4mpBXtNzrzg=s0-d-e1-ft#https://fatbco.stripocdn.email/content/assets/img/social-icons/logo-black/instagram-logo-black.png" alt="Ig" width="48" height="48" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit">
+                       </a>
+                   </td>
+                   <td valign="top" align="center" style="padding:0;Margin:0">
+                       <a href="https://darido.pythonanywhere.com/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.tiktok.com/@aqua.hu&amp;source=gmail&amp;ust=1709238901361000&amp;usg=AOvVaw2BXiA1La9del4f_bPPQgBI">
+                           <img title="Tiktok" src="https://ci3.googleusercontent.com/meips/ADKq_NbPwkXYn2k0OrH2-HnU2Lwm8in6Fbv5lXPbAXQ10Biz5Ym7qpBBD1NtUF6nfwXkrKgfXzgHEuo0pi8e1xke6BgL9OGL_exvhvetYLyiAA5ix2iavKE=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/tiktok.png" alt="Tiktok" width="48" height="48" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit">
+                       </a>
+                   </td>
+               </tr>
+               </tbody></table>
+           <p style="padding-top:25px">
+               <img title="Orszagboltja" src="https://ci3.googleusercontent.com/meips/ADKq_NYW20JfiL9atXY5TWt7bDNO_2Fpww_y3h84CS1l8Si0aN6zW_w-H_uTwdjCjy9kz3MmlQ4YDkSz8ebhRuxoyMqjr8yjJCkprmkAgNSBRxlHl72G1HGwi08su75naY0=s0-d-e1-ft#https://direct.aqua.hu/files/rendszeruzenetek/images/orszagboltja_v3.png" alt="Orszagboltja" style="display:block;border:0;outline:none;text-decoration:none" class="CToWUd" data-bit="iit">
+           </p>
+
+            <p style="Margin:0;padding:40px;padding-bottom:20px;font-size:11px;font-family:montserrat,sans-serif;line-height:17px;color:#d3d3d3">Jelen e-mail nem minősül a rendelés visszaigazolásának.<br>Bármilyen panasszal írjon a Dáridó weboldalára: <a href="https://darido.pythonanywhere.com/" style="font-family:montserrat,sans-serif;font-size:11px;text-decoration:underline;color:#294e9c" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://aqua.hu/aszf.html&amp;source=gmail&amp;ust=1709238901361000&amp;usg=AOvVaw1R-tDYx2Fwiq3Xlln0Wa09">https://darido.pythonanywhere.com/</a>
+               , bemutatót az alábbi linken ér el: <a href="https://www.youtube.com/watch?v=cf5xI0FG1_I" style="font-family:montserrat,sans-serif;font-size:11px;text-decoration:underline;color:#294e9c" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://aqua.hu/adatvedelmi-tajekoztato.html&amp;source=gmail&amp;ust=1709238901362000&amp;usg=AOvVaw01Bl8xxUd88C_orGAfgCix">https://www.youtube.com/watch?v=cf5xI0FG1_I</a>
+            </p>
+        </td>
+    </tr>
+</tbody></table>
+{% endblock content %}

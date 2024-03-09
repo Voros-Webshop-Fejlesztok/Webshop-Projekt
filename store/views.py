@@ -105,9 +105,14 @@ def store(request):
     price_max = request.GET.get('price_max')
     category = request.GET.get('category')
     brand = request.GET.get('brand')
-    
-    
+    digital = request.GET.get('digital')
+    is_digital = False
 
+    if digital == 'false':
+        is_digital = False
+    elif digital == 'true':
+        is_digital = True
+    
     if is_valid_param(product_name_query):
         products = products.filter(Q(pname__icontains=product_name_query)|  Q(brand__name__icontains=product_name_query)|  Q(category__name__icontains=product_name_query)|  Q(pname__icontains=product_name_query)|  Q(description__icontains=product_name_query))
 
@@ -128,6 +133,9 @@ def store(request):
         
     if is_valid_param(brand) and brand != '':
         products = products.filter(brand__name=brand)
+
+    if is_valid_param(is_digital):
+        products = products.filter(digital=is_digital)
     
     context = {'products':products,'categories':categories,'brands':brands, 'shipping':False}
 
@@ -202,19 +210,7 @@ def processOrder(request):
         
         order.pay=data['order_info']['payment']
         order.delivery=data['order_info']['delivery']
-
-        template = render_to_string('store/email.html', {'name':customer.name})
-
-        email = EmailMessage(
-            'Köszönjük a rendelésed!',
-            template,
-            settings.EMAIL_HOST_USER,
-            ['csongorkiss12@gmail.com'],
-        )
-
-        email.content_subtype = "html"
-        email.fail_silently=False
-        #email.send()
+        order.total = data['order_info']['total']
 
     else:
         customer, order = guestOrder(request, data)
@@ -231,9 +227,11 @@ def processOrder(request):
     if total == order.get_cart_total:
         order.status = 'confirmed'
     order.save()
-    
+
+    shipping = ''
+
     if order.shipping:
-        ShippingAddress.objects.create(
+        shipping = ShippingAddress.objects.create(
                 customer=customer,
                 order=order,
                 address=data['shipping']['address'],
@@ -241,7 +239,21 @@ def processOrder(request):
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
             )
-        
+
+    order_items = OrderItem.objects.filter(order=order)
+
+    template = render_to_string('store/emails/processOrderEmail.html', {'name':customer.name, 'order':order, 'shipping':shipping, 'order_items':order_items})
+
+    email = EmailMessage(
+        'Köszönjük a rendelésed!',
+        template,
+        settings.EMAIL_HOST_USER,
+        ['csongorkiss12@gmail.com'],
+    )
+
+    email.content_subtype = "html"
+    email.fail_silently=False
+    email.send()
 
     return JsonResponse('Payment was complete', safe=False)
 

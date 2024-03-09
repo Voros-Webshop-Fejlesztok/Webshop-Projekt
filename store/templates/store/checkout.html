@@ -102,7 +102,12 @@
         </div>
         {% endfor %}
         <h5>Termékek: {{order.get_cart_items}} db</h5>
-        <h5>Végösszeg: {{order.get_cart_total|floatformat:0|intcomma}} Ft</h5>
+        <hr>
+        <h5>Részösszeg: {{order.get_cart_total|floatformat:0|intcomma}} Ft</h5>
+        <h6 id="delivery-cost"></h6>
+        <h6 id="cod-cost"></h6> 
+        <input type="hidden" id="cart-total" value="{{ order.get_cart_total }}" />
+        <h5 id="total-amount">Végösszeg: {{order.get_cart_total|floatformat:0|intcomma}} Ft</h5>
       </div>
     </div>
   </div>
@@ -115,112 +120,156 @@
   </div>
 
   <script>
-    var shipping = "{{order.shipping}}";
-    var user = "{{user}}";
-    var total = "{{order.get_cart_total}}";
+    document.addEventListener('DOMContentLoaded', function () {
+        var shipping = "{{order.shipping}}";
+        var user = "{{user}}";
+        var total = "{{order.get_cart_total}}";
+        var orderTotal = 0;
 
-    if (total == 0) {
-      document.getElementById("payment-info").style.display = 'none';
-    }
+        if (total == 0) {
+            document.getElementById("payment-info").style.display = 'none';
+        }
 
-    if (shipping == "False") {
-      document.getElementById("shipping-info").innerHTML = "";
-      document.getElementById("delivery-options1").style.display = 'none';
-      document.getElementById("delivery-options2").style.display = 'none';
-      document.getElementById("delivery-options3").style.display = 'none';
-    }
+        if (shipping == "False") {
+            document.getElementById("shipping-info").innerHTML = "";
+            document.getElementById("delivery-options1").style.display = 'none';
+            document.getElementById("delivery-options2").style.display = 'none';
+            document.getElementById("delivery-options3").style.display = 'none';
+        }
 
-    if (user != "AnonymousUser") {
-      document.getElementById("user-info").innerHTML = "";
-    }
+        if (user != "AnonymousUser") {
+            document.getElementById("user-info").innerHTML = "";
+        }
 
-    if (shipping == "False" && user != "AnonymousUser") {
-      document.getElementById("form-wrapper").classList.add("hidden");
-      document.getElementById("payment-info").classList.remove("hidden");
-    }
+        if (shipping == "False" && user != "AnonymousUser") {
+            document.getElementById("form-wrapper").classList.add("hidden");
+            document.getElementById("payment-info").classList.remove("hidden");
+        }
 
-    var form = document.getElementById("form");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      document.getElementById("form-button").classList.add("hidden");
-      document.getElementById("payment-info").classList.remove("hidden");
-    });
-
-    document.getElementById("make-payment").addEventListener("click", function (e) {
-        flashMessage(); 
-      });
-
-    function flashMessage() {
-      var checkoutContent = document.getElementById("checkoutContent");
-      checkoutContent.style.animation = "checkoutClose 0.3s ease-in-out";
-      setTimeout(function() {
-            checkoutContent.style.display = "none";
-            checkoutContent.style.animation = ""; // Visszaállítjuk a szüneteltetett animációt
-        }, 300);
-
-
-      document.getElementById("popup").style.display = 'block';
-      var popupClose = document.getElementById("popupClose");
-      popupClose.addEventListener("click", function () {
-        document.getElementById("popup").style.display = 'none';
-        submitFormData();
-      });
-    }
-
-    function submitFormData() {
-      var userFormData = {
-        name: null,
-        phonenumber: null,
-        email: null,
-        total: total,
-      };
-
-      var shippingInfo = {
-        address: null,
-        city: null,
-        state: null,
-        zipcode: null,
-      };
-
-      var orderInfo = {
-        payment: form.payment.value,
-        delivery: null,
-      };
-
-      if (shipping != "False") {
-        shippingInfo.address = form.address.value + ' ' + form.house_number.value + '.';
-        shippingInfo.city = form.city.value;
-        shippingInfo.state = form.state.value;
-        shippingInfo.zipcode = form.zipcode.value;
-        orderInfo.delivery = form.delivery.value;
-      }
-
-
-      if (user == "AnonymousUser") {
-        userFormData.name = form.lastname.value + " " + form.firstname.value;
-        userFormData.email = form.email.value;  
-        userFormData.phonenumber = form.phonenumber.value;
-      }
-
-      var url = "/process_order/";
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrftoken,
-        },
-        body:JSON.stringify({form: userFormData, shipping: shippingInfo, order_info: orderInfo}),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-
-        cart = {}
-        document.cookie ='cart=' + JSON.stringify(cart) + ';domain=;path=/'
-
-        window.location.href = "{% url 'store' %}";
+        var form = document.getElementById("form");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            document.getElementById("form-button").classList.add("hidden");
+            document.getElementById("payment-info").classList.remove("hidden");
         });
-    }
-  </script>
 
-  {% endblock content %}
-</div>
+        document.getElementById("make-payment").addEventListener("click", function (e) {
+            flashMessage();
+        });
+
+        function flashMessage() {
+            var checkoutContent = document.getElementById("checkoutContent");
+            checkoutContent.style.animation = "checkoutClose 0.3s ease-in-out";
+            setTimeout(function () {
+                checkoutContent.style.display = "none";
+                checkoutContent.style.animation = ""; // Visszaállítjuk a szüneteltetett animációt
+            }, 300);
+
+            document.getElementById("popup").style.display = 'block';
+            var popupClose = document.getElementById("popupClose");
+            popupClose.addEventListener("click", function () {
+                document.getElementById("popup").style.display = 'none';
+                submitFormData();
+            });
+        }
+
+        function submitFormData() {
+            var userFormData = {
+                name: null,
+                phonenumber: null,
+                email: null,
+                total: total,
+            };
+
+            var shippingInfo = {
+                address: null,
+                city: null,
+                state: null,
+                zipcode: null,
+            };
+
+            var orderInfo = {
+                payment: form.payment.value,
+                delivery: null,
+                total: orderTotal,
+            };
+
+            if (shipping != "False") {
+                shippingInfo.address = form.address.value + ' ' + form.house_number.value + '.';
+                shippingInfo.city = form.city.value;
+                shippingInfo.state = form.state.value;
+                shippingInfo.zipcode = form.zipcode.value;
+                orderInfo.delivery = form.delivery.value;
+            }
+
+            if (user == "AnonymousUser") {
+                userFormData.name = form.lastname.value + " " + form.firstname.value;
+                userFormData.email = form.email.value;
+                userFormData.phonenumber = form.phonenumber.value;
+            }
+
+            var url = "/process_order/";
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+                body: JSON.stringify({ form: userFormData, shipping: shippingInfo, order_info: orderInfo }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    cart = {};
+                    document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/';
+                    window.location.href = "{% url 'store' %}";
+                });
+        }
+
+        var deliveryOptions = document.getElementsByName('delivery');
+        var paymentOptions = document.getElementsByName('payment');
+        var formButton = document.getElementById('form-button');
+        var jsDeliveryCost = 1390;
+        var jsCodCost = 0;
+
+        // Eseményfigyelők a szállítási lehetőségekhez
+        for (var i = 0; i < deliveryOptions.length; i++) {
+            deliveryOptions[i].addEventListener('click', function () {
+                if (this.value === 'mpl') {
+                    jsDeliveryCost = 1390;
+                } else if (this.value === 'gls') {
+                    jsDeliveryCost = 1790;
+                }
+                updateCosts();
+            });
+        }
+
+        // Eseményfigyelők a fizetési lehetőségekhez
+        for (var i = 0; i < paymentOptions.length; i++) {
+            paymentOptions[i].addEventListener('click', function () {
+                if (this.value === 'cash') {
+                    jsCodCost = 590;
+                } else {
+                    jsCodCost = 0;
+                }
+                updateCosts();
+            });
+        }
+
+        // Eseményfigyelő a "Folytatás" gombhoz
+        formButton.addEventListener('click', function () {
+            updateCosts();
+        });
+
+        // Segédfüggvény a költségek frissítéséhez
+        function updateCosts() {
+            var cartTotal = document.getElementById('cart-total').value;
+            var totalAmount = parseFloat(cartTotal) + parseFloat(jsDeliveryCost) + parseFloat(jsCodCost);
+            orderTotal = totalAmount;
+
+            document.getElementById('total-amount').innerText = 'Végösszeg: ' + totalAmount + ' Ft';
+            document.getElementById('delivery-cost').innerText = 'Szállítási díj: ' + jsDeliveryCost + ' Ft';
+            document.getElementById('cod-cost').innerText = 'Utánvéti díj: ' + jsCodCost + ' Ft';
+        }
+    });
+</script>
+{% endblock content %}
