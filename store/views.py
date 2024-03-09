@@ -210,19 +210,7 @@ def processOrder(request):
         
         order.pay=data['order_info']['payment']
         order.delivery=data['order_info']['delivery']
-
-        template = render_to_string('store/emails/processOrderEmail.html', {'name':customer.name})
-
-        email = EmailMessage(
-            'Köszönjük a rendelésed!',
-            template,
-            settings.EMAIL_HOST_USER,
-            ['csongorkiss12@gmail.com'],
-        )
-
-        email.content_subtype = "html"
-        email.fail_silently=False
-        #email.send()
+        order.total = data['order_info']['total']
 
     else:
         customer, order = guestOrder(request, data)
@@ -239,9 +227,11 @@ def processOrder(request):
     if total == order.get_cart_total:
         order.status = 'confirmed'
     order.save()
-    
+
+    shipping = ''
+
     if order.shipping:
-        ShippingAddress.objects.create(
+        shipping = ShippingAddress.objects.create(
                 customer=customer,
                 order=order,
                 address=data['shipping']['address'],
@@ -249,7 +239,22 @@ def processOrder(request):
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
             )
-        
+
+    order_items = OrderItem.objects.filter(order__in=order)
+    products = Product.objects.filter(orderitem__in=order_items).distinct()
+
+    template = render_to_string('store/emails/processOrderEmail.html', {'name':customer.name, 'order':order, 'shipping':shipping, 'order_items':order_items, 'products':products})
+
+    email = EmailMessage(
+        'Köszönjük a rendelésed!',
+        template,
+        settings.EMAIL_HOST_USER,
+        ['csongorkiss12@gmail.com'],
+    )
+
+    email.content_subtype = "html"
+    email.fail_silently=False
+    email.send()    
 
     return JsonResponse('Payment was complete', safe=False)
 
