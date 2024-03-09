@@ -74,26 +74,39 @@
                     <img src="https://ci3.googleusercontent.com/meips/ADKq_NYqfMWUnBrqRg5rHjFCU-PIUREuZgHi1CizoNOCRDsAiaWvJolsiu_URvUE-kJA05V4bXaO-P6NdAlcUODYppNWjSzH9VkzaJM=s0-d-e1-ft#https://aqua.hu/files/rendszeruzenetek/usericon.png" alt="Profilom" style="display:inline-block;border:none;width:15px;height:15px;margin-right:10px" width="15" height="15" class="CToWUd" data-bit="iit"><span style="display:inline-block">PROFILOM</span>
                 </a></span></p>
             <p style="Margin:0;font-size:12px;font-family:montserrat,sans-serif;line-height:14px;color:#a9a9a9;padding:20px">Rendelésedről a Profilom menüben is tájékozódhatsz.</p>
-
+            
             <div style="background:white;padding:20px">
-                
-            
-            
-                <p><span style="background:#294e9c;display:inline-block;padding:3px 9px;color:white;border-radius:10px;font-weight:bold">1 db</span></p>
-                <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:21px;color:#333333">24" LG 24GN60R-B LCD monitor fekete</p>
-                <p style="Margin:0;font-size:18px;font-family:montserrat,sans-serif;line-height:27px;color:#294e9c"><strong>59 900 Ft</strong></p>
+                {% for order_item in order_items %}
+                <p><span style="background:#294e9c;display:inline-block;padding:3px 9px;color:white;border-radius:10px;font-weight:bold">{{order_item.quantity}} db</span></p>
+                <p style="Margin:0;font-size:14px;font-family:montserrat,sans-serif;line-height:21px;color:#333333">{{order_item.product.pname}}</p>
+                <p style="Margin:0;font-size:18px;font-family:montserrat,sans-serif;line-height:27px;color:#294e9c"><strong>{{order_item.product.price|floatformat:0|intcomma}} Ft</strong></p>
                 <hr style="margin:40px;font-size:0;height:0px;border:none;border-top:1px solid silver">
+                {% endfor %}
                 
                 <p style="Margin:0;font-size:16px;font-family:montserrat,sans-serif;line-height:32px;color:#333333">
-                    <br>Részösszeg<strong>: <span style="color:#294e9c">59 900 Ft</span></strong>
-                    <br>Szállítási költség:<strong> 1 490 Ft</strong>
-                    <br>Utánvét díj:<strong> 490 Ft</strong>
-                    <br><strong>Összesen:&nbsp;<span style="color:#294e9c">61 880 Ft</span></strong>
-            
-                
-
+                    <br>Részösszeg<strong>: <span style="color:#294e9c">{{order.get_cart_total|floatformat:0|intcomma}}</span></strong>
+                    <br>Szállítási költség:
+                    <strong>
+                    {% if order.delivery == 'gls' %}
+                        1,790 Ft
+                    {% endif %}
+                    {% if order.delivery == 'mpl' %}
+                        1,390 Ft
+                    {% endif %}
+                    </strong>
+                    <br>Utánvét díj:
+                    <strong>
+                    {% if order.pay == 'cash' %}
+                        490 Ft
+                    {% endif %}
+                    {% if order.pay == 'card' %}
+                        0 Ft
+                    {% endif %}
+                    </strong>
+                    <br><strong>Összesen:&nbsp;<span style="color:#294e9c">{{order.total}} Ft</span></strong>
 
             </div>
+            
         </td>
     </tr>
     <tr>

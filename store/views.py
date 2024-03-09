@@ -240,10 +240,9 @@ def processOrder(request):
                 zipcode=data['shipping']['zipcode'],
             )
 
-    order_items = OrderItem.objects.filter(order__in=order)
-    products = Product.objects.filter(orderitem__in=order_items).distinct()
+    order_items = OrderItem.objects.filter(order=order)
 
-    template = render_to_string('store/emails/processOrderEmail.html', {'name':customer.name, 'order':order, 'shipping':shipping, 'order_items':order_items, 'products':products})
+    template = render_to_string('store/emails/processOrderEmail.html', {'name':customer.name, 'order':order, 'shipping':shipping, 'order_items':order_items})
 
     email = EmailMessage(
         'Köszönjük a rendelésed!',
@@ -254,7 +253,7 @@ def processOrder(request):
 
     email.content_subtype = "html"
     email.fail_silently=False
-    email.send()    
+    email.send()
 
     return JsonResponse('Payment was complete', safe=False)
 
