@@ -34,6 +34,10 @@ body{
     margin: 0; /
 }
 
+body.dark .profileData span{
+    color: black;
+}
+
 .card{
     border:none;
     box-shadow: var(--black) 0 0 1.6vh;
