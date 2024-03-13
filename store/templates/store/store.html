@@ -87,7 +87,7 @@
     <div class="col-lg-4 col-md-6 col-sm-12 balance">
       <img class="thumbnail" src="{{ product.imageURL }}" />
       <div class="box-element product">
-        <h5><strong>{{ product.pname }}</strong></h5>
+        <h5 style="height: 52px;"><strong>{{ product.pname }}</strong></h5>
         <h6 style="font-size: smaller;"><strong>{{ product.brand.name }}&nbsp;|&nbsp;
           {% for category in product.category.all %}
             {{ category }}
@@ -146,10 +146,10 @@
 <div class="row hidden" style="margin-top: 100px;" id="darkStore">
   {% for product in products %}
   {% if product.darkweb == True %}
-    <div class="col-lg-4 col-md-6 col-sm-12 balance">
+    <div style="margin-bottom: 50px;" class="col-lg-4 col-md-6 col-sm-12 balance">
       <img class="thumbnail" src="{{ product.imageURL }}" />
       <div class="box-element product">
-        <h5><strong>{{ product.pname }}</strong></h5>
+        <h5 style="height: 52px;"><strong>{{ product.pname }}</strong></h5>
         <h6 style="font-size: smaller;"><strong>{{ product.brand.name }}&nbsp;|&nbsp;
           {% for category in product.category.all %}
             {{ category }}
