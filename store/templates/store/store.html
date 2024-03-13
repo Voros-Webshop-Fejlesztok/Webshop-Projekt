@@ -61,7 +61,7 @@
       <span class="switch-left">Igen</span>
       <span class="switch-right">Nem</span>
     </label>
-    <p style="text-align: center; margin-top: 5px;">Digitális termék</p>
+    <p style="text-align: center; margin-top: 5px;" class="digi">Digitális termék</p>
   </div>
 
 
@@ -107,7 +107,7 @@
         {% if product.stock > 0 %}
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
         {% endif %}
-        <button class="button-33 view" role="button" onclick="lightopenQuickView( '{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
+        <button class="button-33 view" role="button" onclick="lightopenQuickView( '{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft')">Megtekint</button>
       </div>
     </div>
     <div id="light" class="popup-view">
@@ -120,7 +120,6 @@
           <h2 id="lightquick-view-name"></h2>
           <p id="lightquick-view-details"></p>
           {% if product.stock > 0 %}
-          <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart quickview" id="lightupdate-cart" role="button">Kosárba</button>
           {% endif %}
         </div>
       </div>
@@ -133,10 +132,9 @@
 
 <script type="text/javascript">
   function lightopenQuickView(productId, imageURL, name, brand, category, description, price, rating) {
-    document.getElementById('lightupdate-cart').setAttribute('data-product', productId);
     document.getElementById('lightquick-view-image').src = imageURL;
     document.getElementById('lightquick-view-name').innerHTML = name + '<br><span>' + brand + '</span>';
-    document.getElementById('lightquick-view-details').innerHTML = category +  '<br>' + description + '<br><strong>' + price + '</strong> <i class="bx bx-star rating-star"></i><span class="rating">' + rating + '</span>';
+    document.getElementById('lightquick-view-details').innerHTML = category +  '<br>' + description + '<br><strong>' + price;
     document.getElementById('light').classList.add('active');
   }
 
@@ -171,7 +169,7 @@
         {% if product.stock > 0 %}
         <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart" role="button">Kosárba</button>
         {% endif %}
-        <button class="button-33 view" role="button" onclick="darkopenQuickView('{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft', '{{ product.rating }}')">Megtekint</button>
+        <button class="button-33 view" role="button" onclick="darkopenQuickView('{{ product.id }}', '{{ product.imageURL }}', '{{ product.pname }}', '{{ product.brand.name }}', '{% for category in product.category.all %}{{ category }}{% endfor %}', '{{ product.description }}', '{{ product.price|floatformat:0|intcomma }} Ft')">Megtekint</button>
       </div>
     </div>
     <div id="dark" class="popup-view">
@@ -184,7 +182,7 @@
           <h2 id="darkquick-view-name"></h2>
           <p id="darkquick-view-details"></p>
           {% if product.stock > 0 %}
-          <button data-product="{{ product.id }}" data-action="add" class="button-33 add-to-cart update-cart quickview" id="darkupdate-cart" role="button">Kosárba</button>
+          
           {% endif %}
         </div>
       </div>
@@ -198,10 +196,9 @@
 <!-- Dark Quick View Popup JavaScript -->
 <script type="text/javascript">
   function darkopenQuickView(productId, imageURL, name, brand, category, description, price, rating) {
-    document.getElementById('darkupdate-cart').setAttribute('data-product', productId);
     document.getElementById('darkquick-view-image').src = imageURL;
     document.getElementById('darkquick-view-name').innerHTML = name + '<br><span>' + brand + '</span>';
-    document.getElementById('darkquick-view-details').innerHTML = category +  '<br>' + description + '<br><strong>' + price + '</strong> <i class="bx bx-star rating-star"></i><span class="rating">' + rating + '</span>';
+    document.getElementById('darkquick-view-details').innerHTML = category +  '<br>' + description + '<br><strong>' + price;
     document.getElementById('dark').classList.add('active');
    }
  
