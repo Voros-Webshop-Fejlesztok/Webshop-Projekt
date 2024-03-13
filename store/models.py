@@ -163,6 +163,15 @@ class Post(models.Model):
     def __str__(self):
         return f"{self.profile} " + f"{self.created:%Y-%m-%d %H:%M}"
     
+class Comment(models.Model):
+    sender = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, blank=True, null=True)
+    post = models.ForeignKey(Post, on_delete=models.DO_NOTHING, blank=True, null=True)
+    comment_body = models.CharField(max_length=300)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender} kommentje a {self.post.id}. számú poszton"
+    
 class Message(models.Model):
     sender = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='received_messages')

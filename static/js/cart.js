@@ -5,7 +5,6 @@ for (i = 0; i < updateBtns.length; i++) {
     var productId = this.dataset.product;
     var action = this.dataset.action;
 
-    console.log(user);
     if (user == "AnonymousUser") {
       addCookieItem(productId, action);
       var path = window.location.pathname;

@@ -45,6 +45,13 @@ h4 {
   height: 50px;
 }
 
+.ava_comment {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
 .icon {
   font-size: 30px;
   color: black;
@@ -56,18 +63,18 @@ h4 {
   gap: 1px;
 }
 
-.username .name {
+.username .uname {
   line-height: normal;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
 }
 
-.username .uname {
+.username .name {
   color: black;
   font-size: 16px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   line-height: normal;
 }
 
@@ -105,4 +112,37 @@ h4 {
 
 .like-value{
   font-weight: 400;
+}
+
+.comment_icon{
+  cursor: pointer;
+  font-size: 23px;
+  color: whitesmoke;
+}
+
+.comment{
+  background-color: white;
+  width: 80%;
+  margin: auto;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.comment_first_line{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.sendComment{
+  margin-left: 35px;
+}
+
+.sendCommentBtn{
+  margin-top: -10px;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 20px;
 }
