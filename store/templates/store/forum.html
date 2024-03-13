@@ -66,8 +66,10 @@
             {% endif %} 
           </a>
           <div class="username">
-            <a href="{% url 'profile' post.profile.user.id %}"><h3 class="uname">{{post.profile.user}}</h3></a>
+            <a href="{% url 'profile' post.profile.user.id %}">
+                <h3 class="uname">{{post.profile.user}}</h3></a>
             <p class="name">{{post.title}}</p>
+            <span>{{post.created|date:'Y.m.d - H:i'}}</span>
           </div>
         </div>        
       </div>
@@ -96,11 +98,40 @@
           {% else %} 
           <p class="like-value"><a class="liker" href="{% url 'profile' post.likes.all.0.user.id %}">{{post.likes.all.0.user}}</a> és további <span data-target="{{post.id}}" id="showLikes" class="likes">{{post.number_of_likes}} személy</span> kedveli a bejegyzést</p>
           {% endif %} 
-          {% endif %} 
+          {% endif %}
+          {% if post.likes.all.count == 0 %}
+          <p style="font-weight: 500;" class="like-value">Nem kedveli jelenleg senki sem a bejegyzést<p>
+          {% endif %}
         </div>
+      </div>
+      <div style="display: flex;">
+      {% if post.id in comments_ids %}
+      <i class='bx bx-comment-detail comment_icon' id="showComment{{post.id}}" data-target="comment{{post.id}}" data-target2="closeComment{{post.id}}"></i>
+      <i class='bx bx-comment-x comment_icon hidden' id="closeComment{{post.id}}" data-target="comment{{post.id}}" data-target2="showComment{{post.id}}"></i>
+      {% endif %}
+
+      <form style="display: flex;" id="commentForm{{post.id}}" method=POST>
+      {% csrf_token %}
+      <p class="sendComment">{{form2.comment_body}}</p>
+      <input type="hidden" name="current_post" value="{{post.id}}">
+      <button type="submit" class='sendCommentBtn bx bx-send' data-target="commentForm{{post.id}}"></button>
+      </form>
+
+      </div>
+      <div id="comment{{post.id}}" class="hidden">
+        {% for comment in comments %}
+        {% if comment.post.id == post.id %}
+        <div class="comment">
+          <div class="comment_first_line">
+            {% if comment.sender.imageURL %}
+              <img src="{{comment.sender.imageURL}}" class="ava_comment">
+            {% endif %}
+            <p>{{comment.sender}}</p>
+          </div>
+          <p>{{comment.comment_body}}</p>
         </div>
-      <div class="created">
-        <p>{{post.created|date:'Y.m.d - H:i'}}</p>
+        {% endif %} 
+        {% endfor %} 
       </div>
     </div>
   </div>
@@ -154,6 +185,36 @@
 
 
 <script>
+  const commentButtons = document.querySelectorAll('.sendCommentBtn');
+
+  commentButtons.forEach(function(button) {
+      button.addEventListener('click', function(event) {
+          event.preventDefault();
+          const targetFormId = this.getAttribute('data-target');
+          const targetForm = document.getElementById(targetFormId);
+          targetForm.submit();
+      });
+  });
+</script>
+
+<script>
+window.onload = function() {
+    // Előző görgetési pozíció mentése
+    var previousScrollPosition = sessionStorage.getItem('scrollPosition');
+
+    // Ha volt előző pozíció, akkor oda görgetünk vissza
+    if (previousScrollPosition !== null) {
+        window.scrollTo(0, previousScrollPosition);
+    }
+
+    // Újratöltés esetén frissítjük a görgetési pozíciót
+    window.onbeforeunload = function() {
+        sessionStorage.setItem('scrollPosition', window.pageYOffset);
+    };
+};
+</script>
+
+<script>
   const showLikesElements = document.querySelectorAll('#showLikes');
   const closeLikesElements = document.querySelectorAll('#closeLikes');
 
@@ -189,6 +250,31 @@
 
             targetDiv.classList.add('hidden')   
         }
+
+  var showCommentButtons = document.querySelectorAll('[id^="showComment"]');
+  var closeCommentButtons = document.querySelectorAll('[id^="closeComment"]');
+
+  showCommentButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      var targetElement = this.getAttribute('data-target');
+      var targetElement2 = this.getAttribute('data-target2');
+      var targetElement3 = this.id
+      document.getElementById(targetElement).classList.remove('hidden');
+      document.getElementById(targetElement2).classList.remove('hidden');
+      document.getElementById(targetElement3).classList.add('hidden');
+    });
+});
+
+  closeCommentButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      var targetElement = this.getAttribute('data-target');
+      var targetElement2 = this.getAttribute('data-target2');
+      var targetElement3 = this.id
+      document.getElementById(targetElement).classList.add('hidden');
+      document.getElementById(targetElement2).classList.remove('hidden');
+      document.getElementById(targetElement3).classList.add('hidden');
+    });
+});
 </script>
 
 {% endblock content %}

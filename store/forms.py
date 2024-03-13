@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Post, Customer, Message
+from .models import Post, Customer, Message, Comment
 
 
 from .models import Order
@@ -98,6 +98,8 @@ class DeletePostForm(forms.Form):
     post_id = forms.IntegerField()
 class DeleteMessageForm(forms.Form):
     message_id = forms.IntegerField()
+class DeleteCommentForm(forms.Form):
+    comment_id = forms.IntegerField()
 
 class SendMessage(forms.ModelForm):
     content = forms.CharField(required=True,
@@ -116,3 +118,21 @@ class SendMessage(forms.ModelForm):
         model = Message
         fields = ['content']
         exclude = ("user", 'sender', 'receiver',)
+
+class CommentForm(forms.ModelForm):
+
+    comment_body = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Hozzászólás küldése',
+            'class': 'form-textarea',
+            'cols': '45',
+            'rows': '1',
+            'maxlength': '300',
+            'required':'required',
+        }),
+        max_length=300,
+        required=True
+    )
+    class Meta:
+        model = Comment
+        exclude = ['sender', 'user', 'created']

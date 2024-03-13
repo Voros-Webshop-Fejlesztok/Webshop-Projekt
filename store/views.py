@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from .models import *
-from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage, DeleteMessageForm
+from .forms import CreateUserForm, PostForm, UpdateProfileForm, DeletePostForm, SendMessage, DeleteMessageForm, CommentForm, DeleteCommentForm
 from .utils import cookieCart, cartData, guestOrder
 from django.conf import settings
 from django.core.files import File
@@ -263,12 +263,21 @@ def processOrder(request):
 
 def forum(request):
     form = PostForm(request.POST or None)
+    form2 = CommentForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             post = form.save(commit=False)
             post.profile = request.user.customer
             post.save()
             messages.success(request, 'A posztod sikeresen létrejött')
+            return redirect('forum')
+        elif form2.is_valid():
+            comy = form2.save(commit=False)
+            comy.sender = request.user.customer
+            post_value = request.POST.get('current_post')
+            comy.post = Post(id=post_value)
+            comy.save()
+            messages.success(request, 'Sikeresen hozzászóltál a bejegyzéshez')
             return redirect('forum')
         else:
             messages.info(request, 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet')
@@ -279,8 +288,13 @@ def forum(request):
 
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
+    comments = Comment.objects.all().order_by("-created")
+    comments_ids = []
+    for comment in comments:
+        if comment.post.id not in comments_ids:
+            comments_ids.append(comment.post.id)
 
-    context = {'profiles': profiles, 'self_profile': self_profile, 'posts': posts, 'form': form}
+    context = {'profiles': profiles, 'self_profile': self_profile, 'posts': posts, 'form': form, 'form2': form2, 'comments':comments, 'comments_ids':comments_ids}
 
     return render(request, 'store/forum.html', context)
 
