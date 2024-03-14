@@ -129,6 +129,7 @@ class CommentForm(forms.ModelForm):
             'rows': '1',
             'maxlength': '300',
             'required':'required',
+            'style':'width: 426px',
         }),
         max_length=300,
         required=True
