@@ -2,6 +2,21 @@
 {% load static %}
 {% block content %}
 
+<form method="GET" action=".">
+  {% csrf_token %}
+
+  <div style="margin: auto;" class="form-group col-lg-4 col-md-4 col-sm-4 balance">
+    <div class="input-group" style="padding-top: 32px;">
+      <input style="border-radius: 20px;" class="form-control py-2 border-right-0 search-box" type="search" placeholder="Keresés" name="search_text" id="pname">
+      <span class="input-group-append" id="pname-icon">
+      </span>
+      </div>
+  </div>
+  <br>
+  <button style="background-color: skyblue; width: 200px; margin: auto; display: block; font-weight: bold;" class="button-33 add-to-cart" role="button">Keresés</button>
+</form>
+
+
 {% for message in messages %}
 <div style="display: block;" class="popup" id="popup">
     {% if message|striptags == 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet' %}
@@ -46,7 +61,7 @@
         <div class="twitt">
           <p style="margin: auto;">{{form.body}}</p>
         </div>
-        <button class="button-33 post">Közlés</button>
+        <button class="button-33 post" name="create_post">Közlés</button>
       </div>
     </div>
 </form>
@@ -74,7 +89,7 @@
         </div>        
       </div>
       <div class="twitt">
-        <p>{{post.body}}</p>
+        <p style="background-color: white; padding: 10px; border-radius: 5px;">{{post.body}}</p>
       </div>
       <div class="insight">
         <div class="like">
@@ -125,8 +140,17 @@
           <div class="comment_first_line">
             {% if comment.sender.imageURL %}
               <img src="{{comment.sender.imageURL}}" class="ava_comment">
+            {% else %}
+              <img src="{% static 'images/placeholder_img.jpg' %}" class="ava_comment">
             {% endif %}
             <p>{{comment.sender}}</p>
+
+            <form method="POST" id="deleteCommentForm">
+              {% csrf_token %}
+              <input type="hidden" name="comment_id" value="{{comment.id}}">
+              <button style="position: relative; left: 280px; font-size: larger; border: none;" class='bx bxs-x-circle' type="submit" name="delete_comment"></button>
+            </form>
+            
           </div>
           <p>{{comment.comment_body}}</p>
         </div>

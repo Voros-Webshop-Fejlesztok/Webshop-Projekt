@@ -16,6 +16,7 @@ body {
     #d9dbd5 130px,
     #d9dbd5 100%
   );
+  overflow-x: hidden;
 }
 
 .container {

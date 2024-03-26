@@ -265,13 +265,26 @@ def forum(request):
     form = PostForm(request.POST or None)
     form2 = CommentForm(request.POST or None)
     if request.method == "POST":
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.profile = request.user.customer
-            post.save()
-            messages.success(request, 'A posztod sikeresen létrejött')
-            return redirect('forum')
-        elif form2.is_valid():
+
+        if 'delete_comment' in request.POST:
+            delete_comment_form = DeleteCommentForm(request.POST)
+            if delete_comment_form.is_valid():
+                comment_id = delete_comment_form.cleaned_data['comment_id']
+                del_comment = get_object_or_404(Comment, id=comment_id)
+                del_comment.delete()
+                messages.success(request, 'A komment sikeresen törlésre került')
+
+        if 'create_post' in request.POST:
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.profile = request.user.customer
+                post.save()
+                messages.success(request, 'A posztod sikeresen létrejött')
+                return redirect('forum')
+            else:
+                messages.info(request, 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet')
+
+        if form2.is_valid():
             comy = form2.save(commit=False)
             comy.sender = request.user.customer
             post_value = request.POST.get('current_post')
@@ -279,13 +292,14 @@ def forum(request):
             comy.save()
             messages.success(request, 'Sikeresen hozzászóltál a bejegyzéshez')
             return redirect('forum')
-        else:
-            messages.info(request, 'A bejegyzés címe legfeljebb 50 karakter a tartalma pedig legfeljebb 1000 karakter lehet')
 
     posts = Post.objects.all().order_by("-created")
 
-    profiles = Customer.objects.all()
+    search_text = request.GET.get('search_text')
+    if is_valid_param(search_text):
+        posts = posts.filter(Q(title__icontains=search_text)|Q(body__icontains=search_text)|Q(profile__user__username__icontains=search_text))
 
+    profiles = Customer.objects.all()
     self_user = request.user.customer
     self_profile = Customer.objects.get(id=self_user.id)
     comments = Comment.objects.all().order_by("-created")
